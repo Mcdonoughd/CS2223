@@ -180,7 +180,7 @@ public class Selection implements Iterable<Selection.Item>, Indexable<Selection.
 	 * @param i
 	 * @param j
 	 */
-	public void swap (int i, int j) {
+	public void swap (int i, int j) throws Exception {
 		try {
 			Item t = items[i];
 			items[i] = items[j];
@@ -188,7 +188,7 @@ public class Selection implements Iterable<Selection.Item>, Indexable<Selection.
 			numSwaps++;
 		} catch (Exception e) {
 			exception = true;
-			throw (e);
+			throw (e); 
 		}
 	}
 	

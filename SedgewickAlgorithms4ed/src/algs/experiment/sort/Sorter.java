@@ -156,7 +156,7 @@ public class Sorter implements Indexable<Sorter.Item> {
 	 * @param i
 	 * @param j
 	 */
-	public void swap (int i, int j) {
+	public void swap (int i, int j) throws Exception {
 		try {
 			Item t = items[i];
 			items[i] = items[j];
