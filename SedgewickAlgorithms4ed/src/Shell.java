@@ -1,9 +1,6 @@
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
+import java.util.*;
 
 import algs.sedgewick.*;
 
@@ -20,6 +17,7 @@ import algs.sedgewick.*;
  * simply not easy to recreate here though I may take a stab at it.
  * 
  * @author George Heineman
+ * @version 10/27/2015
  */
 public class Shell {
 	
@@ -100,8 +98,19 @@ public class Shell {
 				// build up arguments and deal with '<' and '>' but not |
 				Object[] argList = getArguments(st);
 				
+				// hold onto existing stdin/stdou
+				InputStream existInput  = System.in;
+				PrintStream existOutput = System.out;
+				
 				Method m = clazz.getDeclaredMethod("main", String[].class);
 				m.invoke(null, new Object[] { argList});
+
+				// get back into proper alignment so we can close down cleanly...
+				System.setIn(existInput);
+				StdIn.resync();
+				System.setOut(existOutput);
+				StdOut.resync();
+				
 			} catch (Exception e) {
 				fail (e.getMessage());
 			}

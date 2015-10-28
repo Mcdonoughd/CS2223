@@ -6,3 +6,7 @@ is a drop-in replacement for the existing classes.
 
 Simply add "import algs.sedgewick.*;" to the header of your Java classes and you will have access
 to these classes.
+
+Note: I made a few internal changes to support my Shell command, but otherwise these are 
+identical to the published versions.
+ 
