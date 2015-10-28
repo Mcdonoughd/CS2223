@@ -38,13 +38,7 @@ public class Evaluate {
 				vals.push(v);
 			} else {
 				// Token no operator or paren; must be double value to push
-				if (s.equals ("e")) {
-					vals.push (Math.E);
-				} else if (s.equals ("pi")) {
-					vals.push (Math.PI);
-				} else {
-					vals.push(Double.parseDouble(s));
-				}
+				vals.push(Double.parseDouble(s));
 			}
 		}
 		

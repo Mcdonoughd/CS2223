@@ -3,12 +3,11 @@ package algs.experiment.bisection;
 /**
  * Used to determine the root for a continuous function f(x) given a,b where the signs
  * of f(a) and f(b) are different. This will compute a root contained within the domain [a,b]
- * 
  */
 public class BisectionMethod {
 	
 	/** Point at which we are satisfied with root value. If set to 1e-20 compute will fail to terminate. */
-	static double threshold = 1e-12;
+	static double threshold = 1e-14;
 	
 	/**
 	 * Use bisection method over the range [a,b] to determine root of f(x) assuming f(a) has different 
