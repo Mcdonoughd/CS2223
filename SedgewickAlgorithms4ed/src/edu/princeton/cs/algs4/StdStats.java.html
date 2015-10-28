@@ -1,0 +1,541 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang = "en">
+
+<head>
+
+<link rel="shortcut icon" href="http://algs4.cs.princeton.edu/favicon.ico">
+<link rel="stylesheet"    href="http://algs4.cs.princeton.edu/java.css" type="text/css">
+
+<title>StdStats.java</title>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
+<meta NAME="DESCRIPTION" CONTENT="StdStats code in Java">
+<meta NAME="TITLE" CONTENT="StdStats code in Java">
+<meta NAME="KEYWORDS" CONTENT="StdStats,java,programming,computer science,algorithm,data structure,program,code">
+<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+
+</head>
+
+
+<body>
+<center><h1>StdStats.java</h1></center><p><br>
+
+Below is the syntax highlighted version of <a href = "StdStats.java">StdStats.java</a>.
+<p><br>
+
+<!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Compilation:  javac StdStats.java</span>
+<span class="comment"> *  Execution:    java StdStats &lt; input.txt</span>
+<span class="comment"> *  Dependencies: StdOut.java</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Library of statistical functions.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  The test client reads an array of real numbers from standard</span>
+<span class="comment"> *  input, and computes the minimum, mean, maximum, and</span>
+<span class="comment"> *  standard deviation.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  The functions all throw a NullPointerException if the array</span>
+<span class="comment"> *  passed in is null.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  The floating-point functions all return NaN if any input is NaN.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Unlike Math.min() and Math.max(), the min() and max() functions</span>
+<span class="comment"> *  do not differentiate between -0.0 and 0.0.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  % more tiny.txt</span>
+<span class="comment"> *  5</span>
+<span class="comment"> *  3.0 1.0 2.0 5.0 4.0</span>
+<span class="comment"> *</span>
+<span class="comment"> *  % java StdStats &lt; tiny.txt</span>
+<span class="comment"> *         min   1.000</span>
+<span class="comment"> *        mean   3.000</span>
+<span class="comment"> *         max   5.000</span>
+<span class="comment"> *     std dev   1.581</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Should these funtions use varargs instead of array arguments?</span>
+<span class="comment"> *</span>
+<span class="comment"> ******************************************************************************/</span>
+
+<span class="preproc">package</span><span class="normal"> edu</span><span class="symbol">.</span><span class="normal">princeton</span><span class="symbol">.</span><span class="normal">cs</span><span class="symbol">.</span><span class="normal">algs4</span><span class="symbol">;</span>
+
+<span class="comment">/**</span>
+<span class="comment"> *  The {</span><span class="type">@code</span><span class="comment"> StdStats} class provides static methods for computing</span>
+<span class="comment"> *  statistics such as min, max, mean, sample standard deviation, and</span>
+<span class="comment"> *  sample variance.</span>
+<span class="comment"> *  </span><span class="keyword">&lt;p&gt;</span>
+<span class="comment"> *  For additional documentation, see</span>
+<span class="comment"> *  </span><span class="keyword">&lt;a</span><span class="normal"> </span><span class="type">href</span><span class="symbol">=</span><span class="string">"http://introcs.cs.princeton.edu/22library"</span><span class="keyword">&gt;</span><span class="comment">Section 2.2</span><span class="keyword">&lt;/a&gt;</span><span class="comment"> of</span>
+<span class="comment"> *  </span><span class="keyword">&lt;i&gt;</span><span class="comment">Introduction to Programming in Java: An Interdisciplinary Approach</span><span class="keyword">&lt;/i&gt;</span>
+<span class="comment"> *  by Robert Sedgewick and Kevin Wayne.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  </span><span class="type">@author</span><span class="comment"> Robert Sedgewick</span>
+<span class="comment"> *  </span><span class="type">@author</span><span class="comment"> Kevin Wayne</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span><span class="normal"> </span><span class="keyword">final</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">StdStats</span><span class="normal"> </span><span class="cbracket">{</span>
+
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="function">StdStats</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span><span class="normal"> </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the maximum value in the specified array.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  a the array</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the maximum value in the array </span><span class="keyword">&lt;tt&gt;</span><span class="comment">a[]</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">;</span>
+<span class="comment">     *         </span><span class="keyword">&lt;tt&gt;</span><span class="comment">Double.NEGATIVE_INFINITY</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> if no such value</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">double</span><span class="normal"> </span><span class="function">max</span><span class="symbol">(</span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">double</span><span class="normal"> max </span><span class="symbol">=</span><span class="normal"> Double</span><span class="symbol">.</span><span class="normal">NEGATIVE_INFINITY</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">Double</span><span class="symbol">.</span><span class="function">isNaN</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]))</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> Double</span><span class="symbol">.</span><span class="normal">NaN</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">&gt;</span><span class="normal"> max</span><span class="symbol">)</span><span class="normal"> max </span><span class="symbol">=</span><span class="normal"> a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> max</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the maximum value in the specified subarray.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  a the array</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  lo the left endpoint of the subarray (inclusive)</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  hi the right endpoint of the subarray (inclusive)</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the maximum value in the subarray </span><span class="keyword">&lt;tt&gt;</span><span class="comment">a[lo..hi]</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">;</span>
+<span class="comment">     *         </span><span class="keyword">&lt;tt&gt;</span><span class="comment">Double.NEGATIVE_INFINITY</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> if no such value</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">double</span><span class="normal"> </span><span class="function">max</span><span class="symbol">(</span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> lo</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> hi</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">lo </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="normal"> </span><span class="symbol">||</span><span class="normal"> hi </span><span class="symbol">&gt;=</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">length </span><span class="symbol">||</span><span class="normal"> lo </span><span class="symbol">&gt;</span><span class="normal"> hi</span><span class="symbol">)</span>
+<span class="normal">            </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">IndexOutOfBoundsException</span><span class="symbol">(</span><span class="string">"Subarray indices out of bounds"</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="type">double</span><span class="normal"> max </span><span class="symbol">=</span><span class="normal"> Double</span><span class="symbol">.</span><span class="normal">NEGATIVE_INFINITY</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> lo</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;=</span><span class="normal"> hi</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">Double</span><span class="symbol">.</span><span class="function">isNaN</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]))</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> Double</span><span class="symbol">.</span><span class="normal">NaN</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">&gt;</span><span class="normal"> max</span><span class="symbol">)</span><span class="normal"> max </span><span class="symbol">=</span><span class="normal"> a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> max</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the maximum value in the specified array.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  a the array</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the maximum value in the array </span><span class="keyword">&lt;tt&gt;</span><span class="comment">a[]</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">;</span>
+<span class="comment">     *         </span><span class="keyword">&lt;tt&gt;</span><span class="comment">Integer.MIN_VALUE</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> if no such value</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">max</span><span class="symbol">(</span><span class="type">int</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> max </span><span class="symbol">=</span><span class="normal"> Integer</span><span class="symbol">.</span><span class="normal">MIN_VALUE</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">&gt;</span><span class="normal"> max</span><span class="symbol">)</span><span class="normal"> max </span><span class="symbol">=</span><span class="normal"> a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> max</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the minimum value in the specified array.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  a the array</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the minimum value in the array </span><span class="keyword">&lt;tt&gt;</span><span class="comment">a[]</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">;</span>
+<span class="comment">     *         </span><span class="keyword">&lt;tt&gt;</span><span class="comment">Double.POSITIVE_INFINITY</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> if no such value</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">double</span><span class="normal"> </span><span class="function">min</span><span class="symbol">(</span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">double</span><span class="normal"> min </span><span class="symbol">=</span><span class="normal"> Double</span><span class="symbol">.</span><span class="normal">POSITIVE_INFINITY</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">Double</span><span class="symbol">.</span><span class="function">isNaN</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]))</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> Double</span><span class="symbol">.</span><span class="normal">NaN</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">&lt;</span><span class="normal"> min</span><span class="symbol">)</span><span class="normal"> min </span><span class="symbol">=</span><span class="normal"> a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> min</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the minimum value in the specified subarray.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  a the array</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  lo the left endpoint of the subarray (inclusive)</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  hi the right endpoint of the subarray (inclusive)</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the maximum value in the subarray </span><span class="keyword">&lt;tt&gt;</span><span class="comment">a[lo..hi]</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">;</span>
+<span class="comment">     *         </span><span class="keyword">&lt;tt&gt;</span><span class="comment">Double.POSITIVE_INFINITY</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> if no such value</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">double</span><span class="normal"> </span><span class="function">min</span><span class="symbol">(</span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> lo</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> hi</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">lo </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="normal"> </span><span class="symbol">||</span><span class="normal"> hi </span><span class="symbol">&gt;=</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">length </span><span class="symbol">||</span><span class="normal"> lo </span><span class="symbol">&gt;</span><span class="normal"> hi</span><span class="symbol">)</span>
+<span class="normal">            </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">IndexOutOfBoundsException</span><span class="symbol">(</span><span class="string">"Subarray indices out of bounds"</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="type">double</span><span class="normal"> min </span><span class="symbol">=</span><span class="normal"> Double</span><span class="symbol">.</span><span class="normal">POSITIVE_INFINITY</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> lo</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;=</span><span class="normal"> hi</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">Double</span><span class="symbol">.</span><span class="function">isNaN</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]))</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> Double</span><span class="symbol">.</span><span class="normal">NaN</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">&lt;</span><span class="normal"> min</span><span class="symbol">)</span><span class="normal"> min </span><span class="symbol">=</span><span class="normal"> a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> min</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the minimum value in the specified array.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  a the array</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the minimum value in the array </span><span class="keyword">&lt;tt&gt;</span><span class="comment">a[]</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">;</span>
+<span class="comment">     *         </span><span class="keyword">&lt;tt&gt;</span><span class="comment">Integer.MAX_VALUE</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> if no such value</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">min</span><span class="symbol">(</span><span class="type">int</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> min </span><span class="symbol">=</span><span class="normal"> Integer</span><span class="symbol">.</span><span class="normal">MAX_VALUE</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">&lt;</span><span class="normal"> min</span><span class="symbol">)</span><span class="normal"> min </span><span class="symbol">=</span><span class="normal"> a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> min</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the average value in the specified array.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  a the array</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the average value in the array </span><span class="keyword">&lt;tt&gt;</span><span class="comment">a[]</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">;</span>
+<span class="comment">     *         </span><span class="keyword">&lt;tt&gt;</span><span class="comment">Double.NaN</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> if no such value</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">double</span><span class="normal"> </span><span class="function">mean</span><span class="symbol">(</span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">.</span><span class="normal">length </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> Double</span><span class="symbol">.</span><span class="normal">NaN</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="type">double</span><span class="normal"> sum </span><span class="symbol">=</span><span class="normal"> </span><span class="function">sum</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> sum </span><span class="symbol">/</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the average value in the specified subarray.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> a the array</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> lo the left endpoint of the subarray (inclusive)</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> hi the right endpoint of the subarray (inclusive)</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the average value in the subarray </span><span class="keyword">&lt;tt&gt;</span><span class="comment">a[lo..hi]</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">;</span>
+<span class="comment">     *         </span><span class="keyword">&lt;tt&gt;</span><span class="comment">Double.NaN</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> if no such value</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">double</span><span class="normal"> </span><span class="function">mean</span><span class="symbol">(</span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> lo</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> hi</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> length </span><span class="symbol">=</span><span class="normal"> hi </span><span class="symbol">-</span><span class="normal"> lo </span><span class="symbol">+</span><span class="normal"> </span><span class="number">1</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">lo </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="normal"> </span><span class="symbol">||</span><span class="normal"> hi </span><span class="symbol">&gt;=</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">length </span><span class="symbol">||</span><span class="normal"> lo </span><span class="symbol">&gt;</span><span class="normal"> hi</span><span class="symbol">)</span>
+<span class="normal">            </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">IndexOutOfBoundsException</span><span class="symbol">(</span><span class="string">"Subarray indices out of bounds"</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">length </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> Double</span><span class="symbol">.</span><span class="normal">NaN</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="type">double</span><span class="normal"> sum </span><span class="symbol">=</span><span class="normal"> </span><span class="function">sum</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">,</span><span class="normal"> lo</span><span class="symbol">,</span><span class="normal"> hi</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> sum </span><span class="symbol">/</span><span class="normal"> length</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the average value in the specified array.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  a the array</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the average value in the array </span><span class="keyword">&lt;tt&gt;</span><span class="comment">a[]</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">;</span>
+<span class="comment">     *         </span><span class="keyword">&lt;tt&gt;</span><span class="comment">Double.NaN</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> if no such value</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">double</span><span class="normal"> </span><span class="function">mean</span><span class="symbol">(</span><span class="type">int</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">.</span><span class="normal">length </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> Double</span><span class="symbol">.</span><span class="normal">NaN</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="type">double</span><span class="normal"> sum </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0.0</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            sum </span><span class="symbol">=</span><span class="normal"> sum </span><span class="symbol">+</span><span class="normal"> a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> sum </span><span class="symbol">/</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the sample variance in the specified array.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  a the array</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the sample variance in the array </span><span class="keyword">&lt;tt&gt;</span><span class="comment">a[]</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">;</span>
+<span class="comment">     *         </span><span class="keyword">&lt;tt&gt;</span><span class="comment">Double.NaN</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> if no such value</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">double</span><span class="normal"> </span><span class="function">var</span><span class="symbol">(</span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">.</span><span class="normal">length </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> Double</span><span class="symbol">.</span><span class="normal">NaN</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="type">double</span><span class="normal"> avg </span><span class="symbol">=</span><span class="normal"> </span><span class="function">mean</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="type">double</span><span class="normal"> sum </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0.0</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            sum </span><span class="symbol">+=</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">-</span><span class="normal"> avg</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">-</span><span class="normal"> avg</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> sum </span><span class="symbol">/</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">.</span><span class="normal">length </span><span class="symbol">-</span><span class="normal"> </span><span class="number">1</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the sample variance in the specified subarray.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  a the array</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> lo the left endpoint of the subarray (inclusive)</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> hi the right endpoint of the subarray (inclusive)</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the sample variance in the subarray </span><span class="keyword">&lt;tt&gt;</span><span class="comment">a[lo..hi]</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">;</span>
+<span class="comment">     *         </span><span class="keyword">&lt;tt&gt;</span><span class="comment">Double.NaN</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> if no such value</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">double</span><span class="normal"> </span><span class="function">var</span><span class="symbol">(</span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> lo</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> hi</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> length </span><span class="symbol">=</span><span class="normal"> hi </span><span class="symbol">-</span><span class="normal"> lo </span><span class="symbol">+</span><span class="normal"> </span><span class="number">1</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">lo </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="normal"> </span><span class="symbol">||</span><span class="normal"> hi </span><span class="symbol">&gt;=</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">length </span><span class="symbol">||</span><span class="normal"> lo </span><span class="symbol">&gt;</span><span class="normal"> hi</span><span class="symbol">)</span>
+<span class="normal">            </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">IndexOutOfBoundsException</span><span class="symbol">(</span><span class="string">"Subarray indices out of bounds"</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">length </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> Double</span><span class="symbol">.</span><span class="normal">NaN</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="type">double</span><span class="normal"> avg </span><span class="symbol">=</span><span class="normal"> </span><span class="function">mean</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">,</span><span class="normal"> lo</span><span class="symbol">,</span><span class="normal"> hi</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="type">double</span><span class="normal"> sum </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0.0</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> lo</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;=</span><span class="normal"> hi</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            sum </span><span class="symbol">+=</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">-</span><span class="normal"> avg</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">-</span><span class="normal"> avg</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> sum </span><span class="symbol">/</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">length </span><span class="symbol">-</span><span class="normal"> </span><span class="number">1</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the sample variance in the specified array.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  a the array</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the sample variance in the array </span><span class="keyword">&lt;tt&gt;</span><span class="comment">a[]</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">;</span>
+<span class="comment">     *         </span><span class="keyword">&lt;tt&gt;</span><span class="comment">Double.NaN</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> if no such value</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">double</span><span class="normal"> </span><span class="function">var</span><span class="symbol">(</span><span class="type">int</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">.</span><span class="normal">length </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> Double</span><span class="symbol">.</span><span class="normal">NaN</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="type">double</span><span class="normal"> avg </span><span class="symbol">=</span><span class="normal"> </span><span class="function">mean</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="type">double</span><span class="normal"> sum </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0.0</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            sum </span><span class="symbol">+=</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">-</span><span class="normal"> avg</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">-</span><span class="normal"> avg</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> sum </span><span class="symbol">/</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">.</span><span class="normal">length </span><span class="symbol">-</span><span class="normal"> </span><span class="number">1</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the population variance in the specified array.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  a the array</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the population variance in the array </span><span class="keyword">&lt;tt&gt;</span><span class="comment">a[]</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">;</span>
+<span class="comment">     *         </span><span class="keyword">&lt;tt&gt;</span><span class="comment">Double.NaN</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> if no such value</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">double</span><span class="normal"> </span><span class="function">varp</span><span class="symbol">(</span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">.</span><span class="normal">length </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> Double</span><span class="symbol">.</span><span class="normal">NaN</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="type">double</span><span class="normal"> avg </span><span class="symbol">=</span><span class="normal"> </span><span class="function">mean</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="type">double</span><span class="normal"> sum </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0.0</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            sum </span><span class="symbol">+=</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">-</span><span class="normal"> avg</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">-</span><span class="normal"> avg</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> sum </span><span class="symbol">/</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the population variance in the specified subarray.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  a the array</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> lo the left endpoint of the subarray (inclusive)</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> hi the right endpoint of the subarray (inclusive)</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the population variance in the subarray </span><span class="keyword">&lt;tt&gt;</span><span class="comment">a[lo..hi]</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">;</span>
+<span class="comment">     *         </span><span class="keyword">&lt;tt&gt;</span><span class="comment">Double.NaN</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> if no such value</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">double</span><span class="normal"> </span><span class="function">varp</span><span class="symbol">(</span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> lo</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> hi</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> length </span><span class="symbol">=</span><span class="normal"> hi </span><span class="symbol">-</span><span class="normal"> lo </span><span class="symbol">+</span><span class="normal"> </span><span class="number">1</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">lo </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="normal"> </span><span class="symbol">||</span><span class="normal"> hi </span><span class="symbol">&gt;=</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">length </span><span class="symbol">||</span><span class="normal"> lo </span><span class="symbol">&gt;</span><span class="normal"> hi</span><span class="symbol">)</span>
+<span class="normal">            </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">IndexOutOfBoundsException</span><span class="symbol">(</span><span class="string">"Subarray indices out of bounds"</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">length </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> Double</span><span class="symbol">.</span><span class="normal">NaN</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="type">double</span><span class="normal"> avg </span><span class="symbol">=</span><span class="normal"> </span><span class="function">mean</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">,</span><span class="normal"> lo</span><span class="symbol">,</span><span class="normal"> hi</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="type">double</span><span class="normal"> sum </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0.0</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> lo</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;=</span><span class="normal"> hi</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            sum </span><span class="symbol">+=</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">-</span><span class="normal"> avg</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">-</span><span class="normal"> avg</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> sum </span><span class="symbol">/</span><span class="normal"> length</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the sample standard deviation in the specified array.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  a the array</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the sample standard deviation in the array </span><span class="keyword">&lt;tt&gt;</span><span class="comment">a[]</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">;</span>
+<span class="comment">     *         </span><span class="keyword">&lt;tt&gt;</span><span class="comment">Double.NaN</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> if no such value</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">double</span><span class="normal"> </span><span class="function">stddev</span><span class="symbol">(</span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> Math</span><span class="symbol">.</span><span class="function">sqrt</span><span class="symbol">(</span><span class="function">var</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">));</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the sample standard deviation in the specified array.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  a the array</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the sample standard deviation in the array </span><span class="keyword">&lt;tt&gt;</span><span class="comment">a[]</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">;</span>
+<span class="comment">     *         </span><span class="keyword">&lt;tt&gt;</span><span class="comment">Double.NaN</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> if no such value</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">double</span><span class="normal"> </span><span class="function">stddev</span><span class="symbol">(</span><span class="type">int</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> Math</span><span class="symbol">.</span><span class="function">sqrt</span><span class="symbol">(</span><span class="function">var</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">));</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the sample standard deviation in the specified subarray.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  a the array</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> lo the left endpoint of the subarray (inclusive)</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> hi the right endpoint of the subarray (inclusive)</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the sample standard deviation in the subarray </span><span class="keyword">&lt;tt&gt;</span><span class="comment">a[lo..hi]</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">;</span>
+<span class="comment">     *         </span><span class="keyword">&lt;tt&gt;</span><span class="comment">Double.NaN</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> if no such value</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">double</span><span class="normal"> </span><span class="function">stddev</span><span class="symbol">(</span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> lo</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> hi</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> Math</span><span class="symbol">.</span><span class="function">sqrt</span><span class="symbol">(</span><span class="function">var</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">,</span><span class="normal"> lo</span><span class="symbol">,</span><span class="normal"> hi</span><span class="symbol">));</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the population standard deviation in the specified array.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  a the array</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the population standard deviation in the array;</span>
+<span class="comment">     *         </span><span class="keyword">&lt;tt&gt;</span><span class="comment">Double.NaN</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> if no such value</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">double</span><span class="normal"> </span><span class="function">stddevp</span><span class="symbol">(</span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> Math</span><span class="symbol">.</span><span class="function">sqrt</span><span class="symbol">(</span><span class="function">varp</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">));</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the population standard deviation in the specified subarray.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  a the array</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> lo the left endpoint of the subarray (inclusive)</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> hi the right endpoint of the subarray (inclusive)</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the population standard deviation in the subarray </span><span class="keyword">&lt;tt&gt;</span><span class="comment">a[lo..hi]</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">;</span>
+<span class="comment">     *         </span><span class="keyword">&lt;tt&gt;</span><span class="comment">Double.NaN</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> if no such value</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">double</span><span class="normal"> </span><span class="function">stddevp</span><span class="symbol">(</span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> lo</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> hi</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> Math</span><span class="symbol">.</span><span class="function">sqrt</span><span class="symbol">(</span><span class="function">varp</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">,</span><span class="normal"> lo</span><span class="symbol">,</span><span class="normal"> hi</span><span class="symbol">));</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the sum of all values in the specified array.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  a the array</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the sum of all values in the array </span><span class="keyword">&lt;tt&gt;</span><span class="comment">a[]</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">;</span>
+<span class="comment">     *         </span><span class="keyword">&lt;tt&gt;</span><span class="comment">0.0</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> if no such value</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">double</span><span class="normal"> </span><span class="function">sum</span><span class="symbol">(</span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">double</span><span class="normal"> sum </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0.0</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            sum </span><span class="symbol">+=</span><span class="normal"> a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> sum</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the sum of all values in the specified subarray.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  a the array</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> lo the left endpoint of the subarray (inclusive)</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> hi the right endpoint of the subarray (inclusive)</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the sum of all values in the subarray </span><span class="keyword">&lt;tt&gt;</span><span class="comment">a[lo..hi]</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">;</span>
+<span class="comment">     *         </span><span class="keyword">&lt;tt&gt;</span><span class="comment">0.0</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> if no such value</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">double</span><span class="normal"> </span><span class="function">sum</span><span class="symbol">(</span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> lo</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> hi</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">lo </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="normal"> </span><span class="symbol">||</span><span class="normal"> hi </span><span class="symbol">&gt;=</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">length </span><span class="symbol">||</span><span class="normal"> lo </span><span class="symbol">&gt;</span><span class="normal"> hi</span><span class="symbol">)</span>
+<span class="normal">            </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">IndexOutOfBoundsException</span><span class="symbol">(</span><span class="string">"Subarray indices out of bounds"</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="type">double</span><span class="normal"> sum </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0.0</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> lo</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;=</span><span class="normal"> hi</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            sum </span><span class="symbol">+=</span><span class="normal"> a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> sum</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the sum of all values in the specified array.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  a the array</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the sum of all values in the array </span><span class="keyword">&lt;tt&gt;</span><span class="comment">a[]</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">;</span>
+<span class="comment">     *         </span><span class="keyword">&lt;tt&gt;</span><span class="comment">0.0</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> if no such value</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">sum</span><span class="symbol">(</span><span class="type">int</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> sum </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            sum </span><span class="symbol">+=</span><span class="normal"> a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> sum</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Plots the points (0, </span><span class="keyword">&lt;em&gt;</span><span class="comment">a</span><span class="keyword">&lt;/em&gt;&lt;sub&gt;</span><span class="comment">0</span><span class="keyword">&lt;/sub&gt;</span><span class="comment">), (1, </span><span class="keyword">&lt;em&gt;</span><span class="comment">a</span><span class="keyword">&lt;/em&gt;&lt;sub&gt;</span><span class="comment">1</span><span class="keyword">&lt;/sub&gt;</span><span class="comment">), ...,</span>
+<span class="comment">     * (</span><span class="keyword">&lt;em&gt;</span><span class="comment">n</span><span class="keyword">&lt;/em&gt;</span><span class="preproc">&amp;minus;</span><span class="comment">1, </span><span class="keyword">&lt;em&gt;</span><span class="comment">a</span><span class="keyword">&lt;/em&gt;&lt;sub&gt;&lt;em&gt;</span><span class="comment">n</span><span class="keyword">&lt;/em&gt;</span><span class="preproc">&amp;minus;</span><span class="comment">1</span><span class="keyword">&lt;/sub&gt;</span><span class="comment">) to standard draw.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> a the array of values</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">plotPoints</span><span class="symbol">(</span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> N </span><span class="symbol">=</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span>
+<span class="normal">        StdDraw</span><span class="symbol">.</span><span class="function">setXscale</span><span class="symbol">(-</span><span class="number">1</span><span class="symbol">,</span><span class="normal"> N</span><span class="symbol">);</span>
+<span class="normal">        StdDraw</span><span class="symbol">.</span><span class="function">setPenRadius</span><span class="symbol">(</span><span class="number">1.0</span><span class="normal"> </span><span class="symbol">/</span><span class="normal"> </span><span class="symbol">(</span><span class="number">3.0</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"> N</span><span class="symbol">));</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> N</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            StdDraw</span><span class="symbol">.</span><span class="function">point</span><span class="symbol">(</span><span class="normal">i</span><span class="symbol">,</span><span class="normal"> a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Plots the line segments connecting </span>
+<span class="comment">     * (</span><span class="keyword">&lt;em&gt;</span><span class="comment">i</span><span class="keyword">&lt;/em&gt;</span><span class="comment">, </span><span class="keyword">&lt;em&gt;</span><span class="comment">a</span><span class="keyword">&lt;/em&gt;&lt;sub&gt;&lt;em&gt;</span><span class="comment">i</span><span class="keyword">&lt;/em&gt;&lt;/sub&gt;</span><span class="comment">) to</span>
+<span class="comment">     * (</span><span class="keyword">&lt;em&gt;</span><span class="comment">i</span><span class="keyword">&lt;/em&gt;</span><span class="comment">+1, </span><span class="keyword">&lt;em&gt;</span><span class="comment">a</span><span class="keyword">&lt;/em&gt;&lt;sub&gt;&lt;em&gt;</span><span class="comment">i</span><span class="keyword">&lt;/em&gt;</span><span class="comment">+1</span><span class="keyword">&lt;/sub&gt;</span><span class="comment">) for </span>
+<span class="comment">     * each </span><span class="keyword">&lt;em&gt;</span><span class="comment">i</span><span class="keyword">&lt;/em&gt;</span><span class="comment"> to standard draw.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> a the array of values</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">plotLines</span><span class="symbol">(</span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> N </span><span class="symbol">=</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span>
+<span class="normal">        StdDraw</span><span class="symbol">.</span><span class="function">setXscale</span><span class="symbol">(-</span><span class="number">1</span><span class="symbol">,</span><span class="normal"> N</span><span class="symbol">);</span>
+<span class="normal">        StdDraw</span><span class="symbol">.</span><span class="function">setPenRadius</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">1</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> N</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            StdDraw</span><span class="symbol">.</span><span class="function">line</span><span class="symbol">(</span><span class="normal">i</span><span class="symbol">-</span><span class="number">1</span><span class="symbol">,</span><span class="normal"> a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">-</span><span class="number">1</span><span class="symbol">],</span><span class="normal"> i</span><span class="symbol">,</span><span class="normal"> a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Plots bars from (0, </span><span class="keyword">&lt;em&gt;</span><span class="comment">a</span><span class="keyword">&lt;/em&gt;&lt;sub&gt;&lt;em&gt;</span><span class="comment">i</span><span class="keyword">&lt;/em&gt;&lt;/sub&gt;</span><span class="comment">) to</span>
+<span class="comment">     * (</span><span class="keyword">&lt;em&gt;</span><span class="comment">a</span><span class="keyword">&lt;/em&gt;&lt;sub&gt;&lt;em&gt;</span><span class="comment">i</span><span class="keyword">&lt;/em&gt;&lt;/sub&gt;</span><span class="comment">) for each </span><span class="keyword">&lt;em&gt;</span><span class="comment">i</span><span class="keyword">&lt;/em&gt;</span>
+<span class="comment">     * to standard draw.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> a the array of values</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">plotBars</span><span class="symbol">(</span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> a</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> N </span><span class="symbol">=</span><span class="normal"> a</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span>
+<span class="normal">        StdDraw</span><span class="symbol">.</span><span class="function">setXscale</span><span class="symbol">(-</span><span class="number">1</span><span class="symbol">,</span><span class="normal"> N</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> N</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            StdDraw</span><span class="symbol">.</span><span class="function">filledRectangle</span><span class="symbol">(</span><span class="normal">i</span><span class="symbol">,</span><span class="normal"> a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]/</span><span class="number">2</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">.</span><span class="number">25</span><span class="symbol">,</span><span class="normal"> a</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]/</span><span class="number">2</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Unit tests </span><span class="keyword">&lt;tt&gt;</span><span class="comment">StdStats</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">.</span>
+<span class="comment">     * Convert command-line arguments to array of doubles and call various methods.</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="normal">String</span><span class="symbol">[]</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> a </span><span class="symbol">=</span><span class="normal"> StdArrayIO</span><span class="symbol">.</span><span class="function">readDouble1D</span><span class="symbol">();</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">printf</span><span class="symbol">(</span><span class="string">"       min %10.3f</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> </span><span class="function">min</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">));</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">printf</span><span class="symbol">(</span><span class="string">"      mean %10.3f</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> </span><span class="function">mean</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">));</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">printf</span><span class="symbol">(</span><span class="string">"       max %10.3f</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> </span><span class="function">max</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">));</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">printf</span><span class="symbol">(</span><span class="string">"    stddev %10.3f</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> </span><span class="function">stddev</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">));</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">printf</span><span class="symbol">(</span><span class="string">"       var %10.3f</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> </span><span class="function">var</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">));</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">printf</span><span class="symbol">(</span><span class="string">"   stddevp %10.3f</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> </span><span class="function">stddevp</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">));</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">printf</span><span class="symbol">(</span><span class="string">"      varp %10.3f</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> </span><span class="function">varp</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">));</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+<span class="cbracket">}</span>
+
+<span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  This file is part of algs4.jar, which accompanies the textbook</span>
+<span class="comment"> *</span>
+<span class="comment"> *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,</span>
+<span class="comment"> *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.</span>
+<span class="comment"> *      </span><span class="url">http://algs4.cs.princeton.edu</span>
+<span class="comment"> *</span>
+<span class="comment"> *</span>
+<span class="comment"> *  algs4.jar is free software: you can redistribute it and/or modify</span>
+<span class="comment"> *  it under the terms of the GNU General Public License as published by</span>
+<span class="comment"> *  the Free Software Foundation, either version 3 of the License, or</span>
+<span class="comment"> *  (at your option) any later version.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  algs4.jar is distributed in the hope that it will be useful,</span>
+<span class="comment"> *  but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="comment"> *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="comment"> *  GNU General Public License for more details.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  You should have received a copy of the GNU General Public License</span>
+<span class="comment"> *  along with algs4.jar.  If not, see </span><span class="url">http://www.gnu.org/licenses.</span>
+<span class="comment"> ******************************************************************************/</span>
+</tt></pre>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10811519-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+
+<p><br><address><small>
+Last updated: Sat Oct 24 19:31:17 EDT 2015.
+</small></address>
+
+</html>

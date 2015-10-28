@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang = "en">
+
+<head>
+
+<link rel="shortcut icon" href="http://algs4.cs.princeton.edu/favicon.ico">
+<link rel="stylesheet"    href="http://algs4.cs.princeton.edu/java.css" type="text/css">
+
+<title>StopwatchCPU.java</title>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
+<meta NAME="DESCRIPTION" CONTENT="StopwatchCPU code in Java">
+<meta NAME="TITLE" CONTENT="StopwatchCPU code in Java">
+<meta NAME="KEYWORDS" CONTENT="StopwatchCPU,java,programming,computer science,algorithm,data structure,program,code">
+<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+
+</head>
+
+
+<body>
+<center><h1>StopwatchCPU.java</h1></center><p><br>
+
+Below is the syntax highlighted version of <a href = "StopwatchCPU.java">StopwatchCPU.java</a>.
+<p><br>
+
+<!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Compilation:  javac StopwatchCPU.java</span>
+<span class="comment"> *  Execution:    none</span>
+<span class="comment"> *  Dependencies: none</span>
+<span class="comment"> *</span>
+<span class="comment"> *  A version of Stopwatch.java that measures CPU time on a single</span>
+<span class="comment"> *  core or processor (instead of wall clock time).</span>
+<span class="comment"> *</span>
+<span class="comment"> ******************************************************************************/</span>
+
+<span class="preproc">package</span><span class="normal"> edu</span><span class="symbol">.</span><span class="normal">princeton</span><span class="symbol">.</span><span class="normal">cs</span><span class="symbol">.</span><span class="normal">algs4</span><span class="symbol">;</span>
+
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">lang</span><span class="symbol">.</span><span class="normal">management</span><span class="symbol">.</span><span class="normal">ThreadMXBean</span><span class="symbol">;</span>
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">lang</span><span class="symbol">.</span><span class="normal">management</span><span class="symbol">.</span><span class="normal">ManagementFactory</span><span class="symbol">;</span>
+
+<span class="comment">/**</span>
+<span class="comment"> *  The </span><span class="keyword">&lt;tt&gt;</span><span class="comment">StopwatchCPU</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> data type is for measuring</span>
+<span class="comment"> *  the CPU time used during a programming task.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  See {</span><span class="type">@link</span><span class="comment"> Stopwatch} for a version that measures wall-clock time</span>
+<span class="comment"> *  (the real time that elapses).</span>
+<span class="comment"> *</span>
+<span class="comment"> *  </span><span class="type">@author</span><span class="comment"> Josh Hug</span>
+<span class="comment"> *  </span><span class="type">@author</span><span class="comment"> Robert Sedgewick</span>
+<span class="comment"> *  </span><span class="type">@author</span><span class="comment"> Kevin Wayne</span>
+<span class="comment"> */</span>
+
+<span class="keyword">public</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">StopwatchCPU</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="keyword">final</span><span class="normal"> </span><span class="type">double</span><span class="normal"> NANOSECONDS_PER_SECOND </span><span class="symbol">=</span><span class="normal"> </span><span class="number">1000000000</span><span class="symbol">;</span>
+
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="keyword">final</span><span class="normal"> </span><span class="usertype">ThreadMXBean</span><span class="normal"> threadTimer</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="keyword">final</span><span class="normal"> </span><span class="type">long</span><span class="normal"> start</span><span class="symbol">;</span>
+<span class="normal">            </span>
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Initializes a new stopwatch.</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="function">StopwatchCPU</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span><span class="normal">  </span>
+<span class="normal">        threadTimer </span><span class="symbol">=</span><span class="normal"> ManagementFactory</span><span class="symbol">.</span><span class="function">getThreadMXBean</span><span class="symbol">();</span>
+<span class="normal">        start </span><span class="symbol">=</span><span class="normal"> threadTimer</span><span class="symbol">.</span><span class="function">getCurrentThreadCpuTime</span><span class="symbol">();</span>
+<span class="normal">    </span><span class="cbracket">}</span><span class="normal">   </span>
+<span class="normal">        </span>
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the elapsed CPU time (in seconds) since the stopwatch was created.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> elapsed CPU time (in seconds) since the stopwatch was created</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">double</span><span class="normal"> </span><span class="function">elapsedTime</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">long</span><span class="normal"> now </span><span class="symbol">=</span><span class="normal"> threadTimer</span><span class="symbol">.</span><span class="function">getCurrentThreadCpuTime</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">now </span><span class="symbol">-</span><span class="normal"> start</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">/</span><span class="normal"> NANOSECONDS_PER_SECOND</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span><span class="normal">   </span>
+<span class="cbracket">}</span>
+
+<span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  This file is part of algs4.jar, which accompanies the textbook</span>
+<span class="comment"> *</span>
+<span class="comment"> *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,</span>
+<span class="comment"> *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.</span>
+<span class="comment"> *      </span><span class="url">http://algs4.cs.princeton.edu</span>
+<span class="comment"> *</span>
+<span class="comment"> *</span>
+<span class="comment"> *  algs4.jar is free software: you can redistribute it and/or modify</span>
+<span class="comment"> *  it under the terms of the GNU General Public License as published by</span>
+<span class="comment"> *  the Free Software Foundation, either version 3 of the License, or</span>
+<span class="comment"> *  (at your option) any later version.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  algs4.jar is distributed in the hope that it will be useful,</span>
+<span class="comment"> *  but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="comment"> *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="comment"> *  GNU General Public License for more details.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  You should have received a copy of the GNU General Public License</span>
+<span class="comment"> *  along with algs4.jar.  If not, see </span><span class="url">http://www.gnu.org/licenses.</span>
+<span class="comment"> ******************************************************************************/</span>
+</tt></pre>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10811519-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+
+<p><br><address><small>
+Last updated: Sat Oct 24 19:31:17 EDT 2015.
+</small></address>
+
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang = "en">
+
+<head>
+
+<link rel="shortcut icon" href="http://algs4.cs.princeton.edu/favicon.ico">
+<link rel="stylesheet"    href="http://algs4.cs.princeton.edu/java.css" type="text/css">
+
+<title>BinaryStdIn.java</title>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
+<meta NAME="DESCRIPTION" CONTENT="BinaryStdIn code in Java">
+<meta NAME="TITLE" CONTENT="BinaryStdIn code in Java">
+<meta NAME="KEYWORDS" CONTENT="BinaryStdIn,java,programming,computer science,algorithm,data structure,program,code">
+<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+
+</head>
+
+
+<body>
+<center><h1>BinaryStdIn.java</h1></center><p><br>
+
+Below is the syntax highlighted version of <a href = "BinaryStdIn.java">BinaryStdIn.java</a>.
+<p><br>
+
+<!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Compilation:  javac BinaryStdIn.java</span>
+<span class="comment"> *  Execution:    java BinaryStdIn &lt; input &gt; output</span>
+<span class="comment"> *  Dependencies: none             </span>
+<span class="comment"> *  </span>
+<span class="comment"> *  Supports reading binary data from standard input.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  % java BinaryStdIn &lt; input.jpg &gt; output.jpg</span>
+<span class="comment"> *  % diff input.jpg output.jpg</span>
+<span class="comment"> *</span>
+<span class="comment"> ******************************************************************************/</span>
+
+<span class="preproc">package</span><span class="normal"> edu</span><span class="symbol">.</span><span class="normal">princeton</span><span class="symbol">.</span><span class="normal">cs</span><span class="symbol">.</span><span class="normal">algs4</span><span class="symbol">;</span>
+
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">io</span><span class="symbol">.</span><span class="normal">BufferedInputStream</span><span class="symbol">;</span>
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">io</span><span class="symbol">.</span><span class="normal">IOException</span><span class="symbol">;</span>
+
+<span class="comment">/**</span>
+<span class="comment"> *  </span><span class="keyword">&lt;i&gt;</span><span class="comment">Binary standard input</span><span class="keyword">&lt;/i&gt;</span><span class="comment">. This class provides methods for reading</span>
+<span class="comment"> *  in bits from standard input, either one bit at a time (as a </span><span class="keyword">&lt;tt&gt;</span><span class="comment">boolean</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">),</span>
+<span class="comment"> *  8 bits at a time (as a </span><span class="keyword">&lt;tt&gt;</span><span class="comment">byte</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> or </span><span class="keyword">&lt;tt&gt;</span><span class="comment">char</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">),</span>
+<span class="comment"> *  16 bits at a time (as a </span><span class="keyword">&lt;tt&gt;</span><span class="comment">short</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">), 32 bits at a time</span>
+<span class="comment"> *  (as an </span><span class="keyword">&lt;tt&gt;</span><span class="comment">int</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> or </span><span class="keyword">&lt;tt&gt;</span><span class="comment">float</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">), or 64 bits at a time (as a</span>
+<span class="comment"> *  </span><span class="keyword">&lt;tt&gt;</span><span class="comment">double</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> or </span><span class="keyword">&lt;tt&gt;</span><span class="comment">long</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">).</span>
+<span class="comment"> *  </span><span class="keyword">&lt;p&gt;</span>
+<span class="comment"> *  All primitive types are assumed to be represented using their </span>
+<span class="comment"> *  standard Java representations, in big-endian (most significant</span>
+<span class="comment"> *  byte first) order.</span>
+<span class="comment"> *  </span><span class="keyword">&lt;p&gt;</span>
+<span class="comment"> *  The client should not intermix calls to </span><span class="keyword">&lt;tt&gt;</span><span class="comment">BinaryStdIn</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> with calls</span>
+<span class="comment"> *  to </span><span class="keyword">&lt;tt&gt;</span><span class="comment">StdIn</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> or </span><span class="keyword">&lt;tt&gt;</span><span class="comment">System.in</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">;</span>
+<span class="comment"> *  otherwise unexpected behavior will result.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  </span><span class="type">@author</span><span class="comment"> Robert Sedgewick</span>
+<span class="comment"> *  </span><span class="type">@author</span><span class="comment"> Kevin Wayne</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span><span class="normal"> </span><span class="keyword">final</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">BinaryStdIn</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="usertype">BufferedInputStream</span><span class="normal"> in </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">BufferedInputStream</span><span class="symbol">(</span><span class="normal">System</span><span class="symbol">.</span><span class="normal">in</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="keyword">final</span><span class="normal"> </span><span class="type">int</span><span class="normal"> EOF </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">-</span><span class="number">1</span><span class="symbol">;</span><span class="normal">    </span><span class="comment">// end of file</span>
+
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">int</span><span class="normal"> buffer</span><span class="symbol">;</span><span class="normal">            </span><span class="comment">// one character buffer</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">int</span><span class="normal"> n</span><span class="symbol">;</span><span class="normal">                 </span><span class="comment">// number of bits left in buffer</span>
+
+<span class="normal">    </span><span class="comment">// static initializer</span>
+<span class="normal">    </span><span class="keyword">static</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="function">fillBuffer</span><span class="symbol">();</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">// don't instantiate</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="function">BinaryStdIn</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span><span class="normal"> </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">fillBuffer</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">try</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            buffer </span><span class="symbol">=</span><span class="normal"> in</span><span class="symbol">.</span><span class="function">read</span><span class="symbol">();</span>
+<span class="normal">            n </span><span class="symbol">=</span><span class="normal"> </span><span class="number">8</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">catch</span><span class="normal"> </span><span class="symbol">(</span><span class="usertype">IOException</span><span class="normal"> e</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            System</span><span class="symbol">.</span><span class="normal">out</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"EOF"</span><span class="symbol">);</span>
+<span class="normal">            buffer </span><span class="symbol">=</span><span class="normal"> EOF</span><span class="symbol">;</span>
+<span class="normal">            n </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">-</span><span class="number">1</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Close this input stream and release any associated system resources.</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">close</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">try</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            in</span><span class="symbol">.</span><span class="function">close</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">catch</span><span class="normal"> </span><span class="symbol">(</span><span class="usertype">IOException</span><span class="normal"> e</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            e</span><span class="symbol">.</span><span class="function">printStackTrace</span><span class="symbol">();</span>
+<span class="normal">            </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">RuntimeException</span><span class="symbol">(</span><span class="string">"Could not close BinaryStdIn"</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Returns true if standard input is empty.</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> true if and only if standard input is empty</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">boolean</span><span class="normal"> </span><span class="function">isEmpty</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> buffer </span><span class="symbol">==</span><span class="normal"> EOF</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Reads the next bit of data from standard input and return as a boolean.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the next bit of data from standard input as a </span><span class="keyword">&lt;tt&gt;</span><span class="comment">boolean</span><span class="keyword">&lt;/tt&gt;</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> RuntimeException if standard input is empty</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">boolean</span><span class="normal"> </span><span class="function">readBoolean</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="function">isEmpty</span><span class="symbol">())</span><span class="normal"> </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">RuntimeException</span><span class="symbol">(</span><span class="string">"Reading from empty input stream"</span><span class="symbol">);</span>
+<span class="normal">        n</span><span class="symbol">--;</span>
+<span class="normal">        </span><span class="type">boolean</span><span class="normal"> bit </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">buffer </span><span class="symbol">&gt;&gt;</span><span class="normal"> n</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">==</span><span class="normal"> </span><span class="number">1</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">n </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="function">fillBuffer</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> bit</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Reads the next 8 bits from standard input and return as an 8-bit char.</span>
+<span class="comment">     * Note that </span><span class="keyword">&lt;tt&gt;</span><span class="comment">char</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> is a 16-bit type;</span>
+<span class="comment">     * to read the next 16 bits as a char, use </span><span class="keyword">&lt;tt&gt;</span><span class="comment">readChar(16)</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the next 8 bits of data from standard input as a </span><span class="keyword">&lt;tt&gt;</span><span class="comment">char</span><span class="keyword">&lt;/tt&gt;</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> RuntimeException if there are fewer than 8 bits available on standard input</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">char</span><span class="normal"> </span><span class="function">readChar</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="function">isEmpty</span><span class="symbol">())</span><span class="normal"> </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">RuntimeException</span><span class="symbol">(</span><span class="string">"Reading from empty input stream"</span><span class="symbol">);</span>
+
+<span class="normal">        </span><span class="comment">// special case when aligned byte</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">n </span><span class="symbol">==</span><span class="normal"> </span><span class="number">8</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="type">int</span><span class="normal"> x </span><span class="symbol">=</span><span class="normal"> buffer</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="function">fillBuffer</span><span class="symbol">();</span>
+<span class="normal">            </span><span class="keyword">return</span><span class="normal"> </span><span class="symbol">(</span><span class="type">char</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">x </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+<span class="normal">        </span><span class="comment">// combine last n bits of current buffer with first 8-n bits of new buffer</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> x </span><span class="symbol">=</span><span class="normal"> buffer</span><span class="symbol">;</span>
+<span class="normal">        x </span><span class="symbol">&lt;&lt;=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">8</span><span class="normal"> </span><span class="symbol">-</span><span class="normal"> n</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> oldN </span><span class="symbol">=</span><span class="normal"> n</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="function">fillBuffer</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="function">isEmpty</span><span class="symbol">())</span><span class="normal"> </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">RuntimeException</span><span class="symbol">(</span><span class="string">"Reading from empty input stream"</span><span class="symbol">);</span>
+<span class="normal">        n </span><span class="symbol">=</span><span class="normal"> oldN</span><span class="symbol">;</span>
+<span class="normal">        x </span><span class="symbol">|=</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">buffer </span><span class="symbol">&gt;&gt;&gt;</span><span class="normal"> n</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="symbol">(</span><span class="type">char</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">x </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="comment">// the above code doesn't quite work for the last character if n = 8</span>
+<span class="normal">        </span><span class="comment">// because buffer will be -1, so there is a special case for aligned byte</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Reads the next r bits from standard input and return as an r-bit character.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  r number of bits to read.</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the next r bits of data from standard input as a </span><span class="keyword">&lt;tt&gt;</span><span class="comment">char</span><span class="keyword">&lt;/tt&gt;</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> IllegalArgumentException if there are fewer than r bits available on standard input</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> IllegalArgumentException unless 1 </span><span class="preproc">&amp;le;</span><span class="comment"> r </span><span class="preproc">&amp;le;</span><span class="comment"> 16</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">char</span><span class="normal"> </span><span class="function">readChar</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> r</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">r </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">||</span><span class="normal"> r </span><span class="symbol">&gt;</span><span class="normal"> </span><span class="number">16</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">IllegalArgumentException</span><span class="symbol">(</span><span class="string">"Illegal value of r = "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> r</span><span class="symbol">);</span>
+
+<span class="normal">        </span><span class="comment">// optimize r = 8 case</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">r </span><span class="symbol">==</span><span class="normal"> </span><span class="number">8</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> </span><span class="function">readChar</span><span class="symbol">();</span>
+
+<span class="normal">        </span><span class="type">char</span><span class="normal"> x </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> r</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            x </span><span class="symbol">&lt;&lt;=</span><span class="normal"> </span><span class="number">1</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="type">boolean</span><span class="normal"> bit </span><span class="symbol">=</span><span class="normal"> </span><span class="function">readBoolean</span><span class="symbol">();</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">bit</span><span class="symbol">)</span><span class="normal"> x </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> x</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Reads the remaining bytes of data from standard input and return as a string. </span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the remaining bytes of data from standard input as a </span><span class="keyword">&lt;tt&gt;</span><span class="comment">String</span><span class="keyword">&lt;/tt&gt;</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> RuntimeException if standard input is empty or if the number of bits</span>
+<span class="comment">     *         available on standard input is not a multiple of 8 (byte-aligned)</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="usertype">String</span><span class="normal"> </span><span class="function">readString</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="function">isEmpty</span><span class="symbol">())</span><span class="normal"> </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">RuntimeException</span><span class="symbol">(</span><span class="string">"Reading from empty input stream"</span><span class="symbol">);</span>
+
+<span class="normal">        </span><span class="usertype">StringBuilder</span><span class="normal"> sb </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">StringBuilder</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(!</span><span class="function">isEmpty</span><span class="symbol">())</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="type">char</span><span class="normal"> c </span><span class="symbol">=</span><span class="normal"> </span><span class="function">readChar</span><span class="symbol">();</span>
+<span class="normal">            sb</span><span class="symbol">.</span><span class="function">append</span><span class="symbol">(</span><span class="normal">c</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> sb</span><span class="symbol">.</span><span class="function">toString</span><span class="symbol">();</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Reads the next 16 bits from standard input and return as a 16-bit short.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the next 16 bits of data from standard input as a </span><span class="keyword">&lt;tt&gt;</span><span class="comment">short</span><span class="keyword">&lt;/tt&gt;</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> RuntimeException if there are fewer than 16 bits available on standard input</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">short</span><span class="normal"> </span><span class="function">readShort</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">short</span><span class="normal"> x </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">2</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="type">char</span><span class="normal"> c </span><span class="symbol">=</span><span class="normal"> </span><span class="function">readChar</span><span class="symbol">();</span>
+<span class="normal">            x </span><span class="symbol">&lt;&lt;=</span><span class="normal"> </span><span class="number">8</span><span class="symbol">;</span>
+<span class="normal">            x </span><span class="symbol">|=</span><span class="normal"> c</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> x</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Reads the next 32 bits from standard input and return as a 32-bit int.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the next 32 bits of data from standard input as a </span><span class="keyword">&lt;tt&gt;</span><span class="comment">int</span><span class="keyword">&lt;/tt&gt;</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> RuntimeException if there are fewer than 32 bits available on standard input</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">readInt</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> x </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">4</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="type">char</span><span class="normal"> c </span><span class="symbol">=</span><span class="normal"> </span><span class="function">readChar</span><span class="symbol">();</span>
+<span class="normal">            x </span><span class="symbol">&lt;&lt;=</span><span class="normal"> </span><span class="number">8</span><span class="symbol">;</span>
+<span class="normal">            x </span><span class="symbol">|=</span><span class="normal"> c</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> x</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Reads the next r bits from standard input and return as an r-bit int.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  r number of bits to read.</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the next r bits of data from standard input as a </span><span class="keyword">&lt;tt&gt;</span><span class="comment">int</span><span class="keyword">&lt;/tt&gt;</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> IllegalArgumentException if there are fewer than r bits available on standard input</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> IllegalArgumentException unless 1 </span><span class="preproc">&amp;le;</span><span class="comment"> r </span><span class="preproc">&amp;le;</span><span class="comment"> 32</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">readInt</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> r</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">r </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">||</span><span class="normal"> r </span><span class="symbol">&gt;</span><span class="normal"> </span><span class="number">32</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">IllegalArgumentException</span><span class="symbol">(</span><span class="string">"Illegal value of r = "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> r</span><span class="symbol">);</span>
+
+<span class="normal">        </span><span class="comment">// optimize r = 32 case</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">r </span><span class="symbol">==</span><span class="normal"> </span><span class="number">32</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> </span><span class="function">readInt</span><span class="symbol">();</span>
+
+<span class="normal">        </span><span class="type">int</span><span class="normal"> x </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> r</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            x </span><span class="symbol">&lt;&lt;=</span><span class="normal"> </span><span class="number">1</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="type">boolean</span><span class="normal"> bit </span><span class="symbol">=</span><span class="normal"> </span><span class="function">readBoolean</span><span class="symbol">();</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">bit</span><span class="symbol">)</span><span class="normal"> x </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> x</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Reads the next 64 bits from standard input and return as a 64-bit long.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the next 64 bits of data from standard input as a </span><span class="keyword">&lt;tt&gt;</span><span class="comment">long</span><span class="keyword">&lt;/tt&gt;</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> RuntimeException if there are fewer than 64 bits available on standard input</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">long</span><span class="normal"> </span><span class="function">readLong</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">long</span><span class="normal"> x </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">8</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="type">char</span><span class="normal"> c </span><span class="symbol">=</span><span class="normal"> </span><span class="function">readChar</span><span class="symbol">();</span>
+<span class="normal">            x </span><span class="symbol">&lt;&lt;=</span><span class="normal"> </span><span class="number">8</span><span class="symbol">;</span>
+<span class="normal">            x </span><span class="symbol">|=</span><span class="normal"> c</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> x</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Reads the next 64 bits from standard input and return as a 64-bit double.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the next 64 bits of data from standard input as a </span><span class="keyword">&lt;tt&gt;</span><span class="comment">double</span><span class="keyword">&lt;/tt&gt;</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> RuntimeExceptionArgument if there are fewer than 64 bits available on standard input</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">double</span><span class="normal"> </span><span class="function">readDouble</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> Double</span><span class="symbol">.</span><span class="function">longBitsToDouble</span><span class="symbol">(</span><span class="function">readLong</span><span class="symbol">());</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Reads the next 32 bits from standard input and return as a 32-bit float.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the next 32 bits of data from standard input as a </span><span class="keyword">&lt;tt&gt;</span><span class="comment">float</span><span class="keyword">&lt;/tt&gt;</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> RuntimeException if there are fewer than 32 bits available on standard input</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">float</span><span class="normal"> </span><span class="function">readFloat</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> Float</span><span class="symbol">.</span><span class="function">intBitsToFloat</span><span class="symbol">(</span><span class="function">readInt</span><span class="symbol">());</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Reads the next 8 bits from standard input and return as an 8-bit byte.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the next 8 bits of data from standard input as a </span><span class="keyword">&lt;tt&gt;</span><span class="comment">byte</span><span class="keyword">&lt;/tt&gt;</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> RuntimeException if there are fewer than 8 bits available on standard input</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">byte</span><span class="normal"> </span><span class="function">readByte</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">char</span><span class="normal"> c </span><span class="symbol">=</span><span class="normal"> </span><span class="function">readChar</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="type">byte</span><span class="normal"> x </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="type">byte</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">c </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> x</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+<span class="normal">    </span>
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Test client. Reads in a binary input file from standard input and writes</span>
+<span class="comment">     * it to standard output.</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="normal">String</span><span class="symbol">[]</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+
+<span class="normal">        </span><span class="comment">// read one 8-bit char at a time</span>
+<span class="normal">        </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(!</span><span class="normal">BinaryStdIn</span><span class="symbol">.</span><span class="function">isEmpty</span><span class="symbol">())</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="type">char</span><span class="normal"> c </span><span class="symbol">=</span><span class="normal"> BinaryStdIn</span><span class="symbol">.</span><span class="function">readChar</span><span class="symbol">();</span>
+<span class="normal">            BinaryStdOut</span><span class="symbol">.</span><span class="function">write</span><span class="symbol">(</span><span class="normal">c</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        BinaryStdOut</span><span class="symbol">.</span><span class="function">flush</span><span class="symbol">();</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+<span class="cbracket">}</span>
+
+<span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  This file is part of algs4.jar, which accompanies the textbook</span>
+<span class="comment"> *</span>
+<span class="comment"> *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,</span>
+<span class="comment"> *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.</span>
+<span class="comment"> *      </span><span class="url">http://algs4.cs.princeton.edu</span>
+<span class="comment"> *</span>
+<span class="comment"> *</span>
+<span class="comment"> *  algs4.jar is free software: you can redistribute it and/or modify</span>
+<span class="comment"> *  it under the terms of the GNU General Public License as published by</span>
+<span class="comment"> *  the Free Software Foundation, either version 3 of the License, or</span>
+<span class="comment"> *  (at your option) any later version.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  algs4.jar is distributed in the hope that it will be useful,</span>
+<span class="comment"> *  but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="comment"> *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="comment"> *  GNU General Public License for more details.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  You should have received a copy of the GNU General Public License</span>
+<span class="comment"> *  along with algs4.jar.  If not, see </span><span class="url">http://www.gnu.org/licenses.</span>
+<span class="comment"> ******************************************************************************/</span>
+</tt></pre>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10811519-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+
+<p><br><address><small>
+Last updated: Sat Oct 24 19:31:17 EDT 2015.
+</small></address>
+
+</html>

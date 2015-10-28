@@ -1,0 +1,412 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang = "en">
+
+<head>
+
+<link rel="shortcut icon" href="http://algs4.cs.princeton.edu/favicon.ico">
+<link rel="stylesheet"    href="http://algs4.cs.princeton.edu/java.css" type="text/css">
+
+<title>BinaryOut.java</title>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
+<meta NAME="DESCRIPTION" CONTENT="BinaryOut code in Java">
+<meta NAME="TITLE" CONTENT="BinaryOut code in Java">
+<meta NAME="KEYWORDS" CONTENT="BinaryOut,java,programming,computer science,algorithm,data structure,program,code">
+<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+
+</head>
+
+
+<body>
+<center><h1>BinaryOut.java</h1></center><p><br>
+
+Below is the syntax highlighted version of <a href = "BinaryOut.java">BinaryOut.java</a>.
+<p><br>
+
+<!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Compilation:  javac BinaryOut.java</span>
+<span class="comment"> *  Execution:    java BinaryOut</span>
+<span class="comment"> *  Dependencies: none</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Write binary data to an output stream, either one 1-bit boolean,</span>
+<span class="comment"> *  one 8-bit char, one 32-bit int, one 64-bit double, one 32-bit float,</span>
+<span class="comment"> *  or one 64-bit long at a time. The output stream can be standard</span>
+<span class="comment"> *  output, a file, an OutputStream or a Socket.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  The bytes written are not aligned.</span>
+<span class="comment"> *</span>
+<span class="comment"> ******************************************************************************/</span>
+
+<span class="preproc">package</span><span class="normal"> edu</span><span class="symbol">.</span><span class="normal">princeton</span><span class="symbol">.</span><span class="normal">cs</span><span class="symbol">.</span><span class="normal">algs4</span><span class="symbol">;</span>
+
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">io</span><span class="symbol">.</span><span class="normal">BufferedOutputStream</span><span class="symbol">;</span>
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">io</span><span class="symbol">.</span><span class="normal">FileOutputStream</span><span class="symbol">;</span>
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">io</span><span class="symbol">.</span><span class="normal">IOException</span><span class="symbol">;</span>
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">io</span><span class="symbol">.</span><span class="normal">OutputStream</span><span class="symbol">;</span>
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">net</span><span class="symbol">.</span><span class="normal">Socket</span><span class="symbol">;</span>
+
+<span class="comment">/**</span>
+<span class="comment"> *  </span><span class="keyword">&lt;i&gt;</span><span class="comment">Binary output</span><span class="keyword">&lt;/i&gt;</span><span class="comment">. This class provides methods for converting</span>
+<span class="comment"> *  primtive type variables (</span><span class="keyword">&lt;tt&gt;</span><span class="comment">boolean</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">, </span><span class="keyword">&lt;tt&gt;</span><span class="comment">byte</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">, </span><span class="keyword">&lt;tt&gt;</span><span class="comment">char</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">,</span>
+<span class="comment"> *  </span><span class="keyword">&lt;tt&gt;</span><span class="comment">int</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">, </span><span class="keyword">&lt;tt&gt;</span><span class="comment">long</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">, </span><span class="keyword">&lt;tt&gt;</span><span class="comment">float</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">, and </span><span class="keyword">&lt;tt&gt;</span><span class="comment">double</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">)</span>
+<span class="comment"> *  to sequences of bits and writing them to an output stream.</span>
+<span class="comment"> *  The output stream can be standard output, a file, an OutputStream or a Socket.</span>
+<span class="comment"> *  Uses big-endian (most-significant byte first).</span>
+<span class="comment"> *  </span><span class="keyword">&lt;p&gt;</span>
+<span class="comment"> *  The client must </span><span class="keyword">&lt;tt&gt;</span><span class="comment">flush()</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> the output stream when finished writing bits.</span>
+<span class="comment"> *  </span><span class="keyword">&lt;p&gt;</span>
+<span class="comment"> *  The client should not intermixing calls to </span><span class="keyword">&lt;tt&gt;</span><span class="comment">BinaryOut</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> with calls</span>
+<span class="comment"> *  to </span><span class="keyword">&lt;tt&gt;</span><span class="comment">Out</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">; otherwise unexpected behavior will result.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  </span><span class="type">@author</span><span class="comment"> Robert Sedgewick</span>
+<span class="comment"> *  </span><span class="type">@author</span><span class="comment"> Kevin Wayne</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span><span class="normal"> </span><span class="keyword">final</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">BinaryOut</span><span class="normal"> </span><span class="cbracket">{</span>
+
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="usertype">BufferedOutputStream</span><span class="normal"> out</span><span class="symbol">;</span><span class="normal">  </span><span class="comment">// the output stream</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="type">int</span><span class="normal"> buffer</span><span class="symbol">;</span><span class="normal">                </span><span class="comment">// 8-bit buffer of bits to write out</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="type">int</span><span class="normal"> n</span><span class="symbol">;</span><span class="normal">                     </span><span class="comment">// number of bits remaining in buffer</span>
+
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Initializes a binary output stream from standard output.</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="function">BinaryOut</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        out </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">BufferedOutputStream</span><span class="symbol">(</span><span class="normal">System</span><span class="symbol">.</span><span class="normal">out</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Initializes a binary output stream from an </span><span class="keyword">&lt;tt&gt;</span><span class="comment">OutputStream</span><span class="keyword">&lt;/tt&gt;</span><span class="comment">.</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> os the </span><span class="keyword">&lt;tt&gt;</span><span class="comment">OutputStream</span><span class="keyword">&lt;/tt&gt;</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="function">BinaryOut</span><span class="symbol">(</span><span class="usertype">OutputStream</span><span class="normal"> os</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        out </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">BufferedOutputStream</span><span class="symbol">(</span><span class="normal">os</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Initializes a binary output stream from a file.</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> filename the name of the file</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="function">BinaryOut</span><span class="symbol">(</span><span class="usertype">String</span><span class="normal"> filename</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">try</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="usertype">OutputStream</span><span class="normal"> os </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">FileOutputStream</span><span class="symbol">(</span><span class="normal">filename</span><span class="symbol">);</span>
+<span class="normal">            out </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">BufferedOutputStream</span><span class="symbol">(</span><span class="normal">os</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">catch</span><span class="normal"> </span><span class="symbol">(</span><span class="usertype">IOException</span><span class="normal"> e</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            e</span><span class="symbol">.</span><span class="function">printStackTrace</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Initializes a binary output stream from a socket.</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> socket the socket</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="function">BinaryOut</span><span class="symbol">(</span><span class="usertype">Socket</span><span class="normal"> socket</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">try</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="usertype">OutputStream</span><span class="normal"> os </span><span class="symbol">=</span><span class="normal"> socket</span><span class="symbol">.</span><span class="function">getOutputStream</span><span class="symbol">();</span>
+<span class="normal">            out </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">BufferedOutputStream</span><span class="symbol">(</span><span class="normal">os</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">catch</span><span class="normal"> </span><span class="symbol">(</span><span class="usertype">IOException</span><span class="normal"> e</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            e</span><span class="symbol">.</span><span class="function">printStackTrace</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Writes the specified bit to the binary output stream.</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the bit</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">writeBit</span><span class="symbol">(</span><span class="type">boolean</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="comment">// add bit to buffer</span>
+<span class="normal">        buffer </span><span class="symbol">&lt;&lt;=</span><span class="normal"> </span><span class="number">1</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">)</span><span class="normal"> buffer </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="symbol">;</span>
+
+<span class="normal">        </span><span class="comment">// if buffer is full (8 bits), write out as a single byte</span>
+<span class="normal">        n</span><span class="symbol">++;</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">n </span><span class="symbol">==</span><span class="normal"> </span><span class="number">8</span><span class="symbol">)</span><span class="normal"> </span><span class="function">clearBuffer</span><span class="symbol">();</span>
+<span class="normal">    </span><span class="cbracket">}</span><span class="normal"> </span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Writes the 8-bit byte to the binary output stream.</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the byte</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">writeByte</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">assert</span><span class="normal"> x </span><span class="symbol">&gt;=</span><span class="normal"> </span><span class="number">0</span><span class="normal"> </span><span class="symbol">&amp;&amp;</span><span class="normal"> x </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">256</span><span class="symbol">;</span>
+
+<span class="normal">        </span><span class="comment">// optimized if byte-aligned</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">n </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="keyword">try</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                out</span><span class="symbol">.</span><span class="function">write</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">);</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+<span class="normal">            </span><span class="keyword">catch</span><span class="normal"> </span><span class="symbol">(</span><span class="usertype">IOException</span><span class="normal"> e</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                e</span><span class="symbol">.</span><span class="function">printStackTrace</span><span class="symbol">();</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+<span class="normal">            </span><span class="keyword">return</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+<span class="normal">        </span><span class="comment">// otherwise write one bit at a time</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">8</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="type">boolean</span><span class="normal"> bit </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">x </span><span class="symbol">&gt;&gt;&gt;</span><span class="normal"> </span><span class="symbol">(</span><span class="number">8</span><span class="normal"> </span><span class="symbol">-</span><span class="normal"> i </span><span class="symbol">-</span><span class="normal"> </span><span class="number">1</span><span class="symbol">))</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">==</span><span class="normal"> </span><span class="number">1</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="function">writeBit</span><span class="symbol">(</span><span class="normal">bit</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">// write out any remaining bits in buffer to the binary output stream, padding with 0s</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">clearBuffer</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">n </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">n </span><span class="symbol">&gt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> buffer </span><span class="symbol">&lt;&lt;=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">8</span><span class="normal"> </span><span class="symbol">-</span><span class="normal"> n</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">try</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            out</span><span class="symbol">.</span><span class="function">write</span><span class="symbol">(</span><span class="normal">buffer</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">catch</span><span class="normal"> </span><span class="symbol">(</span><span class="usertype">IOException</span><span class="normal"> e</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            e</span><span class="symbol">.</span><span class="function">printStackTrace</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        n </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="normal">        buffer </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Flushes the binary output stream, padding 0s if number of bits written so far</span>
+<span class="comment">     * is not a multiple of 8.</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">flush</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="function">clearBuffer</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="keyword">try</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            out</span><span class="symbol">.</span><span class="function">flush</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">catch</span><span class="normal"> </span><span class="symbol">(</span><span class="usertype">IOException</span><span class="normal"> e</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            e</span><span class="symbol">.</span><span class="function">printStackTrace</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Closes and flushes the binary output stream.</span>
+<span class="comment">     * Once it is closed, bits can no longer be written.</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">close</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="function">flush</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="keyword">try</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            out</span><span class="symbol">.</span><span class="function">close</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">catch</span><span class="normal"> </span><span class="symbol">(</span><span class="usertype">IOException</span><span class="normal"> e</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            e</span><span class="symbol">.</span><span class="function">printStackTrace</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Writes the specified bit to the binary output stream.</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the </span><span class="keyword">&lt;tt&gt;</span><span class="comment">boolean</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> to write</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">write</span><span class="symbol">(</span><span class="type">boolean</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="function">writeBit</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span><span class="normal"> </span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Writes the 8-bit byte to the binary output stream.</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the </span><span class="keyword">&lt;tt&gt;</span><span class="comment">byte</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> to write.</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">write</span><span class="symbol">(</span><span class="type">byte</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="function">writeByte</span><span class="symbol">(</span><span class="normal">x </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Writes the 32-bit int to the binary output stream.</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the </span><span class="keyword">&lt;tt&gt;</span><span class="comment">int</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> to write</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">write</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="function">writeByte</span><span class="symbol">((</span><span class="normal">x </span><span class="symbol">&gt;&gt;&gt;</span><span class="normal"> </span><span class="number">24</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="function">writeByte</span><span class="symbol">((</span><span class="normal">x </span><span class="symbol">&gt;&gt;&gt;</span><span class="normal"> </span><span class="number">16</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="function">writeByte</span><span class="symbol">((</span><span class="normal">x </span><span class="symbol">&gt;&gt;&gt;</span><span class="normal">  </span><span class="number">8</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="function">writeByte</span><span class="symbol">((</span><span class="normal">x </span><span class="symbol">&gt;&gt;&gt;</span><span class="normal">  </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Writes the r-bit int to the binary output stream.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  x the </span><span class="keyword">&lt;tt&gt;</span><span class="comment">int</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> to write</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  r the number of relevant bits in the char</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> IllegalArgumentException unless </span><span class="keyword">&lt;tt&gt;</span><span class="comment">r</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> is between 1 and 32</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> IllegalArgumentException unless </span><span class="keyword">&lt;tt&gt;</span><span class="comment">x</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> is between 0 and 2</span><span class="keyword">&lt;sup&gt;</span><span class="comment">r</span><span class="keyword">&lt;/sup&gt;</span><span class="comment"> - 1</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">write</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> x</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">r </span><span class="symbol">==</span><span class="normal"> </span><span class="number">32</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="function">write</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">);</span>
+<span class="normal">            </span><span class="keyword">return</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">r </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">||</span><span class="normal"> r </span><span class="symbol">&gt;</span><span class="normal"> </span><span class="number">32</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">IllegalArgumentException</span><span class="symbol">(</span><span class="string">"Illegal value for r = "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> r</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">x </span><span class="symbol">&gt;=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> r</span><span class="symbol">))</span><span class="normal">   </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">IllegalArgumentException</span><span class="symbol">(</span><span class="string">"Illegal "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> r </span><span class="symbol">+</span><span class="normal"> </span><span class="string">"-bit char = "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> x</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> r</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="type">boolean</span><span class="normal"> bit </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">x </span><span class="symbol">&gt;&gt;&gt;</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">r </span><span class="symbol">-</span><span class="normal"> i </span><span class="symbol">-</span><span class="normal"> </span><span class="number">1</span><span class="symbol">))</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">==</span><span class="normal"> </span><span class="number">1</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="function">writeBit</span><span class="symbol">(</span><span class="normal">bit</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Writes the 64-bit double to the binary output stream.</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the </span><span class="keyword">&lt;tt&gt;</span><span class="comment">double</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> to write</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">write</span><span class="symbol">(</span><span class="type">double</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="function">write</span><span class="symbol">(</span><span class="normal">Double</span><span class="symbol">.</span><span class="function">doubleToRawLongBits</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">));</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Writes the 64-bit long to the binary output stream.</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the </span><span class="keyword">&lt;tt&gt;</span><span class="comment">long</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> to write</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">write</span><span class="symbol">(</span><span class="type">long</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="function">writeByte</span><span class="symbol">((</span><span class="type">int</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">x </span><span class="symbol">&gt;&gt;&gt;</span><span class="normal"> </span><span class="number">56</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">));</span>
+<span class="normal">        </span><span class="function">writeByte</span><span class="symbol">((</span><span class="type">int</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">x </span><span class="symbol">&gt;&gt;&gt;</span><span class="normal"> </span><span class="number">48</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">));</span>
+<span class="normal">        </span><span class="function">writeByte</span><span class="symbol">((</span><span class="type">int</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">x </span><span class="symbol">&gt;&gt;&gt;</span><span class="normal"> </span><span class="number">40</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">));</span>
+<span class="normal">        </span><span class="function">writeByte</span><span class="symbol">((</span><span class="type">int</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">x </span><span class="symbol">&gt;&gt;&gt;</span><span class="normal"> </span><span class="number">32</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">));</span>
+<span class="normal">        </span><span class="function">writeByte</span><span class="symbol">((</span><span class="type">int</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">x </span><span class="symbol">&gt;&gt;&gt;</span><span class="normal"> </span><span class="number">24</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">));</span>
+<span class="normal">        </span><span class="function">writeByte</span><span class="symbol">((</span><span class="type">int</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">x </span><span class="symbol">&gt;&gt;&gt;</span><span class="normal"> </span><span class="number">16</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">));</span>
+<span class="normal">        </span><span class="function">writeByte</span><span class="symbol">((</span><span class="type">int</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">x </span><span class="symbol">&gt;&gt;&gt;</span><span class="normal">  </span><span class="number">8</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">));</span>
+<span class="normal">        </span><span class="function">writeByte</span><span class="symbol">((</span><span class="type">int</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">x </span><span class="symbol">&gt;&gt;&gt;</span><span class="normal">  </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">));</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Writes the 32-bit float to the binary output stream.</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the </span><span class="keyword">&lt;tt&gt;</span><span class="comment">float</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> to write</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">write</span><span class="symbol">(</span><span class="type">float</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="function">write</span><span class="symbol">(</span><span class="normal">Float</span><span class="symbol">.</span><span class="function">floatToRawIntBits</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">));</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Write the 16-bit int to the binary output stream.</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the </span><span class="keyword">&lt;tt&gt;</span><span class="comment">short</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> to write.</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">write</span><span class="symbol">(</span><span class="type">short</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="function">writeByte</span><span class="symbol">((</span><span class="normal">x </span><span class="symbol">&gt;&gt;&gt;</span><span class="normal">  </span><span class="number">8</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="function">writeByte</span><span class="symbol">((</span><span class="normal">x </span><span class="symbol">&gt;&gt;&gt;</span><span class="normal">  </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Writes the 8-bit char to the binary output stream.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  x the </span><span class="keyword">&lt;tt&gt;</span><span class="comment">char</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> to write</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> IllegalArgumentException unless </span><span class="keyword">&lt;tt&gt;</span><span class="comment">x</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> is betwen 0 and 255</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">write</span><span class="symbol">(</span><span class="type">char</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">x </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="normal"> </span><span class="symbol">||</span><span class="normal"> x </span><span class="symbol">&gt;=</span><span class="normal"> </span><span class="number">256</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">IllegalArgumentException</span><span class="symbol">(</span><span class="string">"Illegal 8-bit char = "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> x</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="function">writeByte</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Writes the r-bit char to the binary output stream.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  x the </span><span class="keyword">&lt;tt&gt;</span><span class="comment">char</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> to write</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  r the number of relevant bits in the char</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> IllegalArgumentException unless </span><span class="keyword">&lt;tt&gt;</span><span class="comment">r</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> is between 1 and 16</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> IllegalArgumentException unless </span><span class="keyword">&lt;tt&gt;</span><span class="comment">x</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> is between 0 and 2</span><span class="keyword">&lt;sup&gt;</span><span class="comment">r</span><span class="keyword">&lt;/sup&gt;</span><span class="comment"> - 1</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">write</span><span class="symbol">(</span><span class="type">char</span><span class="normal"> x</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">r </span><span class="symbol">==</span><span class="normal"> </span><span class="number">8</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="function">write</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">);</span>
+<span class="normal">            </span><span class="keyword">return</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">r </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">||</span><span class="normal"> r </span><span class="symbol">&gt;</span><span class="normal"> </span><span class="number">16</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">IllegalArgumentException</span><span class="symbol">(</span><span class="string">"Illegal value for r = "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> r</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">x </span><span class="symbol">&gt;=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> r</span><span class="symbol">))</span><span class="normal">   </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">IllegalArgumentException</span><span class="symbol">(</span><span class="string">"Illegal "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> r </span><span class="symbol">+</span><span class="normal"> </span><span class="string">"-bit char = "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> x</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> r</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="type">boolean</span><span class="normal"> bit </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">x </span><span class="symbol">&gt;&gt;&gt;</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">r </span><span class="symbol">-</span><span class="normal"> i </span><span class="symbol">-</span><span class="normal"> </span><span class="number">1</span><span class="symbol">))</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">==</span><span class="normal"> </span><span class="number">1</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="function">writeBit</span><span class="symbol">(</span><span class="normal">bit</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Writes the string of 8-bit characters to the binary output stream.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  s the </span><span class="keyword">&lt;tt&gt;</span><span class="comment">String</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> to write</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> IllegalArgumentException if any character in the string is not</span>
+<span class="comment">     *         between 0 and 255</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">write</span><span class="symbol">(</span><span class="usertype">String</span><span class="normal"> s</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> s</span><span class="symbol">.</span><span class="function">length</span><span class="symbol">();</span><span class="normal"> i</span><span class="symbol">++)</span>
+<span class="normal">            </span><span class="function">write</span><span class="symbol">(</span><span class="normal">s</span><span class="symbol">.</span><span class="function">charAt</span><span class="symbol">(</span><span class="normal">i</span><span class="symbol">));</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Writes the String of r-bit characters to the binary output stream.</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  s the </span><span class="keyword">&lt;tt&gt;</span><span class="comment">String</span><span class="keyword">&lt;/tt&gt;</span><span class="comment"> to write</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  r the number of relevants bits in each character</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> IllegalArgumentException unless r is between 1 and 16</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> IllegalArgumentException if any character in the string is not</span>
+<span class="comment">     *         between 0 and 2</span><span class="keyword">&lt;sup&gt;</span><span class="comment">r</span><span class="keyword">&lt;/sup&gt;</span><span class="comment"> - 1</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">write</span><span class="symbol">(</span><span class="usertype">String</span><span class="normal"> s</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> s</span><span class="symbol">.</span><span class="function">length</span><span class="symbol">();</span><span class="normal"> i</span><span class="symbol">++)</span>
+<span class="normal">            </span><span class="function">write</span><span class="symbol">(</span><span class="normal">s</span><span class="symbol">.</span><span class="function">charAt</span><span class="symbol">(</span><span class="normal">i</span><span class="symbol">),</span><span class="normal"> r</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Test client. Read bits from standard input and write to the file</span>
+<span class="comment">     * specified on command line.</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="normal">String</span><span class="symbol">[]</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+
+<span class="normal">        </span><span class="comment">// create binary output stream to write to file</span>
+<span class="normal">        </span><span class="usertype">String</span><span class="normal"> filename </span><span class="symbol">=</span><span class="normal"> args</span><span class="symbol">[</span><span class="number">0</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="usertype">BinaryOut</span><span class="normal"> out </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">BinaryOut</span><span class="symbol">(</span><span class="normal">filename</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="usertype">BinaryIn</span><span class="normal">  in  </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">BinaryIn</span><span class="symbol">();</span>
+
+<span class="normal">        </span><span class="comment">// read from standard input and write to file</span>
+<span class="normal">        </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(!</span><span class="normal">in</span><span class="symbol">.</span><span class="function">isEmpty</span><span class="symbol">())</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="type">char</span><span class="normal"> c </span><span class="symbol">=</span><span class="normal"> in</span><span class="symbol">.</span><span class="function">readChar</span><span class="symbol">();</span>
+<span class="normal">            out</span><span class="symbol">.</span><span class="function">write</span><span class="symbol">(</span><span class="normal">c</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">flush</span><span class="symbol">();</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="cbracket">}</span>
+
+<span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  This file is part of algs4.jar, which accompanies the textbook</span>
+<span class="comment"> *</span>
+<span class="comment"> *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,</span>
+<span class="comment"> *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.</span>
+<span class="comment"> *      </span><span class="url">http://algs4.cs.princeton.edu</span>
+<span class="comment"> *</span>
+<span class="comment"> *</span>
+<span class="comment"> *  algs4.jar is free software: you can redistribute it and/or modify</span>
+<span class="comment"> *  it under the terms of the GNU General Public License as published by</span>
+<span class="comment"> *  the Free Software Foundation, either version 3 of the License, or</span>
+<span class="comment"> *  (at your option) any later version.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  algs4.jar is distributed in the hope that it will be useful,</span>
+<span class="comment"> *  but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="comment"> *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="comment"> *  GNU General Public License for more details.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  You should have received a copy of the GNU General Public License</span>
+<span class="comment"> *  along with algs4.jar.  If not, see </span><span class="url">http://www.gnu.org/licenses.</span>
+<span class="comment"> ******************************************************************************/</span>
+</tt></pre>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10811519-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+
+<p><br><address><small>
+Last updated: Sat Oct 24 19:31:17 EDT 2015.
+</small></address>
+
+</html>

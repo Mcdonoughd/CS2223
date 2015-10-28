@@ -1,0 +1,390 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang = "en">
+
+<head>
+
+<link rel="shortcut icon" href="http://algs4.cs.princeton.edu/favicon.ico">
+<link rel="stylesheet"    href="http://algs4.cs.princeton.edu/java.css" type="text/css">
+
+<title>Out.java</title>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
+<meta NAME="DESCRIPTION" CONTENT="Out code in Java">
+<meta NAME="TITLE" CONTENT="Out code in Java">
+<meta NAME="KEYWORDS" CONTENT="Out,java,programming,computer science,algorithm,data structure,program,code">
+<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+
+</head>
+
+
+<body>
+<center><h1>Out.java</h1></center><p><br>
+
+Below is the syntax highlighted version of <a href = "Out.java">Out.java</a>.
+<p><br>
+
+<!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Compilation:  javac Out.java</span>
+<span class="comment"> *  Execution:    java Out</span>
+<span class="comment"> *  Dependencies: none</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Writes data of various types to: stdout, file, or socket.</span>
+<span class="comment"> *</span>
+<span class="comment"> ******************************************************************************/</span>
+
+<span class="preproc">package</span><span class="normal"> edu</span><span class="symbol">.</span><span class="normal">princeton</span><span class="symbol">.</span><span class="normal">cs</span><span class="symbol">.</span><span class="normal">algs4</span><span class="symbol">;</span>
+
+
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">io</span><span class="symbol">.</span><span class="normal">FileOutputStream</span><span class="symbol">;</span>
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">io</span><span class="symbol">.</span><span class="normal">IOException</span><span class="symbol">;</span>
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">io</span><span class="symbol">.</span><span class="normal">OutputStream</span><span class="symbol">;</span>
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">io</span><span class="symbol">.</span><span class="normal">OutputStreamWriter</span><span class="symbol">;</span>
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">io</span><span class="symbol">.</span><span class="normal">PrintWriter</span><span class="symbol">;</span>
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">net</span><span class="symbol">.</span><span class="normal">Socket</span><span class="symbol">;</span>
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">util</span><span class="symbol">.</span><span class="normal">Locale</span><span class="symbol">;</span>
+
+<span class="comment">/**</span>
+<span class="comment"> *  This class provides methods for writing strings and numbers to</span>
+<span class="comment"> *  various output streams, including standard output, file, and sockets.</span>
+<span class="comment"> *  </span><span class="keyword">&lt;p&gt;</span>
+<span class="comment"> *  For additional documentation, see</span>
+<span class="comment"> *  </span><span class="keyword">&lt;a</span><span class="normal"> </span><span class="type">href</span><span class="symbol">=</span><span class="string">"http://introcs.cs.princeton.edu/31datatype"</span><span class="keyword">&gt;</span><span class="comment">Section 3.1</span><span class="keyword">&lt;/a&gt;</span><span class="comment"> of</span>
+<span class="comment"> *  </span><span class="keyword">&lt;i&gt;</span><span class="comment">Introduction to Programming in Java: An Interdisciplinary Approach</span><span class="keyword">&lt;/i&gt;</span>
+<span class="comment"> *  by Robert Sedgewick and Kevin Wayne.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  </span><span class="type">@author</span><span class="comment"> Robert Sedgewick</span>
+<span class="comment"> *  </span><span class="type">@author</span><span class="comment"> Kevin Wayne</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">Out</span><span class="normal"> </span><span class="cbracket">{</span>
+
+<span class="normal">    </span><span class="comment">// force Unicode UTF-8 encoding; otherwise it's system dependent</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="keyword">final</span><span class="normal"> </span><span class="usertype">String</span><span class="normal"> CHARSET_NAME </span><span class="symbol">=</span><span class="normal"> </span><span class="string">"UTF-8"</span><span class="symbol">;</span>
+
+<span class="normal">    </span><span class="comment">// assume language = English, country = US for consistency with In</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="keyword">final</span><span class="normal"> </span><span class="usertype">Locale</span><span class="normal"> LOCALE </span><span class="symbol">=</span><span class="normal"> Locale</span><span class="symbol">.</span><span class="normal">US</span><span class="symbol">;</span>
+
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="usertype">PrintWriter</span><span class="normal"> out</span><span class="symbol">;</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Initializes an output stream from a {</span><span class="type">@link</span><span class="comment"> OutputStream}.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  os the </span><span class="keyword">&lt;tt&gt;</span><span class="comment">OutputStream</span><span class="keyword">&lt;/tt&gt;</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="function">Out</span><span class="symbol">(</span><span class="usertype">OutputStream</span><span class="normal"> os</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">try</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="usertype">OutputStreamWriter</span><span class="normal"> osw </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">OutputStreamWriter</span><span class="symbol">(</span><span class="normal">os</span><span class="symbol">,</span><span class="normal"> CHARSET_NAME</span><span class="symbol">);</span>
+<span class="normal">            out </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">PrintWriter</span><span class="symbol">(</span><span class="normal">osw</span><span class="symbol">,</span><span class="normal"> </span><span class="keyword">true</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">catch</span><span class="normal"> </span><span class="symbol">(</span><span class="usertype">IOException</span><span class="normal"> e</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            e</span><span class="symbol">.</span><span class="function">printStackTrace</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Initializes an output stream from standard output.</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="function">Out</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">this</span><span class="symbol">(</span><span class="normal">System</span><span class="symbol">.</span><span class="normal">out</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Initializes an output stream from a socket.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  socket the socket</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="function">Out</span><span class="symbol">(</span><span class="usertype">Socket</span><span class="normal"> socket</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">try</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="usertype">OutputStream</span><span class="normal"> os </span><span class="symbol">=</span><span class="normal"> socket</span><span class="symbol">.</span><span class="function">getOutputStream</span><span class="symbol">();</span>
+<span class="normal">            </span><span class="usertype">OutputStreamWriter</span><span class="normal"> osw </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">OutputStreamWriter</span><span class="symbol">(</span><span class="normal">os</span><span class="symbol">,</span><span class="normal"> CHARSET_NAME</span><span class="symbol">);</span>
+<span class="normal">            out </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">PrintWriter</span><span class="symbol">(</span><span class="normal">osw</span><span class="symbol">,</span><span class="normal"> </span><span class="keyword">true</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">catch</span><span class="normal"> </span><span class="symbol">(</span><span class="usertype">IOException</span><span class="normal"> e</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            e</span><span class="symbol">.</span><span class="function">printStackTrace</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Initializes an output stream from a file.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  filename the name of the file</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="function">Out</span><span class="symbol">(</span><span class="usertype">String</span><span class="normal"> filename</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">try</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="usertype">OutputStream</span><span class="normal"> os </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">FileOutputStream</span><span class="symbol">(</span><span class="normal">filename</span><span class="symbol">);</span>
+<span class="normal">            </span><span class="usertype">OutputStreamWriter</span><span class="normal"> osw </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">OutputStreamWriter</span><span class="symbol">(</span><span class="normal">os</span><span class="symbol">,</span><span class="normal"> CHARSET_NAME</span><span class="symbol">);</span>
+<span class="normal">            out </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">PrintWriter</span><span class="symbol">(</span><span class="normal">osw</span><span class="symbol">,</span><span class="normal"> </span><span class="keyword">true</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">catch</span><span class="normal"> </span><span class="symbol">(</span><span class="usertype">IOException</span><span class="normal"> e</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            e</span><span class="symbol">.</span><span class="function">printStackTrace</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Closes the output stream.</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">close</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">close</span><span class="symbol">();</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Terminates the current line by printing the line-separator string.</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">println</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">();</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Prints an object to this output stream and then terminates the line.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the object to print</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">println</span><span class="symbol">(</span><span class="usertype">Object</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Prints a boolean to this output stream and then terminates the line.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the boolean to print</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">println</span><span class="symbol">(</span><span class="type">boolean</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Prints a character to this output stream and then terminates the line.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the character to print</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">println</span><span class="symbol">(</span><span class="type">char</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Prints a double to this output stream and then terminates the line.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the double to print</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">println</span><span class="symbol">(</span><span class="type">double</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Prints a float to this output stream and then terminates the line.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the float to print</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">println</span><span class="symbol">(</span><span class="type">float</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Prints an integer to this output stream and then terminates the line.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the integer to print</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">println</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Prints a long to this output stream and then terminates the line.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the long to print</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">println</span><span class="symbol">(</span><span class="type">long</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Prints a byte to this output stream and then terminates the line.</span>
+<span class="comment">     * </span><span class="keyword">&lt;p&gt;</span>
+<span class="comment">     * To write binary data, see {</span><span class="type">@link</span><span class="comment"> BinaryOut}.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the byte to print</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">println</span><span class="symbol">(</span><span class="type">byte</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Flushes this output stream.</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">print</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">flush</span><span class="symbol">();</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Prints an object to this output stream and flushes this output stream.</span>
+<span class="comment">     * </span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the object to print</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">print</span><span class="symbol">(</span><span class="usertype">Object</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">print</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">);</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">flush</span><span class="symbol">();</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Prints a boolean to this output stream and flushes this output stream.</span>
+<span class="comment">     * </span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the boolean to print</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">print</span><span class="symbol">(</span><span class="type">boolean</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">print</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">);</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">flush</span><span class="symbol">();</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Prints a character to this output stream and flushes this output stream.</span>
+<span class="comment">     * </span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the character to print</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">print</span><span class="symbol">(</span><span class="type">char</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">print</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">);</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">flush</span><span class="symbol">();</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Prints a double to this output stream and flushes this output stream.</span>
+<span class="comment">     * </span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the double to print</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">print</span><span class="symbol">(</span><span class="type">double</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">print</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">);</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">flush</span><span class="symbol">();</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Prints a float to this output stream and flushes this output stream.</span>
+<span class="comment">     * </span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the float to print</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">print</span><span class="symbol">(</span><span class="type">float</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">print</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">);</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">flush</span><span class="symbol">();</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Prints an integer to this output stream and flushes this output stream.</span>
+<span class="comment">     * </span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the integer to print</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">print</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">print</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">);</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">flush</span><span class="symbol">();</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Prints a long integer to this output stream and flushes this output stream.</span>
+<span class="comment">     * </span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the long integer to print</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">print</span><span class="symbol">(</span><span class="type">long</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">print</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">);</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">flush</span><span class="symbol">();</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Prints a byte to this output stream and flushes this output stream.</span>
+<span class="comment">     * </span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> x the byte to print</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">print</span><span class="symbol">(</span><span class="type">byte</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">print</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">);</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">flush</span><span class="symbol">();</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Prints a formatted string to this output stream, using the specified format</span>
+<span class="comment">     * string and arguments, and then flushes this output stream.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> format the format string</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> args   the arguments accompanying the format string</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">printf</span><span class="symbol">(</span><span class="usertype">String</span><span class="normal"> format</span><span class="symbol">,</span><span class="normal"> Object</span><span class="symbol">...</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">printf</span><span class="symbol">(</span><span class="normal">LOCALE</span><span class="symbol">,</span><span class="normal"> format</span><span class="symbol">,</span><span class="normal"> args</span><span class="symbol">);</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">flush</span><span class="symbol">();</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * Prints a formatted string to this output stream, using the specified</span>
+<span class="comment">     * locale, format string, and arguments, and then flushes this output stream.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> locale the locale</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> format the format string</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> args   the arguments accompanying the format string</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">printf</span><span class="symbol">(</span><span class="usertype">Locale</span><span class="normal"> locale</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">String</span><span class="normal"> format</span><span class="symbol">,</span><span class="normal"> Object</span><span class="symbol">...</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">printf</span><span class="symbol">(</span><span class="normal">locale</span><span class="symbol">,</span><span class="normal"> format</span><span class="symbol">,</span><span class="normal"> args</span><span class="symbol">);</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">flush</span><span class="symbol">();</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+<span class="normal">   </span><span class="comment">/**</span>
+<span class="comment">     * A test client.</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="normal">String</span><span class="symbol">[]</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="usertype">Out</span><span class="normal"> out</span><span class="symbol">;</span>
+
+<span class="normal">        </span><span class="comment">// write to stdout</span>
+<span class="normal">        out </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Out</span><span class="symbol">();</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"Test 1"</span><span class="symbol">);</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">close</span><span class="symbol">();</span>
+
+<span class="normal">        </span><span class="comment">// write to a file</span>
+<span class="normal">        out </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Out</span><span class="symbol">(</span><span class="string">"test.txt"</span><span class="symbol">);</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"Test 2"</span><span class="symbol">);</span>
+<span class="normal">        out</span><span class="symbol">.</span><span class="function">close</span><span class="symbol">();</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="cbracket">}</span>
+
+<span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Copyright 2002-2015, Robert Sedgewick and Kevin Wayne.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  This file is part of algs4.jar, which accompanies the textbook</span>
+<span class="comment"> *</span>
+<span class="comment"> *      Algorithms, 4th edition by Robert Sedgewick and Kevin Wayne,</span>
+<span class="comment"> *      Addison-Wesley Professional, 2011, ISBN 0-321-57351-X.</span>
+<span class="comment"> *      </span><span class="url">http://algs4.cs.princeton.edu</span>
+<span class="comment"> *</span>
+<span class="comment"> *</span>
+<span class="comment"> *  algs4.jar is free software: you can redistribute it and/or modify</span>
+<span class="comment"> *  it under the terms of the GNU General Public License as published by</span>
+<span class="comment"> *  the Free Software Foundation, either version 3 of the License, or</span>
+<span class="comment"> *  (at your option) any later version.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  algs4.jar is distributed in the hope that it will be useful,</span>
+<span class="comment"> *  but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="comment"> *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="comment"> *  GNU General Public License for more details.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  You should have received a copy of the GNU General Public License</span>
+<span class="comment"> *  along with algs4.jar.  If not, see </span><span class="url">http://www.gnu.org/licenses.</span>
+<span class="comment"> ******************************************************************************/</span>
+</tt></pre>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10811519-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+
+<p><br><address><small>
+Last updated: Sat Oct 24 19:31:17 EDT 2015.
+</small></address>
+
+</html>
