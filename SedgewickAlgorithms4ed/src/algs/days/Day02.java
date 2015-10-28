@@ -1,7 +1,6 @@
 package algs.days;
 
-import algs.sedgewick.StdRandom;
-import algs.sedgewick.Stopwatch;
+import edu.princeton.cs.algs4.*;
 
 public class Day02 {
 	public static void main(String[] args) {
@@ -17,7 +16,6 @@ public class Day02 {
 		}
 		
 		// SWITCH THESE AROUND AND SEE WHAT HAPPENS!
-		
 		
 		Stopwatch addsw = new Stopwatch();
 		sum = 0;

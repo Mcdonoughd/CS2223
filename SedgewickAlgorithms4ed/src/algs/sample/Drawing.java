@@ -1,6 +1,6 @@
 package algs.sample;
 
-import algs.sedgewick.StdDraw;
+import edu.princeton.cs.algs4.StdDraw;
 
 /**
  * More examples can be found here:

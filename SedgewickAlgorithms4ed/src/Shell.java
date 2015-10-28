@@ -1,8 +1,9 @@
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import algs.sedgewick.*;
+import edu.princeton.cs.algs4.*;
 
 /**
  * Helper class to launch programs on your behalf within Eclipse.
@@ -119,9 +120,10 @@ public class Shell {
 				StdIn.resync();
 				System.setOut(existOutput);
 				StdOut.resync();
-				
+			} catch (InvocationTargetException ite) {
+				fail (ite.getTargetException().getMessage());
 			} catch (Exception e) {
-				fail (e.getMessage());
+				fail (e.getLocalizedMessage());
 			}
 		}
 	}

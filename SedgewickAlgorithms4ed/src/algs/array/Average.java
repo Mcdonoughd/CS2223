@@ -1,6 +1,6 @@
 package algs.array;
 
-import algs.sedgewick.StdRandom;
+import edu.princeton.cs.algs4.StdRandom;
 
 public class Average {
 	
