@@ -33,7 +33,7 @@ public class Shell {
 	 * Get all arguments. Stop if '<' or '>' observed
 	 * @return
 	 */
-	static String[] getArguments(StringTokenizer st) throws Exception {
+	static String[] getArguments(StringTokenizer st, boolean redirect[]) throws Exception {
 		ArrayList<String> args = new ArrayList<String>();
 		boolean doneWithArguments = false;
 		boolean redirectInput = false;
@@ -44,9 +44,11 @@ public class Shell {
 			if (s.equals ("<")) {
 				doneWithArguments = true;
 				redirectInput = true;
+				redirect[0] = true;
 			} else if (s.equals (">")) {
 				doneWithArguments = true;
 				redirectOutput = true;
+				redirect[0] = true;
 			} else {
 				if (redirectInput) {
 					System.setIn(new FileInputStream(new File (s)));
@@ -96,15 +98,22 @@ public class Shell {
 			// execute!
 			try {
 				// build up arguments and deal with '<' and '>' but not |
-				Object[] argList = getArguments(st);
+				boolean redirect[] = { false };
+				Object[] argList = getArguments(st, redirect);
 				
-				// hold onto existing stdin/stdou
+				// hold onto existing stdin/stdout
 				InputStream existInput  = System.in;
 				PrintStream existOutput = System.out;
 				
 				Method m = clazz.getDeclaredMethod("main", String[].class);
 				m.invoke(null, new Object[] { argList});
 
+				// if we were involved in any redirection, leave now to avoid 
+				// problems with buffering
+				if (redirect[0]) {
+					System.exit(0);
+				}
+				
 				// get back into proper alignment so we can close down cleanly...
 				System.setIn(existInput);
 				StdIn.resync();
