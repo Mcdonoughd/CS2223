@@ -1,8 +1,8 @@
-package algs.days;
+package algs.days.day02;
 
 import edu.princeton.cs.algs4.*;
 
-public class Day02 {
+public class CompareOperation {
 	public static void main(String[] args) {
 		// timing comparison of addition vs. multiplication vs. square root
 		
