@@ -13,9 +13,7 @@ public class Evaluate {
 	public static void main(String[] args) {
 		Stack<String> ops = new Stack<String>();
 		Stack<Double> vals = new Stack<Double>();
-		System.out.println(Math.PI);
-		System.out.println(Math.E);
-		
+				
 		while (!StdIn.isEmpty()) {
 			// Read token. push if operator.
 			String s= StdIn.readString();
