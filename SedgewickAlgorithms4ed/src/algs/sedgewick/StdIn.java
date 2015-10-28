@@ -301,7 +301,7 @@ public final class StdIn {
     /**
      * If StdIn changes, use this to reinitialize the scanner.
      */
-    private static void resync() {
+    public static void resync() {
         setScanner(new Scanner(new java.io.BufferedInputStream(System.in), CHARSET_NAME));
     }
     

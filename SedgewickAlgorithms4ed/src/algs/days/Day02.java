@@ -16,6 +16,9 @@ public class Day02 {
 			numbers[i] = StdRandom.uniform(-1000000, 1000000);
 		}
 		
+		// SWITCH THESE AROUND AND SEE WHAT HAPPENS!
+		
+		
 		Stopwatch addsw = new Stopwatch();
 		sum = 0;
 		for (int i = 0; i < N; i++) {

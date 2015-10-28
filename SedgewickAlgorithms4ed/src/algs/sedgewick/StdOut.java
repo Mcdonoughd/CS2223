@@ -45,6 +45,14 @@ public final class StdOut {
     // don't instantiate
     private StdOut() { }
 
+    
+    public static void resync() {
+    	try {
+            out = new PrintWriter(new OutputStreamWriter(System.out, CHARSET_NAME), true);
+        }
+        catch (UnsupportedEncodingException e) { System.out.println(e); }
+    }
+    
     // close the output stream (not required)
    /**
      * Close standard output.
