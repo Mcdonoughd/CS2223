@@ -4,6 +4,9 @@ import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 
+// This will run for a long, long time....
+// 15! = 1,307,674,368,000
+
 public class Anagram15 {
 	
 	public static int rank(String key, String[] a) {
