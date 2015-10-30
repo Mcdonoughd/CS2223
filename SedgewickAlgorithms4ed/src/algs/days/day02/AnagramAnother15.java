@@ -42,6 +42,7 @@ public class AnagramAnother15 {
 			for (int pos : already) {
 				word.append(letters[pos]);
 			}
+			if (ctr % 50000000 == 0) { System.out.println(ctr + "," + word + "," + new java.util.Date()); }
 			if (rank(word.toString(), words) != -1) {
 				System.out.println(word + " at " + ctr);	
 			}
