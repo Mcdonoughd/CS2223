@@ -1,4 +1,4 @@
-package algs.days.day03;
+package algs.days.day04;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -9,19 +9,27 @@ import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.Stopwatch;
 
 /** 
- * Observe that we can short-circuit a search when (a) a word does not match; and (b) we find our
+ * Rephrase this algorithm in pseudocode and see if that leads to a cleaner solution
  * 
- * largest prefix which is not the prefix for some word in the dictionary. At that point, we 
- * can short circuit.
- *
- * As an aside, I am really excited that this casual example -- which I came up with earlier in the
- * week -- has proven to be so productive! Note that I haven't eliminate the combinatorial explosion
- * of the problem. Rather, I am taking advantage of the non-uniform distribution of the English language
- * to eliminate countless permutations that are simply not valid.
+ * INPUT: letters to use
+ * OUTPUT: list of anagrams using permutation of those letters only
+ * 
+ * 
+ * # positions is lowest permutation of n index positions
+ * positions = [0, 1, 2, 3, ..., n-1]
+ * while positions is not empty
+ *    if positions reflects a word in dictionary
+ *       add word to list
+ *    else
+ *       find largest prefix of word which is not a prefix of any word in dictionary
+ *       truncate positions[] to this spot
+ * 
+ *	  advance to next permutation, removing prior positions as needed.
+ *    
  * 
  * @author George Heineman
  */
-public class AnagramThird {
+public class AnagramFinal {
 
 	// store letters here and the words from the dictionary.
 	static char[] letters;
@@ -29,6 +37,8 @@ public class AnagramThird {
 
 	// maximum number of anagrams to discover
 	static int MAX_NUM_ANAGRAMS = 1000; 
+	
+	static int ctr = 0;
 	
 	// existing words that have been found as anagrams.
 	static ArrayList<String> anagrams = new ArrayList<String>();
@@ -111,90 +121,72 @@ public class AnagramThird {
 	 * recursive calls necessary. This tricky bit of logic was the hard-fought result of wrestling the
 	 * recursion into an iterative solution. 
 	 */
-	static void process() {
-		Stack<Integer> candidate = new Stack<Integer>();
+	static void process(Stack<Integer> positions) {
 		
-		// minStart is an odd state variable. It only comes into play when we short-circuit a specific solution,
-		// in which case we want to start with the next available position, rather than starting from 0.
-		int minStart = 0;
-
 		// instead of using recursion, keep the stack and manipulate it constantly. 
-		while (true) {
+		while (positions.size() > 0) {
 			
-			// once we have a full stack representing a permutation, see if we have a word or we can short-circuit.
-			if (candidate.size() == letters.length) {
+			// We have a full stack representing a permutation, see if we have a word or we can short-circuit.
 				
-				// StringBuilder is faster for appending characters.
-				StringBuilder word = new StringBuilder();
-				for (int pos : candidate) {
-					word.append(letters[pos]);
+			// StringBuilder is faster for appending characters.
+			StringBuilder word = new StringBuilder();
+			for (int pos : positions) {
+				word.append(letters[pos]);
+			}
+			String s = word.toString();
+			
+			ctr++;
+			
+			// if the constructed word exists in dictionary (i.e., its rank is not -1), then add to our
+			// collection of anagrams. Do this way to prevent duplicates.
+			if (rank(s, words) != -1) {
+				if (!anagrams.contains(s)) {
+					anagrams.add(s);
 				}
-				String s = word.toString();
 				
-				// if the constructed word exists in dictionary (i.e., its rank is not -1), then add to our
-				// collection of anagrams. Do this way to prevent duplicates.
-				if (rank(s, words) != -1) {
-					if (!anagrams.contains(s)) {
-						anagrams.add(s);
-					}
-				} else {
-					// otherwise, find our largest prefix which is not the prefix for any word in the dictionary.
-					// we can short-circuit the process from that point, which we do by removing letters from the
-					// stack and continuing on to the next opportunity if possible.
-					int shortCircuit = largestPrefixNonDictionaryPrefix(s);
-					while (shortCircuit < candidate.size()) {
-						candidate.pop();
-					}
+				// return once done...
+				if (anagrams.size() > MAX_NUM_ANAGRAMS) {
+					return;
 				}
-
-				// at this point we either have a short-circuit or a max-letter word. In either case, we pop
-				// off the final position in the candidate and advance it to be the "next one" that we will 
-				// attempt to add to candidate.
-				minStart= candidate.pop();
-				minStart++;
-
 			} else {
-				// bulk back up to letters.length. Ok, here is the real complexity. The key is we don't want to
-				// miss any permutations. We remember the 'minStart' from the short-circuit and start from that 
-				// point. 
-				while (candidate.size() < letters.length) {
-					// assume we can't add another candidate, which can happen when the final position has
-					// run out of values (which can only be in the range 0 .. letters.length-1). Honestly, 
-					// this inner while loop was one of the most challenging parts of getting this working.
-					// I wish I could explain how I got this to work, but it was done carefully within a debugger
-					// tracing the results of the first short-circuit request that I got working.
-					boolean added = false;
-					int i = minStart;
-					while (i < letters.length) {
-						if (!candidate.contains(i)) {
-							candidate.push(i);   // only come inside loop if i not already contained. This limits infinite loops.
-							added = true;
-							if (minStart != 0) {
-								i = 0;
-								minStart = 0;
-								continue;  // make sure to reset at 0 so we don't miss any positions.
-							}
-						}
-						
-						i++;
-					}
-
-					if (!added) {
-						// we cannot proceed with our existing candidate. We must advance the final position 
-						// in our candidate. If we are even empty, then we hav exhausted all possible permutations.
-						if (candidate.isEmpty()) { 
-							return; // we are done!
-						}
-						
-						// this retrieves the final position in our candidate and advances it. We break so we are
-						// able to restart our outer loop which grows the partial candidate until it has reached
-						// the maximum number of letters allowed.
-						minStart= candidate.pop();
-						minStart++;
-						break;
-					}
+				// otherwise, find our largest prefix which is not the prefix for any word in the dictionary.
+				// we can short-circuit the process from that point, which we do by removing letters from the
+				// stack and continuing on to the next opportunity if possible.
+				int shortCircuit = largestPrefixNonDictionaryPrefix(s);
+				while (shortCircuit < positions.size()) {
+					positions.pop();
 				}
 			}
+			
+			// advance! Do this by popping last one off and try to refill back to 15. If fail, because there
+			// are no more options, pop off previous one and continue. Stop when FULL or EMPTY.
+			int next = positions.pop()+1;
+			while (positions.size() != 0 && positions.size() != letters.length) {
+
+				// try to fill back up to max size.
+				while (positions.size() != letters.length) {
+					while (next < letters.length) {
+						if (!positions.contains(next)) {
+							break;
+						}
+						next++;
+					}
+
+					// advance the prior value
+					if (next == letters.length) {
+						// if no more positions we are done!
+						if (positions.isEmpty()) { break; }
+						
+						next = positions.pop() + 1;
+						continue;
+					}
+					
+					positions.push(next);
+					next = 0;
+				}
+			}
+			
+			// if we get to 15 we are ready to try again...
 		}
 	}
 
@@ -211,13 +203,18 @@ public class AnagramThird {
 		StdOut.println("Enter letters for which you want a SINGLE word anagram");
 		String word = StdIn.readString().toLowerCase();
 		letters = word.toCharArray();
-
+		
+		Stack<Integer> positions = new Stack<Integer>();
+		for (int i = 0; i < letters.length; i++) {
+			positions.push(i);
+		}
 		Stopwatch sw = new Stopwatch();
-		process();
+		process(positions);
+		
 		System.out.println("Here are the anagrams.");
 		for (String s : anagrams) {
 			System.out.println(s);
 		}
-		System.out.println("total time:" + sw.elapsedTime());
+		System.out.println("total time:" + sw.elapsedTime() + " with " + ctr + " lookups.");
 	}
 }
