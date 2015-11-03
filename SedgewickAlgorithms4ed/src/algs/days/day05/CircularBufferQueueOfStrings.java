@@ -35,7 +35,7 @@ public class CircularBufferQueueOfStrings  {
 	}
 
 	public static void main(String[] args) {
-		CircularBufferQueueOfStrings queue = new CircularBufferQueueOfStrings(5);
+		CircularBufferQueueOfStrings queue = new CircularBufferQueueOfStrings(8);
 		while (!StdIn.isEmpty()) {
 			String item = StdIn.readString();
 			if (item.equals("-")) {
