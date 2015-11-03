@@ -1,5 +1,7 @@
 package algs.days.day04;
 
+import edu.princeton.cs.algs4.StdOut;
+
 public class SampleBooleanArrayInvestigation {
 	/** 
 	 * Given a two-dimensional array, count the number of true values it contains.
@@ -36,6 +38,7 @@ public class SampleBooleanArrayInvestigation {
 				{ true,  false, false, true }
 		};
 		
-		assert (7 == countNumberTrue(sample));
+		StdOut.println("Count number true: " + countNumberTrue(sample));
+		StdOut.println("The above should be six. Doh!");
 	}
 }
