@@ -4,28 +4,34 @@ import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 
 // Naive MergeSort that wastes lots of storage.
-public class Merge {
+public class MergeAnnotated {
     
 	static Comparable aux[];
 	
     public static void sort(Comparable[] a) {
     	aux = new Comparable[a.length];
-    	sort (a, 0, a.length-1);
+    	sort (a, 0, a.length-1, "");
     }
     
     // recursive helper function
-    static void sort (Comparable[] a, int lo, int hi) {
+    static void sort (Comparable[] a, int lo, int hi, String indent) {
     	if (hi <= lo) return;
     	
     	int mid = lo + (hi - lo)/2;
     	
-    	sort(a, lo, mid);
-    	sort(a, mid+1, hi);
-    	merge(a, lo, mid, hi);
+    	sort(a, lo, mid, indent + "  ");
+    	
+    	sort(a, mid+1, hi, indent + "  ");
+    	merge(a, lo, mid, hi, indent);
+    	
     }
     
     // merge sorted results a[lo..mid] with a[mid+1..hi] back into a
-    static void merge (Comparable[] a, int lo, int mid, int hi) {
+    static void merge (Comparable[] a, int lo, int mid, int hi, String indent) {
+    	StdOut.print(indent + "merge a[" + lo + ".." + mid + "] with a[" + (mid+1) + ".." + hi + "]     [");
+    	show(a, lo,mid);
+    	show(a, mid+1,hi); 
+    	
     	int i = lo;     // starting index into left sorted sub-array
     	int j = mid+1;  // starting index into right sorted sub-array
     	
@@ -42,6 +48,9 @@ public class Merge {
     		else if  (less(aux[j], aux[i]))  { a[k] = aux[j++]; }
     		else                             { a[k] = aux[i++]; }
     	}
+    	StdOut.print ("]  ==> [");
+    	show(a,lo,hi);
+    	StdOut.println("]");
     }
     
 
@@ -64,7 +73,7 @@ public class Merge {
     // print array to standard output a[lo..hi]
     private static void show(Comparable[] a, int lo, int hi) {
         for (int i = lo; i <= hi; i++) {
-            StdOut.println (a[i]);
+            StdOut.print (a[i] + " ");
         }
     }
 
@@ -74,7 +83,7 @@ public class Merge {
      */
     public static void main(String[] args) {
         String[] a = StdIn.readAllStrings();
-        Merge.sort(a);
+        MergeAnnotated.sort(a);
         show(a, 0, a.length-1);
     }
 }
