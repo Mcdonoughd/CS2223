@@ -3,7 +3,7 @@ package algs.days.day07;
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 
-// Naive MergeSort that wastes lots of storage.
+// Proper Merge Sort from Sedgewick, 4ed
 public class Merge {
     
 	static Comparable aux[];
