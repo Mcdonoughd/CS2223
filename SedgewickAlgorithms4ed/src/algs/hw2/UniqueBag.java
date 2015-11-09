@@ -10,9 +10,15 @@ package algs.hw2;
  * Once you complete this implementation, you will need to provide empirical evidence 
  * to support the performance specifications of each method.
  * 
+ * CHANGE LOG:
+ * 1. Added logic that each Item must extend Comparable<Item>. This means that you can
+ *    fully compare items with each other
+ *    
+ * 2. Added default constructor so you can create an empty bag more easily.
+ * 
  * @param <Item>
  */
-public class UniqueBag<Item> {
+public class UniqueBag<Item extends Comparable<Item>> {
 
 	Node<Item> first = null;
 	
@@ -22,6 +28,11 @@ public class UniqueBag<Item> {
 		private Node<Item> next;
 	}
 
+	/** Default constructor to create an empty initial bag. */
+	public UniqueBag() {
+		
+	}
+	
 	/**
 	 * Initialize the bag to contain the unique elements found in the initial list.
 	 * 

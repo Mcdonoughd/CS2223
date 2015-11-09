@@ -1,9 +1,11 @@
 package algs.days.day08;
 
+import edu.princeton.cs.algs4.StdIn;
 
-public class PartitionWeakness {
+
+public class PartitionDemonstration {
 	public static void main(String[] args) {
-		String[] a = new String [] { "the", "the", "the", "the", "the", "the", "the" };
+		String[] a = StdIn.readAllStrings();
 		Quick.partition(a, 0, a.length-1);
 		Quick.show(a);
 	}
