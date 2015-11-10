@@ -1,5 +1,8 @@
 package algs.days.day09;
 
+import edu.princeton.cs.algs4.StdIn;
+import edu.princeton.cs.algs4.StdOut;
+
 public class MaxPQ<Key> {
 	private Key[] pq;                    // store items at indices 1 to N (pq[0] is unused)
 	private int N;                       // number of items on priority queue
@@ -70,5 +73,20 @@ public class MaxPQ<Key> {
 		if (left  <= N && less(k, left))  return false;
 		if (right <= N && less(k, right)) return false;
 		return isMaxHeap(left) && isMaxHeap(right);
+	}
+	
+	/****************************
+	 *  Sample main
+	 ****************************/
+	public static void main(String[] args) {
+		MaxPQ<String> pq = new MaxPQ<String>(16);
+		String[] a = StdIn.readAllStrings();
+		for (String s : a) {
+			pq.insert(s);
+		}
+		
+		while (!pq.isEmpty()) {
+			StdOut.println(pq.delMax());
+		}
 	}
 }
