@@ -36,7 +36,7 @@ public class UniqueBag<Item extends Comparable<Item>> {
 	/**
 	 * Initialize the bag to contain the unique elements found in the initial list.
 	 * 
-	 * Performance must be dependent of the number of items in initial, or ~ N.
+	 * NOTE: there are no performance requirements on this constructor.
 	 */
 	public UniqueBag(Item[] initial) {
 		
