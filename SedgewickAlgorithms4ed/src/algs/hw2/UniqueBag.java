@@ -16,16 +16,30 @@ package algs.hw2;
  *    
  * 2. Added default constructor so you can create an empty bag more easily.
  * 
+ * 3. Cleaned up the description of the Node inner class, which doesn't need generics
+ *    because the outer class provides this.
+ *    
+ * 4. Added remove method, which I somehow had forgotten to include in the template. You need
+ *    to implement this (as a complement to add).
+ * 
+ * 
+ * Final Comments:
+ * 
+ * 1. To receive maximum points you are to implement all methods without using the existing
+ *    java.util.* classes that would otherwise be useful. The point of this programming exercise
+ *    is to gain experience in working with linked-list structures where the focus is on achieving
+ *    the highest performance of the code.
+ * 
  * @param <Item>
  */
 public class UniqueBag<Item extends Comparable<Item>> {
 
-	Node<Item> first = null;
+	Node first = null;
 	
 	/** You must use this Node class as part of a LinkedList to store the UniqueBag items. */
-	class Node<Item> {
-		private Item       item;
-		private Node<Item> next;
+	class Node {
+		private Item   item;
+		private Node   next;
 	}
 
 	/** Default constructor to create an empty initial bag. */
@@ -77,7 +91,17 @@ public class UniqueBag<Item extends Comparable<Item>> {
 	 * 
 	 * Performance can be linearly dependent on the number of items in the UniqueBag, or ~ N.
 	 */
-	public boolean add(Item it){
+	public boolean add (Item it){
+		// Replace with your implementation
+		return false;
+	}
+	
+	/** 
+	 * Remove an item to the UniqueBag; return false if not contained within, true on success.
+	 * 
+	 * Performance can be linearly dependent on the number of items in the UniqueBag, or ~ N.
+	 */
+	public boolean remove (Item it){
 		// Replace with your implementation
 		return false;
 	}
