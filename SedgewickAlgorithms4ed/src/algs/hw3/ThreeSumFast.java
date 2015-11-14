@@ -4,8 +4,10 @@ import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.Stopwatch;
 
+// this is here for you to conduct Tilde code analysis as seen on p. 181
 public class ThreeSumFast {
 
+	// you can assume this while loop executes 1+floor(log N) 
 	static int rank (Comparable[] collection, Comparable target) {
 		int low = 0;
 		int high = collection.length-1;
@@ -25,6 +27,7 @@ public class ThreeSumFast {
 		return -1;
 	}
 
+	// this is the function you are to analyze...
 	public static int count(Integer[] a) {
 		int N = a.length;
 		Quick.sort(a);
@@ -39,6 +42,7 @@ public class ThreeSumFast {
 		return cnt;
 	} 
 
+	// don't analyze this function. It is here to demonstrate empirical results
 	public static void main(String[] args) {
 		for (int N = 256; N <= 16384; N *= 2) {
 			Integer[] sample = new Integer[N];
