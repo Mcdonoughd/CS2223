@@ -54,7 +54,7 @@ public class ThreeSumFast {
 			int num = count(sample);
 			double time = sw.elapsedTime();
 					
-			StdOut.println(N + "\t" + time);
+			StdOut.println(N + "\t" + time + "\t" + (num) + " triples");
 		}
 	}
 }
