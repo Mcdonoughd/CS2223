@@ -44,6 +44,7 @@ public class ThreeSumFast {
 
 	// don't analyze this function. It is here to demonstrate empirical results
 	public static void main(String[] args) {
+		StdOut.println("N\tTime(secs)\t#Triples");
 		for (int N = 256; N <= 16384; N *= 2) {
 			Integer[] sample = new Integer[N];
 			for (int i = 0; i < sample.length; i++) {
