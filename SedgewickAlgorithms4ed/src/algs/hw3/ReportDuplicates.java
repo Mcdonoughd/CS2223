@@ -2,8 +2,6 @@ package algs.hw3;
 
 // place the "10sonnets.txt" file within your top-level project so it can be found.
 
-import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
-
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
 
