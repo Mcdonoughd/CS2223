@@ -1,0 +1,273 @@
+Name: <YOUR NAME HERE>
+
+Stack Experiments Question
+
+An arithmetic expression AE (page 128) is either:
+  
+  * a number
+  * ( AE op AE )
+
+1. On "( sqrt ( 6 ) )", the program throws an Exception. This is surprising because
+   the expression appears to be well-formed. However, whenever a ")" token is 
+   encountered, the program seeks to pop off the most recent TWO values and 
+   the operator. But sqrt is a unary operator and not "AE op AE" so it fails.
+
+    5 (100%)    Accurate    - Explains above purpose behind how ')' is processed
+    4 (75%)	    Substantial - mentions op stack is empty but nothing more 
+    3 (50%)     Superficial - mentions that code throws Exception
+    2 (25%)     Incorrect   - doesn't come close
+    0 (0%)      None        - leaves blank
+    
+2. The input "2 + 3" has no parentheses, so it is not a well-formed expression.
+   However, the program processes it and terminates because the input completes.
+   When it terminates, the op stack has the "+" operator and the topmost value
+   on the values stack is a "3", so that value is output
+
+    5 (100%)    Accurate    - Explains above state that remains
+    4 (75%)	    Substantial - Claims that without parentheses the code doesn't work 
+    3 (50%)     Superficial - mentions that 3.0 is the result
+    2 (25%)     Incorrect   - doesn't come close
+    0 (0%)      None        - leaves blank
+
+3. The input "2 + 3 + 4 + 5" has no parentheses, so it is not well-formed expression.
+   However, the program processes it and terminates because the input completes.
+   When it terminates, the op stack has three "+" operators and the topmost value
+   on the values stack is a "5", so that value is output
+
+    5 (100%)    Accurate    - Explains above state that remains
+    4 (75%)	    Substantial - Claims that without parentheses the code doesn't work 
+    3 (50%)     Superficial - mentions that 5.0 is the result
+    2 (25%)     Incorrect   - doesn't come close
+    0 (0%)      None        - leaves blank
+
+4. The input "sqrt ( 12 + 4 )" is not well-formed expression because it doesn't
+   match the description of an AE. However, the program processes the input and
+   terminates because the input completes. When it terminates, the op stack has
+   the sqrt operator and the topmost value on the values stack is a "16" so that
+   value is output.
+
+    5 (100%)    Accurate    - Explains above state that remains
+    4 (75%)	    Substantial - Claims that without parentheses the code doesn't work 
+    3 (50%)     Superficial - mentions that 5.0 is the result
+    2 (25%)     Incorrect   - doesn't come close
+    0 (0%)      None        - leaves blank
+
+5. See solution
+
+    5 (100%)    Accurate    - Implements both Math.E and Math.PI
+    4 (75%)	    Substantial - <NOT A VALID GRADE FOR THIS QUESTION>
+    3 (50%)     Superficial - Only does one of Math.E or Math.PI
+    2 (25%)     Incorrect   - doesn't come close
+    0 (0%)      None        - leaves blank
+   
+6. The input "( sqrt ( e * pi ) )" is identical in structure to the first input and is
+   similarly ill-formed, because what is contained within the ( .. ) is not an AE.
+   However, when encountering each of the ")" tokens, there are proper values and
+   operands on the respective stacks so the program actually does work! 
+   
+    5 (100%)    Accurate    - Explains above purpose behind how ')' is processed
+    4 (75%)	    Substantial - <NOT A VALID GRADE FOR THIS QUESTION>
+    3 (50%)     Superficial - mentions that code works
+    2 (25%)     Incorrect   - doesn't come close
+    0 (0%)      None        - leaves blank
+
+Question 2 : Programming Exercise
+
+1. Validate by running. Note that it only matters that your program is correct, not 
+   how slow or fast it runs.
+
+   + 5 points for properly identifying the crossing point
+   + 5 points for computing the number of array accesses
+
+2. We are looking for a worst-case estimate. This number must be smaller than M*N because
+   we don't need to investigate more elements than are in the array itself. 
+   
+   Here is my initial answer. Note that in office hours, several students (i.e., Patrick
+   Polley) came up with a better answer! So first my original solution:
+   
+   Check the top-two rows from left to right until you find one that has two TRUE values
+   in a single Column. At worst, this takes 2N-2 checks (because the top row could 
+   contain all TRUE values
+   
+       FFFFFF.    If you haven't found TWO true values by the right-most column, then 
+       FFFFFF.    you know that it must contain two TRUE values.
+       .......    
+       .......    If (0,0) is the crossing, then this special case requires only one
+       .......    additional check (see code).
+   
+   If special case happens (top row is all TRUE) then you are done. If not, then
+   repeat the same for the remaining M-2 rows, starting with row 1 and completing 
+   at row M-1, checking the first two entries
+   
+       FFFFFFF.    If you haven't found TWO true values by the bottom-most row
+       FFFFFFF.    you know that it must contain two TRUE values. In the worst 
+       FF......    case, this will require (M-3) rows to check, or 2M-6
+       FF......    
+       ........    
+
+   Once you find (or determine) that a row has two TRUE values and a column has two
+   TRUE values, you have determined the crossing point. Total cost: 2N-2 + 2M-6
+   which equals 2(N+M-4). This code exists in my initial CrossingPoint Java file.
+   For N=7 and M=5, this means no crossing point needs more than 16 checks.
+                   
+   Now, here is the better answer. First observe that it is suboptimal to check for 
+   the first TRUE value simply by reading values within a row. Why? Well, you are not 
+   taking any advantage of the fact that once you see a FALSE value, you can move on
+   to the next row to continue your search, and this expands the range of your search!
+   Aha! As you can see this algorithm tries to be intelligent. So the optimal search is 
+   to check values ON THE DIAGONAL. Let's assume that number of rows (M) is smaller
+   than number of columns (N). So we check first M diagonal elements starting [0][0], 
+   [1][1] and so on until you run out of diagonal at [M-1][M-1]. Somewhere in here must
+   be a TRUE value, since you have covered every row. It might also represent a valid
+   crossing point! So at the first TRUE that you see, inspect another column value in
+   the TRUE column. If that value is TRUE then you have determined the crossing column
+   and have only to find the crossing row; if that value is FALSE then you have determined
+   the crossing row and have only to find the crossing column.
+   
+   With this logic in mind, when N > M, the total number of array lookups is N, but when 
+   M >= N, the total number of lookups is M+1. The reason is the asymmetry in the 
+   implementation, but I bet I could rewrite the code to handle this case to ensure just M.
+   Check the code NPlusOneCrossingPoint for validation. A slightly inaccurate 
+   result is max(M,N)+1.                                             
+   
+    5 (100%)    Accurate    - Accurate, based on the program that was written
+    4 (75%)	    Substantial - Answer is ALMOST right (i.e., off by +1 or so)
+    3 (50%)     Superficial - Only mentions answer without any evidence supporting claim.
+    2 (25%)     Incorrect   - some wrong answer without any hope of being correct.
+    0 (0%)      None        - leaves blank
+
+3. Validate by running
+
+Question 3 : Stack Exercises
+
+1. One (1)
+
+  +5 if right
+
+2. One (1)
+
+  +5 if right
+
+3. What is the maximum number of consecutive  "–" tokens that can appear to avoid exception?
+
+   Answer: N, since more than that would empty the stack (fixed capacity N).
+   
+   +5 if right
+
+4. Minimum number of "-" tokens that must appear to avoid exception?
+
+   Answer: N.  
+   
+           There are 3N total total tokens in the input string. The number of lower case
+           letters must out-number the "-" tokens, otherwise an attempt will be made to
+           pop from an empty stack. Now, if the final N operations are all 'push' operations,
+           then the remaining 2N must be some combination of equal number of push and pop.
+           In this situation, the minimum number of pop operations is N.
+           
+           Note: The order matters, thus "- - a b c - - d" would be invalid in any 
+           situation because if first pops from an empty stack.
+   
+   +5 if right
+   +3 if wrong but at least tried to provide some logical explanation
+
+5. Minimum number of lower-case tokens to avoid exception?
+
+   Answer: Ceiling(3N/2)
+   
+           The final answer depends on whether N is even or odd. In the first 2N tokens,
+           there cannot be fewer letters than - tokens, otherwise there would be a pop
+           on an empty stack (note: there may be more but this question is asking about
+           fewest number of letter tokens). In the remaining N, the letters must out-number
+           the "-" tokens. For ODD, Ceiling(N/2)+1. For EVEN, N/2. In both cases, Ceiling(N/2).
+           So, the total number is N+Ceiling(N/2) or Ceiling(3N/2)
+   
+   +5 if right
+   +3 if wrong but at least tried to provide some logical explanation
+
+Question 4 : Binary Search Exercise 
+
+  The string is composed only of lowercase letters (26 of them) and you know that each 
+  one has exactly K characters. First observe that the string S has a maximum size since
+  the tokens are unique. There are 26^K unique tokens ("aaa...a" through "zzz...z") and
+  there is a space between each one so largest N is 26^K with 26^K-1 spaces for a total
+  string length S of 2*(26^K)-1. The following table shows:
+  
+     K   numTokens     S
+     1   26            51
+     2   676           1351
+     3   17576         35151 
+     4   456976        913951 
+     5   11881376      23762751
+     6   308915776     617831551
+  
+  OK, but that just gives a sense of the size. Since each token is the SAME size, you can
+  actually treat this just like binary search, where you are comparing strings rather than
+  just integers.
+
+1. Program (see solution)
+
+2. K*(1 + Floor(log (N))) 
+
+  When reviewing the BinarySearch, especially with small numbers, you should see that
+  increasing from 7 numbers to 8 numbers will increase max number of comparisons. In fact
+  from 8 to 15 the maximum number of comparisons stays the same (at 4), until it increases 
+  one more time at 16 (to 5). This is a sure sign that we use Floor or Ceiling.
+  
+  Consider when a single token in the target (i.e., N=1). Then Log(1) is zero, but we have
+  at least one comparison. I bet we will be adding 1 somewhere.
+  
+  Number of tokens to match is 1 + Floor(log(N)). When n is 7, then we have 3. For n=8, then
+  there are 4. Now how many characters are being matched. For this answer, all I was 
+  expecting was the estimate that "in the worst case" when comparing two K-character strings,
+  you would be checking K characters. That answer, thus, receives full credit.
+  
+  However, a more subtle analysis reveals that it can't be the case that every one of the
+  (1 + Floor(log (N))) tokens that you check will require K character matches! For example,
+  Assume K=2 and imagine that the alphabet only contained letters {a, b, c}. Then the target
+  String would never be larger than "aa ab ac ba bb bc ca cb cc". And in this case, how many
+  character comparisons when looking for "cc"? 7 because 1 for (cc vs. bb) and 2 (for cc vs. ca)
+  and 2 (for cc vs. cb) and 2 (for cc vs. cc). At this point, there would be an interesting
+  mathematical analysis based on the size of the alphabet when compared with K, but I think
+  you would agree that we can leave the worst case as K*(1 + Floor(log (N))). Note that
+  the FineGrainedBinaryStringSearch class implements this fine-grained comparison. 
+  
+
+Bonus Question
+
+1. In the worst case, count the maximum number of character comparisons that rank
+   must perform on any input. State your answer in terms of K and N.
+   
+   Ans: So we no longer have a pattern of the tokens. This means we have to still do
+   logarithmic searches, that is, 1 + Floor(log(N)). However, when we find the "middle"
+   we have to find the beginning of the word. since K is an upperbound on the length of
+   each token, we may have to search backwards K characters to find the previous space
+   which indicates the start of a word. For example, if the following is the string, the
+   initial low position is 0 and the initial high position is 78 (start of pontificant). 
+   The midpoint is 39 (the space before elephant). The start of the word must be found, 
+   which means going backwards to a separator space or the start of the word, which in 
+   the worst case means checking go back to the beginning of the word (drinking in this
+   case). Now, in the worst case this would be a total of K+2 characters. Count 1 for 
+   the initial read (the space). Go back K characters to beginning of word, then 1 more
+   character for the space. 
+   
+   "a alpha beta charlie david dog drinking elephant fraught me myself neverwhere pontificant"
+      
+   So we start with K*(1 + Floor(log N)) is still the baseline, once we have found the 
+   words, and it takes K+2 each time, we need to add (K+2)*Floor(log N). Which means
+   the total is: K + (2K+2)*Floor(log N). 
+   
+   Empirical evidence that this is right? Given the 'words.english.txt' file, there are 
+   N = 213,557 words in this file, and K=24 (for word formaldehydesulphoxylate). With 
+   this information, log 213557 = 17.70426166, so Floor is 17
+   
+   24 + 50*17 = 874
+   
+   As you can see, empirically the highest character comparisons was 612. Naturally this 
+   number is far smaller because not every word in the list is 24 characters in length.
+   We are dealing with worst case analysis here, so we can have slight inaccuracies that
+   are bounded.
+   
+ Bonus Question #2
+ 
+   See implementation
+   
