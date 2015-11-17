@@ -59,9 +59,7 @@ public class HeapExercise {
 	public static void main(String[] args) {
 
 		int T = 10;
-		Stopwatch watch;
 		Double[] data;
-		double time;
 
 		for (int t = 0; t < T; t++) {
 			for (int n = 4, idx = 0; n <= 8192; n*= 2, idx++) {

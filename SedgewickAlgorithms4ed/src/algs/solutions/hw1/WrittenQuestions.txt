@@ -1,4 +1,4 @@
-Name: <YOUR NAME HERE>
+Name: George Heineman / HW1 Solutions
 
 Stack Experiments Question
 
