@@ -8,7 +8,7 @@ public class SeparateChainingHashST<Key, Value> {
 	int M;                                // hash table size
 	SequentialSearchST<Key, Value>[] st;  // array of linked-list symbol tables
 
-	final static int INIT_CAPACITY = 4;   // initial default size
+	final static int INIT_CAPACITY = 11;   // initial default size
 	final static int AVG_LENGTH = 7;      // Threshold to determine resizing
 
 	/** Initialize empty symbol table with <tt>M</tt> chains. */
@@ -65,7 +65,7 @@ public class SeparateChainingHashST<Key, Value> {
 		if (st[i].contains(key)) { N--; }
 		st[i].delete(key);
 
-		// halve table size if average length of list <= 2
+		// halve table size if average length of list <= 2M
 		if (M > INIT_CAPACITY && N <= 2*M) resize(M/2);
 	} 
 
@@ -84,6 +84,7 @@ public class SeparateChainingHashST<Key, Value> {
 			String word = in.readString(); 
 			table.put(word, word);      // You can use value as the key
 		}
+		in.close();
 
 		StdOut.println(table.size() + " words in the hash table.");
 
@@ -111,5 +112,15 @@ public class SeparateChainingHashST<Key, Value> {
 		StdOut.println("  there are " + numEmpty + " empty indices " + percent + "%");
 		StdOut.println("  maximum chain is " + maxChain);
 		StdOut.println("  number of single is " + numSingle);
+		
+		// validate we can reduce
+		in = new In ("words.english.txt");
+		while (!in.isEmpty()) {
+			String word = in.readString(); 
+			table.delete(word);
+		}
+		in.close();
+
+		StdOut.println("Table has " + table.M + " indices.");
 	}
 }
