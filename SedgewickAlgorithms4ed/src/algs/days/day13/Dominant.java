@@ -39,6 +39,7 @@ public class Dominant {
 
 	public static void main(String[] args) {
 		
+		// Run and see how the ratio converges to 1....
 		StdOut.println("N\tDom.\tMaxCompares\tn log n\tRatio");
 		for (int n = 4, idx =2 ; n <= 1048576; n*= 2, idx++) {
 			int nlogn = n*idx;
