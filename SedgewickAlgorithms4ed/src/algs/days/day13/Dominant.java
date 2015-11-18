@@ -18,7 +18,7 @@ public class Dominant {
 		int left = dominant(collection, lo, mid);
 		int right = dominant(collection, mid+1, hi);
 
-		// same on both sides? You've found it!
+		// same on both sides? You've found it! Turns out that we don't need this check.
 		// NOTE: IF YOU ADD THIS INNOCUOUS LITTLE STATEMENT, THE NUMBER OF COMPARISONS
 		// GROWS DRAMATICALLY because the equation becomes: C(n) = 2*C(n/2) + (n+1)
 		// numComparisons++;
