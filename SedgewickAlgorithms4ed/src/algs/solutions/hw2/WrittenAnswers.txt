@@ -215,7 +215,7 @@ Reviewing the sort logic, you can see that C(N) = C(N/3) + C(N/3) + C(N/3) + M(N
 where M(N) is the number of comparisons within the Merge. Assuming that N is a power 
 of 3, we can eliminate much of the special cases, and simply treat this as:
 
-  C(3) = 3*C(N/3) + M(N)
+  C(N) = 3*C(N/3) + M(N)
   
 We need to think about the best case and the worst case for the # of comparisons in the merge.
 Reviewing my code, in the BEST case, you drain one of the three subranges containing N/3 elements.
