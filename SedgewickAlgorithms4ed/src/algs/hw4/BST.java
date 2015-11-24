@@ -1,12 +1,8 @@
-package algs.days.day17;
+package algs.hw4;
 
 import edu.princeton.cs.algs4.StdOut;
 
-// In this example, we eliminate the attribute N which had stored the
-// number of nodes in the subtree rooted at a node. This value is
-// absolutely necessary for the rank(key) and select(int) methods
-// as outlined on p. 409 of the book. However if you don't need 
-// these operations, you can dispense with it (again, p. 415)
+// Several questions in HW4 assume you start with the following BST.
 
 public class BST<Key extends Comparable<Key>> {
 
@@ -20,12 +16,35 @@ public class BST<Key extends Comparable<Key>> {
 			this.key = key;
 		}
 
+		/** Helpful debugging method. */
 		public String toString() { return "[" + key + "]"; }
 	}
 
+	/** Default constructor still used for empty BST. Leave as is. */
+	public BST () { }
+	
+	/** 
+	 * Given an ordered array of keys in ascending order of length 2^k-1, construct a perfectly 
+	 * balanced BST. 
+	 *  
+	 * @param keys    keys are in ascending order
+	 */
+	public BST(Key[] keys) {
+		
+	}
+	
+	public int height() { 
+		// TODO: REPLACE
+		return -999;
+	}
+	
+	public int height(Node n) {
+		// TODO: REPLACE
+		return -999;
+	}
+	
+	
 	public boolean isEmpty() { return root == null; }
-
-	public String toString() { return "<bst: root=" + root +">"; }
 
 	// One-line method for containment. 
 	public boolean contains(Key key) { return get(root, key); }
@@ -166,32 +185,6 @@ public class BST<Key extends Comparable<Key>> {
 		return parent;
 	}
 
-	/**
-	 * Returns all keys in the symbol table as an <tt>Iterable</tt>.
-	 * To iterate over all of the keys in the symbol table named <tt>st</tt>,
-	 * use the foreach notation: <tt>for (Key key : st.keys())</tt>.
-	 *
-	 * @return all keys in the symbol table
-	 */
-	public Iterable<Key> keys() { return keys(min(), max()); }
-
-	public Iterable<Key> keys(Key lo, Key hi) {
-		Queue<Key> queue = new Queue<Key>();
-		keys(root, queue, lo, hi);
-		return queue;
-	} 
-
-	private void keys(Node node, Queue<Key> queue, Key lo, Key hi) { 
-		if (node == null) return; 
-
-		// check if contained within this range
-		int cmplo = lo.compareTo(node.key); 
-		int cmphi = hi.compareTo(node.key);
-
-		// much like a traversal; builds up state in the queue.
-		if (cmplo < 0)                 keys(node.left, queue, lo, hi); 
-		if (cmplo <= 0 && cmphi >= 0)  queue.enqueue(node.key); 
-		if (cmphi > 0)                 keys(node.right, queue, lo, hi); 
-	}
+	
 
 }

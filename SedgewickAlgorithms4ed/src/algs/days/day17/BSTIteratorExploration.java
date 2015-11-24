@@ -5,15 +5,15 @@ import edu.princeton.cs.algs4.StdOut;
 public class BSTIteratorExploration {
 	public static void main(String[] args) {
 		// construct binary tree on p. 401
-		BST<String,Integer> bst = new BST<String,Integer>();
+		BST<String> bst = new BST<String>();
 
-		bst.put("R", 1);
-		bst.put("U", 2);
-		bst.put("A", 3);
-		bst.put("T", 4);
-		bst.put("W", 5);
-		bst.put("P", 6);
-		bst.put("I", 7);
+		bst.insert("R");
+		bst.insert("U");
+		bst.insert("A");
+		bst.insert("T");
+		bst.insert("W");
+		bst.insert("P");
+		bst.insert("I");
 
 		// This is very different from the traversal, since we are able
 		// to act on the keys, whereas the traversal simply printed the
