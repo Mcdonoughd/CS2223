@@ -4,7 +4,7 @@ package algs.days.day18;
 public class BSTIteratorExploration {
 	public static void main(String[] args) {
 		// construct binary tree on p. 401
-		BST<String> bst = new BST<String>();
+		AVL<String> bst = new AVL<String>();
 
 		// woah. this is very funky Java, which you won't normally
 		// use, but I am trying to hack a BST.
