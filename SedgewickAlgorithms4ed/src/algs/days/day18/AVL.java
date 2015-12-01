@@ -273,7 +273,7 @@ public class AVL<Key extends Comparable<Key>> {
 	}
 
 	public void fastDelete (Key key) { root = fastDelete(root, key); }
-	
+
 	Node fastDelete(Node parent, Key key) {
 		if (parent == null) { return null; }
 
@@ -331,17 +331,17 @@ public class AVL<Key extends Comparable<Key>> {
 		else if (cmp > 0) parent.right = delete(parent.right, key);
 		else { 
 			// handle easy cases first:
-				if (parent.right == null) return parent.left;
-				if (parent.left  == null) return parent.right;
+			if (parent.right == null) return parent.left;
+			if (parent.left  == null) return parent.right;
 
-				// has two children: Plan on returning min of our right child
-				Node old = parent;
-				parent = min(old.right);     // will eventually be "new parent"
+			// has two children: Plan on returning min of our right child
+			Node old = parent;
+			parent = min(old.right);     // will eventually be "new parent"
 
-				// Note this is a simpler case: Delete min from right subtree
-				// and DON'T FORGET to stitch back in the original left child
-				parent.right = deleteMin(old.right);   
-				parent.left = old.left;
+			// Note this is a simpler case: Delete min from right subtree
+			// and DON'T FORGET to stitch back in the original left child
+			parent.right = deleteMin(old.right);   
+			parent.left = old.left;
 		} 
 
 		// as recursions unwind, update size appropriately
@@ -375,5 +375,13 @@ public class AVL<Key extends Comparable<Key>> {
 		if (cmplo <= 0 && cmphi >= 0)  queue.enqueue(node.key); 
 		if (cmphi > 0)                 keys(node.right, queue, lo, hi); 
 	}
-	
+
+	public int height() {
+		return height(root);
+	}
+	private int height(Node x) {
+		if (x == null) return -1;
+		return 1 + Math.max(height(x.left), height(x.right));
+	}
+
 }

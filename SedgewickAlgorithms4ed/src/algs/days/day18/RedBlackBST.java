@@ -64,7 +64,7 @@ import edu.princeton.cs.algs4.StdOut;
  *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/33balanced">Section 3.3</a> of
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  *  For other implementations, see {@link ST}, {@link BinarySearchST},
- *  {@link SequentialSearchST}, {@link BST},
+ *  {@link SequentialSearchST}, {@link BST_OptimizedDelete},
  *  {@link SeparateChainingHashST}, and {@link LinearProbingHashST},
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  */

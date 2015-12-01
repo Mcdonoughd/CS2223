@@ -2,6 +2,7 @@ package algs.days.day18;
 
 import java.util.*;
 
+
 /*
  * %W% %E%
  *
@@ -2015,6 +2016,18 @@ public class TreeMap<K,V>
         return (p == null) ? null: p.right;
     }
 
+    /**
+     * Returns the height of the BST (for debugging).
+     * @return the height of the BST (a 1-node tree has height 0)
+     */
+    public int height() {
+        return height(root);
+    }
+    private int height(Entry<K,V> x) {
+        if (x == null) return -1;
+        return 1 + Math.max(height(x.left), height(x.right));
+    }
+    
     /** From CLR */
     private void rotateLeft(Entry<K,V> p) {
     	rotations++;
