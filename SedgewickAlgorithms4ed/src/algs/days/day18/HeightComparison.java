@@ -2,6 +2,10 @@ package algs.days.day18;
 
 import edu.princeton.cs.algs4.StdOut;
 
+// this code inserts values into the binary tree IN ASCENDING ORDER. Without balancing,
+// this would lead to incredibly skewed trees. As it is, the trees self-balance, and we can
+// keep track of its height and number of rotations. See if you can figure out a closed
+// formula for the number of rotations, for all three varieties.
 public class HeightComparison {
 
 	public static void main(String[] args) {
