@@ -1,5 +1,7 @@
 package algs.days.day19;
 
+import edu.princeton.cs.algs4.In;
+
 public class Graph {
     
     final int V;
@@ -23,6 +25,16 @@ public class Graph {
         }
     }
 
+    /** Added this method for day20 to load graph from file. */
+    public Graph (In in) {
+    	this (in.readInt());
+    	int E = in.readInt();
+    	for (int i = 0; i < E; i++) {
+    		int v = in.readInt();
+    		int w = in.readInt();
+    		addEdge (v,w);
+    	}
+    }
 
     public int V() { return V; }
     public int E() { return E; }
