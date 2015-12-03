@@ -50,8 +50,8 @@ public class EvaluateBonus {
 				// should always get the StartExpressionNode here. If not, must keep going, 
 				// simply replacing the right child with an expanded version. No concept
 				// of operator precedence, thus can accept "2 + 3 * 7 + 5 / 6" which would 
-				// be treated as 2 + (3 * (7 + (5 / 6) )). Hey, this is a Bonus question.
-				// see if you can take it from here....
+				// be treated as ((((2 + 3) * 7) + 5) / 6). Hey this is a bonus question. See
+				// if you can take it from here...
 				OperatorNode check = ops.pop();
 				while (check.isOperator()) {  // If operator IS an operator, then have unexpectedly
 											  // run into more of the expression.
