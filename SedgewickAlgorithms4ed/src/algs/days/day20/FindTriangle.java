@@ -11,22 +11,21 @@ public class FindTriangle {
 		// find triangles. Assume no self loops, thus u can never be in g.adj(u)
 		int count = 0;
 		for (int u = 0; u < g.V(); u++) {             // for all vertices u...
-			for (Integer v : g.adj(u)) {              //   go find a neighbor v whose id is greater
-				if (u < v) {
-					for (Integer w : g.adj(v)) {      //   then find neighbor w to v whose id is greater
-
-						if (v < w) {                  //   now check that w is adjacent to u.
-							for (Integer x : g.adj(u)) {
-								if (x == w) {
-									if (print) {
-										System.out.println("Triangle Found: (" + u + "," + v + "," + w + ")");
-									}
-									count++;
+/* V */		for (Integer v : g.adj(u)) {              //   go find a neighbor v whose id is greater
+/* 2E */  	  if (u < v) {
+/* E */			for (Integer w : g.adj(v)) {     	  //   then find neighbor w to v whose id is greater
+					if (v < w) {                	  //   now check that w is adjacent to u.
+						for (Integer x : g.adj(u)) {
+							if (x == w) {
+								if (print) {
+									System.out.println("Triangle Found: (" + u + "," + v + "," + w + ")");
 								}
+								count++;
 							}
 						}
 					}
 				}
+			  }
 			}
 		}
 
