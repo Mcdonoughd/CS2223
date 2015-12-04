@@ -16,7 +16,8 @@ public abstract class AnimationEngine {
 	static int delay = 10;
 
 
-	static double scale = 0.13;   // play around with some values
+	static double scale = 0.13;   // play around with some values. Controls density of graph (.13 is good value).
+	
 	static double Radius = 0.01;
 	static int White = 0;
 	static int Gray = 1;
