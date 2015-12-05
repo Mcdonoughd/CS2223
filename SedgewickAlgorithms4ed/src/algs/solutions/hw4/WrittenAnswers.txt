@@ -1,0 +1,138 @@
+Homework 4 : George Heineman
+
+Question 1: Balanced Binary Tree
+
+There are two ways to created the Balanced Binary Search Tree from an ordered 
+array of 2^k-1 elements. It can be done recursively or imperatively. The solution
+is found in StraightBST.java
+
+Recursive solution: 
+
+Write a helper method that returns a Node that is the root of a proper balanced subtree. 
+Note how this helper method properly constructs the left and right child subtrees recursively
+
+    /** 
+	 * Assuming v is sorted array of size 2^k-1, then this will construct balanced binary
+	 * search tree. 
+	 */
+	public StraightBST(Value v[]) {
+		root = load (v, 0, v.length-1);
+	}
+
+	Node load (Value v[], int lo, int hi) {
+		if (hi < lo) { return null; }
+		
+		int mid = (lo + hi)/2;
+		Node parent = new Node(v[mid]);
+		parent.left =  load(v, lo, mid-1);
+		parent.right = load(v, mid+1, hi);
+		return parent;
+	}
+	
+Imperative solution:
+
+Observe that you can add the values into the tree level by level.
+
+   void imperative (Value v[], int lo, int hi) {
+		int mid = (lo + hi)/2;
+		add(v[mid]);
+		
+		// now level by level add proper values from left to right. Observe
+		// the relationship between the values. Start with offset of 2^(k-2)
+		// and distance of 2^(k-1).
+		int offset = (v.length+1)/4;
+		int distance = (v.length+1)/2;
+		
+		while (distance > 1) {
+			for (int i = offset; i < v.length; i += distance) {
+				Value k = v[i-1];
+				add(k);
+			}
+			distance /= 2;
+			offset /= 2;
+		}
+	}
+	
+Question 2: Delete Max
+
+This problem asks you to construct an experiment to determine which approach is better 
+for repeatedly removing the maximum element. By "better" I mean inspects the fewest 
+number of elements.
+
+Because this is confusing, I provided code to count the number of heap inspections. I
+presented this in class just to explain it further. I also said that you inspect
+an element of a binary tree when you look at its KEY or LEFT or RIGHT.
+
+Thus in their deleteMax operation, the solution only needs to increment this count 
+once within the recursive deleteMax() method if implemented as follows with a 
+check for 'root == null' before going into deleteMax.
+
+  /** Implement method to return Value when removing largest element. */
+	public void deleteMax() {
+		if (root == null) { return; }
+		root = deleteMax(root);
+	}
+	
+	Node deleteMax(Node parent) {
+		inspectedElementCount++;
+		if (parent.right == null) {
+			return parent.left;
+		}
+		
+		parent.right = deleteMax(parent.right);
+		parent.N = size(parent.left) + size(parent.right) + 1;
+		return parent;
+	}
+	
+Note: The final execution takes a LONG time to complete on any reasonable computer. Since
+this is a simpler matter of changing the for loop, you can just tell students they can stop
+running the problem at 65,356 instead of 1,048,576. Here is sample output
+
+4		1.25
+8		2.4444444
+16		2.7307692
+32		3.0615385
+64		3.1506023
+128		3.0954654
+256		3.1248732
+512		3.2227192
+1024	3.0685468
+2048	2.980589
+4096	3.0678759
+8192	2.9950888
+16384	3.0063918
+32768	3.003728
+65536	3.0014575
+
+Answer: is that MaxHeap uses about 3x as many element inspections to complete its operation. Naturally,
+it doesn't need any extra space (unlike BST).
+
+Question 3: Binary Tree Methods
+
+Methods are provided. See Q3.java for my sample program
+
+Question 4: Evaluate
+
+Run Evaluate in the expression subpackage.
+
+EvaluateBonus has bonus solution but not the bonus bonus solution.
+
+ a) ( 3 + ( sqrt 8 ) )
+
+    Formula:(3.0 + (sqrt 8.0))
+    5.82842712474619
+    
+ b) ( 4 + ( ( 7 * 2 ) + ( 6 * 3 ) ) )
+
+    Formula:(4.0 + ((7.0 * 2.0) + (6.0 * 3.0)))
+    36.0
+    
+ c) ( ( ( 3 * 4 ) + ( 8 ^ 3 ) ) / ( ( 2 + 1 ) * ( sqrt 7 ) ) )
+ 
+    Formula:(((3.0 * 4.0) + (8.0 ^ 3.0)) / ((2.0 + 1.0) * (sqrt 7.0)))
+    66.01779461894502
+    
+    
+ 
+ 
+ 
