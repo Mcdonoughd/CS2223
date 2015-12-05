@@ -91,7 +91,7 @@ public class Graph {
     }
 
     /** Implement as part of HW5, Question 3. */
-    public int countSafeVertices() {
+    public int diameter() {
     	// TODO: 
     	return -1;
     }
