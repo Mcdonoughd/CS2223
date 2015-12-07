@@ -2,10 +2,12 @@ package algs.days.day22;
 
 public class DirectedDFS {
     boolean[] marked;  // marked[v] = true if v is reachable
+    int[]     edgeTo;
     
     /** Conduct DFS over digraph from specific vertex s. */
     public DirectedDFS(Digraph G, int s) {
         marked = new boolean[G.V()];
+        edgeTo = new int[G.V()];
         dfs(G, s);
     }
 
@@ -19,19 +21,13 @@ public class DirectedDFS {
         }
     }
 
-    /** Stack-based implementation of dfs. */
     void dfs(Digraph G, int v) { 
-    	Stack<Integer> stack = new Stack<Integer>();
         marked[v] = true;
-        stack.push(v);
-        while (!stack.isEmpty()) {
-        	v = stack.pop();
-	        for (int w : G.adj(v)) {
-	            if (!marked[w]) {
-	            	marked[w] = true;
-	            	stack.push(w);
-	            }
-	        }
+        for (int w : G.adj(v)) {
+            if (!marked[w]) {
+            	edgeTo[w] = v;
+            	dfs(G, w);
+            }
         }
     }
 
