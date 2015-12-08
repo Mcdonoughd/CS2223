@@ -19,7 +19,7 @@ public class DepthFirstPaths {
 	}
 
 	// depth first search from v
-	private void dfs(int v) {
+	void dfs(int v) {
 		marked[v] = true;
 		for (int w : g.adj(v)) {
 			if (!marked[w]) {
