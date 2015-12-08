@@ -7,7 +7,8 @@ public class DijkstrasAlgorithm {
 	static int dist[];
 	static int pred[];     // this is equivalent to edgeTo as discussed for DFS/BFS
 	
-	public static void singleSourceShortestPath(DiGraphMatrix graph) {
+	// conduct from this designated source vertex.
+	public static void singleSourceShortestPath(DiGraphMatrix graph, int s) {
 		// TODO: Replace
 	}
 	
