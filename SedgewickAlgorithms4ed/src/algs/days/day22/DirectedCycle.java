@@ -26,6 +26,9 @@ public class DirectedCycle {
 		onStack[v] = true;
 		marked[v] = true;
 
+		// terminate once a cycle has been found...
+		if (hasCycle()) { return; }
+		
 		for (int w : G.adj(v)) {
 			if (!marked[w]) {
 				edgeTo[w] = v;
