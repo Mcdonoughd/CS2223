@@ -1,0 +1,71 @@
+HW5: Solutions George Heineman
+
+1. Graph Exercise
+
+Make sure complement doesn't contain self-loops
+
+connected is satisfied by a DFS search
+
+Sample graph with five vertices whose complement is connected.
+
+  A ---C       A : B C E
+  |\           B : A D
+  | \          C : A
+  B  \         D : B E
+  |   \        E : A D
+  |    \
+  D-----E
+  
+  A     C       A : D
+  |    /|\      B : C E
+  |   / | |     C : B D E
+  |  B  | |     D : A C 
+  |   \ | |     E : B C
+  |    \| |
+  D     E |
+   \______|
+   
+Both graphs are connected.
+
+2. Status injective graphs
+
+use BFS to compute the distances and then accumulate. Must iterate
+over all vertices to accomplish this.
+
+For Bonus question, there are no 6-vertex SIJ graphs. However the existing explorer finds
+7, 8 and 9 graphs.
+
+Q3. Graph Proof
+
+a. Students are asked to prove that every connected undirected graph contains 
+some safe vertex whose removal will not disconnect the graph.
+
+The claim is that given a graph with N+1 vertices that is connected, we 
+can always find a vertex whose removal will give us an N vertex connected
+graph.
+
+Start by observing that a proper depth first search of a connected graph
+will visit every vertex in the graph and mark it accordingly so it won't
+be visited again.
+
+Thus given a graph with N+1 vertices that is connected, consider what 
+happens in the DFS search when it is about to visit (and mark) the 
+final vertex, sv, which stands for safe vertex. In this case, the existing 
+N marked vertices are all reachable from the initial source vertex, s.  
+In addition, this final vertex, sf, has at least one edge to it, otherwise
+the original graph of N+1 vertices would not have been connected. In fact, 
+for all edges that connect to sv you know that they are coming from vertices
+that have already been marked. So now you can see that the N marked vertices
+forms a subgraph of connected vertices (they are all marked during the DFS)
+and this vertex sf is only connected to marked vertices and it is the last
+vertex to be unmarked. If you remove it, you will be left with a graph
+of N vertices, each of which is marked and therefore represents a connected
+graph.
+
+This is a case of mathematical reductive reasoning, not inductive. The 
+base cases presented are there to explain that with a graph containing
+a single vertex, we assume that it is connected and we can remove this
+vertex and you would be left with an empty graph, which by definition
+we will consider is connected.
+
+ 
