@@ -3,7 +3,9 @@ package algs.days.day24;
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.Stopwatch;
 import algs.days.day23.EdgeWeightedDigraph;
-import algs.days.day24.hw5.FloydWarshall;
+
+// will post friday
+//import algs.days.day24.hw5.FloydWarshall;
 
 public class Comparison {
 	public static void main(String[] args) {
@@ -15,7 +17,8 @@ public class Comparison {
 			DijkstraAllPairsSP path = new DijkstraAllPairsSP(dg);
 			double timeD = swD.elapsedTime();
 			Stopwatch swF = new Stopwatch();
-			FloydWarshall fw = new FloydWarshall(dg);
+			//On Friday I will be able to post this code.
+			//FloydWarshall fw = new FloydWarshall(dg);
 			double timeFW = swF.elapsedTime();
 
 			// compute longest non-infinity distance found in the graph for ASP
@@ -38,17 +41,17 @@ public class Comparison {
 			double maxFW = 0;
 			int srcFW = -1;
 			int targetFW = -1;
-			for (int i = 0; i < dg.V(); i++) {
-				for (int j = 0; j < dg.V(); j++) {
-					if (fw.hasPath(i, j)) {
-						if (fw.dist(i, j) > maxFW) {
-							srcFW = i;
-							targetFW = j;
-							maxFW = fw.dist(i, j);
-						}
-					}
-				}
-			}
+//			for (int i = 0; i < dg.V(); i++) {
+//				for (int j = 0; j < dg.V(); j++) {
+//					if (fw.hasPath(i, j)) {
+//						if (fw.dist(i, j) > maxFW) {
+//							srcFW = i;
+//							targetFW = j;
+//							maxFW = fw.dist(i, j);
+//						}
+//					}
+//				}
+//			}
 
 			
 			System.out.println(N + "\t" + dg.E() + "\t" + "maxD=" + maxD + "(" + srcD + "," + targetD + ") time=" + timeD + "\t" + 
