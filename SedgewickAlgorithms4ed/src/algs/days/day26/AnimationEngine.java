@@ -73,7 +73,7 @@ public abstract class AnimationEngine {
 		// 
 		StdDraw.show(100); // wait 100 milliseconds.
 
-		explore(n);  // BFS
+		explore(n);  // Explore using appropriate algorithm.
 	}
 
 	static EightPuzzleNode bfs (EightPuzzleNode n, int maxDepth) {

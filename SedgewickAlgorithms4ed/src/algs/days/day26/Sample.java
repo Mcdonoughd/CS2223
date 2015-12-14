@@ -17,6 +17,7 @@ public class Sample {
 		AStarSearch as = new AStarSearch(new GoodEvaluator());
 		Solution sol = as.search(start, goal);
 
+		StdOut.println(start);
 		for (SlideMove s : sol) {
 			StdOut.println(s);
 		}

@@ -5,21 +5,33 @@ import edu.princeton.cs.algs4.StdRandom;
 
 public class DFSSearchAnimation extends AnimationEngine {
 
+	// max depth of 32 to give a chance of success.
+	// note: takes advantage of some preliminary analysis that suggests any 8-puzzle is no more than 
+	// 31 moves away from a solution.
+	final int MaxDepth = 31; 
+	
 	boolean explore (EightPuzzleNode n) {
 		Stack<EightPuzzleNode> stack = new Stack<EightPuzzleNode>();
 		SeparateChainingHashST<EightPuzzleNode, Boolean> visited = new SeparateChainingHashST<EightPuzzleNode, Boolean>();
 		
 
-		// positions in the Queue are Gray and under investigation.
+		// positions in the Stack are Gray and under investigation.
 		stack.push(n);
+		n.transition = new Transition(null, null, 0);
 		while (!stack.isEmpty()) {
 			EightPuzzleNode u = stack.pop();
 
+			// stop searching after exceeds depth.
+			if (u.transition.depth > MaxDepth) {
+				continue;
+			}
+			
 			for (SlideMove sm : u.validMoves()) {
 				EightPuzzleNode next = u.copy();
 				sm.execute(next);
 				if (!visited.contains(next)) {
 					visited.put(next, true);
+					next.transition = new Transition(sm, u, u.transition.depth+1);
 					StdDraw.setPenColor(colors[Gray]);
 					Point p = getLocation(next);
 					drawLine(colors[Gray], u, next);
