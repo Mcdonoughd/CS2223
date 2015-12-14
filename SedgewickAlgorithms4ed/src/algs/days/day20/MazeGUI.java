@@ -70,7 +70,11 @@ public class MazeGUI extends JFrame {
 				if (SwingUtilities.isRightMouseButton(me)) {
 					solver = new BFSSolver(panel);
 				} else {
-					solver = new DFSSolver(panel);
+					if (me.isControlDown()) {
+						solver = new AStarSolver(panel);
+					} else {
+						solver = new DFSSolver(panel);
+					}
 				}
 
 				solver.start();
