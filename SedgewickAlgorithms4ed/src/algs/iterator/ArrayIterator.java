@@ -16,8 +16,7 @@ public class ArrayIterator<T> implements Iterator<T> {
 	public boolean hasNext() { return idx < array.length; }
 	
 	public T next() { T ret = array[idx++]; return ret; }
-	
-	
+		
 	public void remove() { throw new UnsupportedOperationException("No remove possible."); }
 
 }

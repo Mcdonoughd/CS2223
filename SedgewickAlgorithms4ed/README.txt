@@ -1,3 +1,5 @@
 Code Repository for CS 2223
-B 15
+D 18
 heineman@cs.wpi.edu
+
+These files may be useful.
