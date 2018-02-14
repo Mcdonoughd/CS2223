@@ -162,12 +162,12 @@ public class TimingComparison {
 	public static void main(String[] args) {
 		
 		System.out.println("Generating values. This may take a few seconds...");
-		// range of numbers is +/- 2^24 or [-16777216, 16777216]. Generate a total of 2^17 or 131072
-		vals = randomUniqueArray((int) Math.pow(2, 17), (int) Math.pow(2, 24));
+		// range of numbers is +/- 2^24 or [-16777216, 16777216]. Generate a total of 2^16 or 65,536
+		vals = randomUniqueArray((int) Math.pow(2, 16), (int) Math.pow(2, 24));
 		
 		// These are the items to be searched: 131072 within range +/- 2^25 of [-33554432, 33554432]
 		// to ensure there are some numbers that are not found.
-		targets = randomUniqueArray((int) Math.pow(2, 17), (int) Math.pow(2, 25));
+		targets = randomUniqueArray((int) Math.pow(2, 16), (int) Math.pow(2, 25));
 		
 		// quick test
 		TimingComparison tc = new TimingComparison();
@@ -185,21 +185,21 @@ public class TimingComparison {
 		}
 		
 		System.out.println("timing_eq_lt_gt_div");
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 5; i++) {
 			System.gc();
 			double t = new TimingComparison().timing_eq_lt_gt_div(512);	
 			System.out.printf("%.3f%n", t);
 		}
 		System.out.println("----");
 		System.out.println("timing_lt_gt_eq_shift");
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 5; i++) {
 			System.gc();
 			double t = new TimingComparison().timing_lt_gt_eq_shift(512);	
 			System.out.printf("%.3f%n", t);
 		}
 		System.out.println("----");
 		System.out.println("timing_lt_gt_eq_div");
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 5; i++) {
 			System.gc();
 			double t = new TimingComparison().timing_lt_gt_eq_div(512);	
 			System.out.printf("%.3f%n", t);
