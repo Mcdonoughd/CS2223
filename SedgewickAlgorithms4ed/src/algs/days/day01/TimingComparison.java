@@ -137,12 +137,14 @@ public class TimingComparison {
 	/** Compute timing results of DIV/LT/GT/EQ. */
 	double timing_lt_gt_eq_div(int numRuns) {
 		// time a base run
+		long numFound = 0, numMissed = 0;
 		StopwatchCPU base = new StopwatchCPU();
 		for (int t = 0; t < numRuns; t++) {
 			for (int i = 0; i < targets.length; i++) {
-				contains_lt_gt_eq_div(vals, targets[i]);
+				if (contains_lt_gt_eq_div(vals, targets[i])) { numFound++; } else { numMissed++; }
 			}
 		}
+		System.out.println("numF:" + numFound + ", numMiss:" + numMissed);
 		return base.elapsedTime();
 	}
 	
@@ -165,7 +167,7 @@ public class TimingComparison {
 		// range of numbers is +/- 2^24 or [-16777216, 16777216]. Generate a total of 2^16 or 65,536
 		vals = randomUniqueArray((int) Math.pow(2, 16), (int) Math.pow(2, 24));
 		
-		// These are the items to be searched: 131072 within range +/- 2^25 of [-33554432, 33554432]
+		// These are the items to be searched: 2^16 or 65,536 within range +/- 2^25 of [-33554432, 33554432]
 		// to ensure there are some numbers that are not found.
 		targets = randomUniqueArray((int) Math.pow(2, 16), (int) Math.pow(2, 25));
 		

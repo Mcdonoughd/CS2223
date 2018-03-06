@@ -20,7 +20,7 @@ package algs.days.day02;
  * http://mathworld.wolfram.com/MagicSquare.html
  * 
  */
-public class FindLatinSquare {
+public class FindMagicSquare {
 	public static void main(String[] args) {
 		int count = 0;
 		
