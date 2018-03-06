@@ -121,7 +121,7 @@ public class Shell {
 				System.setOut(existOutput);
 				StdOut.resync();
 			} catch (InvocationTargetException ite) {
-				fail (ite.getTargetException().getMessage());
+				fail (ite.getTargetException().toString());
 			} catch (Exception e) {
 				fail (e.getLocalizedMessage());
 			}

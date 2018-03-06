@@ -1,10 +1,24 @@
 package algs.days.day02;
 
 /**
- * A 4x4 latin magic square has 16 digits from 1-16. There are 16! possible arrangements
+ * A 4x4 magic square has 16 digits from 1-16. There are 16! possible arrangements
  * or 20,922,789,888,000 possible.
  * 
- * @author heineman
+ *  A  B  C  D
+ *  E  Q  K  S
+ *  F  H  N  P 
+ *  G  R  O  T
+ * 
+ * Note: there are obvious improvements to the performance of this code. For example,
+ * consider the for-loops for D (and G); these are redundant, since the proper value
+ * can be computed based on the other three values in the row (and column).
+ * 
+ * Ultimately this finds 7,040 unique squares, but with symmetry and rotation, this evaluates
+ * to just 880 (divide by 8).
+ * 
+ * The 880 squares of order four were enumerated by Frénicle de Bessy in 1693.
+ * http://mathworld.wolfram.com/MagicSquare.html
+ * 
  */
 public class FindLatinSquare {
 	public static void main(String[] args) {
@@ -12,6 +26,7 @@ public class FindLatinSquare {
 		
 		// compute known target value=34 for 4x4 square
 		int M=34;
+		
 		// top row
 		for (int a = 1; a <= 16; a++) {
 			for (int b = 1; b <= 16; b++) {
@@ -35,7 +50,7 @@ public class FindLatinSquare {
 									// C(12,3) ways of getting here=1320
 									if (vert+g != M) { continue; }
 
-									// long diagonal
+									// long diagonal Northeast
 									int diag = d + g;
 									for (int h = 1; h <= 16; h++) {
 										if (h == a || h == b || h == c || h == d || h == e || h == f || h == g) { continue; }
@@ -111,5 +126,6 @@ public class FindLatinSquare {
 		}
 		
 		System.out.println("total found:" + count);
+		System.out.println("total unique (ignoring symmetry):" + count/8);
 	}
 }

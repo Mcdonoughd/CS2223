@@ -36,5 +36,16 @@ public class CompareOperation {
 		}
 		System.out.println("Mult:" + multsw.elapsedTime() + " seconds");
 		System.out.println("For the record, sum was " + sum);
+		
+		Stopwatch sqrtsw = new Stopwatch();
+		sum = 0;
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				sum += (Math.sqrt(numbers[i])+Math.sqrt(numbers[j]));
+			}
+		}
+		System.out.println("Mult:" + sqrtsw.elapsedTime() + " seconds");
+		System.out.println("For the record, sum was " + sum);
+		
 	}
 }

@@ -8,10 +8,10 @@ import edu.princeton.cs.algs4.*;
 public class TimingComparison {
 
 	/** Values to be searched. Will be in sorted order and contain unique values. */
-	static int vals[];
+	public static int vals[];
 	
 	/** Values to be searched. WIll also be in sorted order and contain unique values. */
-	static int targets[];
+	public static int targets[];
 	
 	/**
 	 * Returns a unique, sorted array 
@@ -123,7 +123,7 @@ public class TimingComparison {
 	}
 
 	/** Compute timing results of SHIFT/LT/GT/EQ. */
-	double timing_lt_gt_eq_shift(int numRuns) {
+	public double timing_lt_gt_eq_shift(int numRuns) {
 		// time a base run
 		StopwatchCPU base = new StopwatchCPU();
 		for (int t = 0; t < numRuns; t++) {
