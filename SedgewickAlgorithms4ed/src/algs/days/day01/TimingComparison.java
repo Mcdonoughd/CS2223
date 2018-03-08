@@ -9,10 +9,10 @@ public class TimingComparison {
 
 	/** Values to be searched. Will be in sorted order and contain unique values. */
 	public static int vals[];
-	
+
 	/** Values to be searched. WIll also be in sorted order and contain unique values. */
 	public static int targets[];
-	
+
 	/**
 	 * Returns a unique, sorted array 
 	 * 
@@ -25,7 +25,7 @@ public class TimingComparison {
 		if (2*range + 1 < total) {
 			throw new IllegalArgumentException ("Range is too small given the required total: " + total);
 		}
-		
+
 		ArrayList<Integer> uniq = new ArrayList<>();
 		while (uniq.size() < total) {
 			int val = StdRandom.uniform(-range, range);
@@ -36,7 +36,7 @@ public class TimingComparison {
 		Collections.sort(uniq); // sorts properly
 		int[] values = new int[uniq.size()];
 		for (int i = 0; i < values.length; i++) { values[i] = uniq.get(i); }
-		
+
 		return values;
 	}
 
@@ -133,21 +133,18 @@ public class TimingComparison {
 		}
 		return base.elapsedTime();
 	}
-	
+
 	/** Compute timing results of DIV/LT/GT/EQ. */
 	double timing_lt_gt_eq_div(int numRuns) {
-		// time a base run
-		long numFound = 0, numMissed = 0;
 		StopwatchCPU base = new StopwatchCPU();
 		for (int t = 0; t < numRuns; t++) {
 			for (int i = 0; i < targets.length; i++) {
-				if (contains_lt_gt_eq_div(vals, targets[i])) { numFound++; } else { numMissed++; }
+				contains_lt_gt_eq_div(vals, targets[i]);
 			}
 		}
-		System.out.println("numF:" + numFound + ", numMiss:" + numMissed);
 		return base.elapsedTime();
 	}
-	
+
 	/** Compute timing results of DIV/EQ/LT/GT. */
 	double timing_eq_lt_gt_div(int numRuns) {
 		// time a base run
@@ -159,25 +156,25 @@ public class TimingComparison {
 		}
 		return base.elapsedTime();
 	}
-	
+
 	/** Launch everything. */
 	public static void main(String[] args) {
-		
+
 		System.out.println("Generating values. This may take a few seconds...");
 		// range of numbers is +/- 2^24 or [-16777216, 16777216]. Generate a total of 2^16 or 65,536
 		vals = randomUniqueArray((int) Math.pow(2, 16), (int) Math.pow(2, 24));
-		
+
 		// These are the items to be searched: 2^16 or 65,536 within range +/- 2^25 of [-33554432, 33554432]
 		// to ensure there are some numbers that are not found.
 		targets = randomUniqueArray((int) Math.pow(2, 16), (int) Math.pow(2, 25));
-		
+
 		// quick test
 		TimingComparison tc = new TimingComparison();
 		for (int t : targets) {
 			boolean found1 = tc.contains_eq_lt_gt_div(vals, t);
 			boolean found2 = tc.contains_lt_gt_eq_shift(vals, t);
 			boolean found3 = tc.contains_lt_gt_eq_div(vals, t);
-			
+
 			if (found1 == found2 && found2 == found3) {
 				// good
 			} else {
@@ -186,6 +183,11 @@ public class TimingComparison {
 			}
 		}
 		
+
+		// how many times is a value actually found?
+		new TimingComparison().investigate(512);
+
+
 		System.out.println("timing_eq_lt_gt_div");
 		for (int i = 0; i < 5; i++) {
 			System.gc();
@@ -206,6 +208,23 @@ public class TimingComparison {
 			double t = new TimingComparison().timing_lt_gt_eq_div(512);	
 			System.out.printf("%.3f%n", t);
 		}
-		
+
+
+	}
+
+	/** Can you compute (in advance) how many will be found? */
+	void investigate(int numRuns) {
+		long numFound = 0, numMissed = 0;
+		for (int t = 0; t < numRuns; t++) {
+			for (int i = 0; i < targets.length; i++) {
+				if (contains_eq_lt_gt_div(vals, targets[i])) {
+					numFound++;
+				} else {
+					numMissed++;
+				}
+			}
+		}
+
+		System.out.println("Out of " + (numMissed + numFound) + " there were " + numFound + " found.");
 	}
 }
