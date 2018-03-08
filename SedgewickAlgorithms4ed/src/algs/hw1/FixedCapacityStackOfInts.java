@@ -15,6 +15,7 @@ public class FixedCapacityStackOfInts implements Iterable<Integer> {
 		N = 0;
 	}
 
+	/** Returns values in order that you would get them if you pop'd them one at a time. */
 	class ReverseArrayIterator implements Iterator<Integer> {
 		private int i = N;
 		public boolean hasNext() { return i > 0;  }

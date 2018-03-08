@@ -15,7 +15,6 @@ public class TwiceSorted_Solution extends TwiceSorted {
 		super();
 	}
 
-
 	/** 
 	 * For this homework assignment, you need to complete the implementation of this
 	 * method.
@@ -27,6 +26,7 @@ public class TwiceSorted_Solution extends TwiceSorted {
 			return new int[] {0, length()-1};
 		}
 		
+		// if target value is not found in array, then return null 
 		return null;
 	}
 
