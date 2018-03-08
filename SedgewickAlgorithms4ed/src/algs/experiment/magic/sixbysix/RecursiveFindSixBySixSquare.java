@@ -1,7 +1,6 @@
 package algs.experiment.magic.sixbysix;
 
 import algs.experiment.magic.Cell;
-import algs.experiment.magic.Computed;
 
 /**
  * A 5x5 latin magic square has 25 digits from 1-25. There are 25! possible arrangements
@@ -123,22 +122,22 @@ public class RecursiveFindSixBySixSquare {
 	static final int N   = 21;
 	static final int O   = 22;
 	static final int x5  = 23;
+	static final int x6  = 24;
 	
-	static final int P   = 24;
-	static final int Q   = 25;
-	static final int x6  = 26;
+	static final int P   = 25;
+	static final int x7  = 26;
+	static final int x8  = 27;
 	
-	static final int R   = 27;
-	static final int x7  = 28;
+	static final int Q   = 28;
+	static final int x9  = 29;
 	
-	static final int S   = 29;
-	static final int x8  = 30;
-	static final int x9  = 31;
+	static final int R   = 30;
+	static final int x10 = 31;
 	
-	static final int T   = 32;
-	static final int x10 = 33;
-	static final int x11 = 34;
-	static final int x12 = 35;
+	static final int S   = 32;
+	static final int x11 = 33;
+	static final int x12 = 34;
+	static final int x13 = 35;
 
 	static Cell[] positions = new Cell[] {
 		/* o1 */ new Cell(2,2), /* o2 */ new Cell(2,3), /* o3 */ new Cell(3,2), /* o4 */ new Cell(3,3), 
@@ -146,29 +145,13 @@ public class RecursiveFindSixBySixSquare {
 		new Cell(1,0), new Cell(2,0), new Cell(3,0), new Cell(4,0), /*x2*/ null, 
 		new Cell(2,1), new Cell(2,4), /*x3*/ null,
 		new Cell(3,1), new Cell(3,4), /*x4*/ null,
-		new Cell(1,2), new Cell(4,2), /*x5*/ null,
-		new Cell(1,1), new Cell(4,1), /*x6*/ null,
-		new Cell(4,4), /*x7*/ null,
-		new Cell(4,3), /*x8*/ null, /*x9*/ null,
-		new Cell(1,3), /*x10*/ null, /*x11*/ null, /*x12*/ null};
-	
-	// fill in the computed values
-	static void d() {
-		positions[9]  = new Computed(0,4).from(positions[A], positions[B], positions[C], positions[D]);     // x1=65-(A+B+C+D)
-		positions[9]  = new Computed(4,0).from(positions[A], positions[E], positions[F], positions[G]);     // x2=65-(A+E+F+G)
-		positions[13] = new Computed(4,1).from(positions[B], positions[H], positions[I], positions[J]);     // x3=65-(B+H+I+J)
-		positions[14] = new Computed(1,3).from(positions[x1], positions[T], positions[J], positions[x2]);   // x4=65-(x1+T+J+x2)
-
-		positions[16] = new Computed(2,4).from(positions[F], positions[I], positions[T], positions[K]);     // x5=65-(F+I+T+K)
-		positions[18] = new Computed(4,4).from(positions[A], positions[H], positions[T], positions[L]);     // x6=65-(A+H+T+L)
-		positions[19] = new Computed(4,3).from(positions[D], positions[x4], positions[K], positions[L]);    // x7=65-(D+x4+K+L)
-		positions[20] = new Computed(4,2).from(positions[x2], positions[x3], positions[x7], positions[x6]); // x8=65-(x2+x3+x7+x6)
-
-		positions[22] = new Computed(3,4).from(positions[G], positions[J], positions[M], positions[L]);     // x9=65-(G+J+M+L)
-		positions[23] = new Computed(1,4).from(positions[x1], positions[x5], positions[x6], positions[x9]); // x10=65-(x1+x5+x6+x9)
-		positions[24] = new Computed(1,2).from(positions[E], positions[H], positions[x4], positions[x10]);  // x11=65-(E+H+x4+x10)
-	}
-
+		
+		new Cell(1,1), new Cell(4,1), /*x5*/ null, /*x6*/ null,
+		new Cell(4,4), /*x7*/ null, /*x8*/ null, 
+		new Cell(1,5), /*x9*/ null,
+		new Cell(1,2), /*x10*/ null, 
+		new Cell(4,3), /*x11*/ null, /*x12*/ null, /*x13*/ null};
+ 
 	
 	// places to investigate
 	/*
@@ -179,14 +162,15 @@ public class RecursiveFindSixBySixSquare {
 	 * We can pre-compute these inner four placements and reduce the search space 8-fold. Still 
 	 * might not make a dent, however.
 	 * 
-	 *  A   B   C   D   E  x1   
-	 *  F   P   N   T x12  x9
-	 *  G   J  o1  o2   K  x3   
-	 *  H   L  o3  o4   M  x4
-	 *  I   Q  O    S   R  x8
-	 *  x2 x6  x5 x10 x11  x7
+	 *  A   B   C   D   E   x1   
+	 *  F   N   R  x10  x6  Q
+	 *  G   J  o1  o2   K   x3   
+	 *  H   L  o3  o4   M   x4
+	 *  I   O  x13  S   P   x9
+	 *  x2 x5  x12 x11 x7   x8
 	 * 
-	 * (x,a,b,c,d,e)
+	 * 
+	 * (x1,a,b,c,d,e)
 	 * (x2,a,f,g,h,i)
 	 * (x3,g,j,o1,o2,k)
 	 * (x4,h,l,o3,o4,m)
@@ -228,99 +212,125 @@ public class RecursiveFindSixBySixSquare {
 	 * 
 	 * 
 	 */
-
-
-	// call this instead to simply generate all magic squares sequentially. Takes too long.
-	public static void explore_0 () {
-		Cell c = positions[0];
-		for (int i = 1; i <= 25; i++) {
-			if (i == 13) { continue; }  // skip 13 since those were all computed for day04
-
-			// every time we get here, all of the used should be reset
-			board[c.row][c.col] = i;
+	public static void explore_from(int vals[]) {
+		//new int[] {1,4,13,30,31,32,35,18,27,25}
+		int idx = 4;
+		for (int i : vals) {
 			used[i] = true;
-			explore(1);
-			used[i] = false;
+			board[positions[idx].row][positions[idx].col] = i;
+			idx++;
 		}
+		board[positions[o1].row][positions[o1].col] = 17;
+		board[positions[o2].row][positions[o2].col] = 26;
+		board[positions[o3].row][positions[o3].col] = 28;
+		board[positions[o4].row][positions[o4].col] = 3;
+		used[17] = true; used[26] = true; used[28] = true; used[3] = true;
+		explore(vals.length+4);
 	}
 
 	/** Call this one using different processes to parallelize effort. */
-	public static void explore_from (int start) {
-		Cell c = positions[0];
+	public static void explore_from (int O1, int O2, int O3, int O4) {
+		
 		// every time we get here, all of the used should be reset
-		board[c.row][c.col] = start;
-		used[start] = true;
-		explore(1);
-		used[start] = false;
+		board[positions[o1].row][positions[o1].col] = O1;
+		board[positions[o2].row][positions[o2].col] = O2;
+		board[positions[o3].row][positions[o3].col] = O3;
+		board[positions[o4].row][positions[o4].col] = O4;
+		used[O1] = true; used[O2] = true; used[O3] = true; used[O4] = true;
+		explore(A);
+		used[O1] = false; used[O2] = false; used[O3] = false; used[O4] = false;
 	}
 	
-	public static void explore (int pos) {
+	public static int explore (int pos) {
 
-		if (pos == 25) {
+		if (pos == 36) {
 			// DONE
-			System.out.printf("%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d%n",
-					board[0][0], board[0][1], board[0][2], board[0][3], board[0][4],
-					board[1][0], board[1][1], board[1][2], board[1][3], board[1][4],
-					board[2][0], board[2][1], board[2][2], board[2][3], board[2][4],
-					board[3][0], board[3][1], board[3][2], board[3][3], board[3][4],
-					board[4][0], board[4][1], board[4][2], board[4][3], board[4][4]
+			System.out.printf("%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d,%2d%n",
+					board[0][0], board[0][1], board[0][2], board[0][3], board[0][4],board[0][5],
+					board[1][0], board[1][1], board[1][2], board[1][3], board[1][4],board[1][5],
+					board[2][0], board[2][1], board[2][2], board[2][3], board[2][4],board[2][5],
+					board[3][0], board[3][1], board[3][2], board[3][3], board[3][4],board[3][5],
+					board[4][0], board[4][1], board[4][2], board[4][3], board[4][4],board[4][5],
+					board[5][0], board[5][1], board[5][2], board[5][3], board[5][4],board[5][5]
 					);
-			return;
+			return 0;
 		}
 
 		Cell c = positions[pos];
 		if  (c.type == 0) {
 			// try each value. If not already used, add to board at current position and then
 			// mark the number as being used. When explore returns, the number is no longer 
-			// being used, but we continue the for loop until all 25 are found.
-			// Note in the first implementation, I had only i<25 which (of course, omitted the
-			// 25th one).
-			for (int i = 1; i <= 25; i++) {
+			// being used, but we continue the for loop until all are found.
+			for (int i = 1; i <= 36; i++) {
 				if (!used[i]) {
 					board[c.row][c.col] = i;
 					used[i] = true;
-					explore(pos+1);
+					int delta = explore(pos+1);
 					used[i] = false;
+					//board[c.row][c.col] = 0;
+					if (delta > 0) {   // this saves ~30%
+						i += (delta-1);
+					}
 				}
 			}
-			return;
+			return 0;
 		} else if (c.type == 1) {
 			// COMPUTED
 			Cell[] bases = ((Computed)c).bases;
-			int dig = 111 - (
-					board[bases[0].row][bases[0].col] +
-					board[bases[1].row][bases[1].col] +
-					board[bases[2].row][bases[2].col] +
-					board[bases[3].row][bases[3].col]);
+			int dig = 111 - 
+					board[bases[0].row][bases[0].col] -
+					board[bases[1].row][bases[1].col] -
+					board[bases[2].row][bases[2].col] -
+					board[bases[3].row][bases[3].col] - 
+					board[bases[4].row][bases[4].col];
 			// note: in an earlier implementation, I had used dig >= 0, which is nonsensical.
-			if (dig >= 1 && dig <= 25 && !used[dig]) {
-				used[dig] = true;
-				board[c.row][c.col] = dig;
-				explore(pos+1);
-				used[dig] = false;
+			if (dig >= 1 && dig <= 36) {
+				 if (!used[dig]) {
+					used[dig] = true;
+					board[c.row][c.col] = dig;
+					explore(pos+1);
+					used[dig] = false;
+					//board[c.row][c.col] = 0;
+					return 0;
+				 }
+			} else {
+				return dig-36;   // how far off are we? Try to signal earlier.
 			}
 		}
-
+		
+		return 0; // never gets here.
 	}
 
+	
+	
 	public static void main(String[] args) {
 
 		// fill in the computed values
-		positions[5]  = new Computed(0,4).from(positions[A], positions[B], positions[C], positions[D]);     // x1=65-(A+B+C+D)
-		positions[9]  = new Computed(4,0).from(positions[A], positions[E], positions[F], positions[G]);     // x2=65-(A+E+F+G)
-		positions[13] = new Computed(4,1).from(positions[B], positions[H], positions[I], positions[J]);     // x3=65-(B+H+I+J)
-		positions[14] = new Computed(1,3).from(positions[x1], positions[T], positions[J], positions[x2]);   // x4=65-(x1+T+J+x2)
+		positions[9]  = new Computed(0,5).from(positions[A], positions[B], positions[C], positions[D], positions[E]);     
+		positions[14] = new Computed(5,0).from(positions[A], positions[F], positions[G], positions[H], positions[I]);     
+		
+/*x3*/  positions[17] = new Computed(2,5).from(positions[G], positions[J], positions[o1], positions[o2], positions[K]);     
+		positions[20] = new Computed(3,5).from(positions[H], positions[L], positions[o3], positions[o4], positions[M]);   
 
-		positions[16] = new Computed(2,4).from(positions[F], positions[I], positions[T], positions[K]);     // x5=65-(F+I+T+K)
-		positions[18] = new Computed(4,4).from(positions[A], positions[H], positions[T], positions[L]);     // x6=65-(A+H+T+L)
-		positions[19] = new Computed(4,3).from(positions[D], positions[x4], positions[K], positions[L]);    // x7=65-(D+x4+K+L)
-		positions[20] = new Computed(4,2).from(positions[x2], positions[x3], positions[x7], positions[x6]); // x8=65-(x2+x3+x7+x6)
+/*x5*/  positions[23] = new Computed(5,1).from(positions[B], positions[N], positions[J], positions[L], positions[O]);
+		positions[24] = new Computed(1,4).from(positions[x2], positions[O], positions[o3], positions[o2], positions[x1]);
+		
+		positions[26] = new Computed(5,4).from(positions[E], positions[x6], positions[K], positions[M], positions[P]);
+		positions[27] = new Computed(5,5).from(positions[A], positions[N], positions[o1], positions[o4], positions[P]);
 
-		positions[22] = new Computed(3,4).from(positions[G], positions[J], positions[M], positions[L]);     // x9=65-(G+J+M+L)
-		positions[23] = new Computed(1,4).from(positions[x1], positions[x5], positions[x6], positions[x9]); // x10=65-(x1+x5+x6+x9)
-		positions[24] = new Computed(1,2).from(positions[E], positions[H], positions[x4], positions[x10]);  // x11=65-(E+H+x4+x10)
+/*x9*/	positions[29] = new Computed(4,5).from(positions[x1], positions[Q], positions[x3], positions[x4], positions[x8]); 
+		positions[31] = new Computed(1,3).from(positions[F], positions[N], positions[R], positions[x6], positions[Q]); 
+		positions[33] = new Computed(5,3).from(positions[D], positions[x10], positions[o2], positions[o4], positions[S]);
+		positions[34] = new Computed(5,2).from(positions[x2], positions[x5], positions[x11], positions[x7], positions[x8]);
+		positions[35] = new Computed(4,2).from(positions[C], positions[R], positions[o1], positions[o3], positions[x12]);
+		
+		// 9, 14, 17, 20, 23, 26, 28, 30, 31, 33, 34, 35
 
 		// handle the 1st one specially; grab from the command line.
-		explore_from(Integer.parseInt(args[0]));
+		explore_from(17, 26, 8, 3);
+		
+		//explore_from(new int[] {1,4,13,30,31,32,35});
+		//explore_from(new int[] {});
+		
 	}
 }

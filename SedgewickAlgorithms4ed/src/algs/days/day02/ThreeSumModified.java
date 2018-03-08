@@ -2,6 +2,9 @@ package algs.days.day02;
 
 import edu.princeton.cs.algs4.*;
 
+/**
+ * Example from 
+ */
 public class ThreeSumModified {
 	
 	public static int count(int[] a) {
@@ -23,6 +26,7 @@ public class ThreeSumModified {
 	}
 		
 	public static void main(String[] args) {
+		if (args.length == 0) { args = new String[] { "1024" }; }
 		int N = Integer.parseInt(args[0]);
 		
 		int[] ar = new int[N];

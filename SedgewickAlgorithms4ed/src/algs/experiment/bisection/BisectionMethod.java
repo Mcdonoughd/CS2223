@@ -51,5 +51,15 @@ public class BisectionMethod {
 		double root = compute(-1,6,sample);
 		System.out.println("f(" + root + ")=" + sample.compute(root));
 		
+		/** A sample polynomial function x^3 - 5x^2 - 13. */
+		F log = new F() {
+			public double compute(double x) {
+				return Math.log(x);
+			}
+			
+		};
+		
+		root = compute(0.1,6,log);
+		System.out.println("f(" + root + ")=" + log.compute(root));
 	}
 }

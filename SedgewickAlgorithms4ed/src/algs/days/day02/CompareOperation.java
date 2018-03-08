@@ -5,7 +5,7 @@ import edu.princeton.cs.algs4.*;
 public class CompareOperation {
 	public static void main(String[] args) {
 		// timing comparison of addition vs. multiplication vs. square root
-		
+		if (args.length == 0) { args = new String[] { "32768" }; }
 		int N = Integer.parseInt(args[0]);
 		
 		// only here so the code won't be detected as having no external effect.
@@ -39,6 +39,7 @@ public class CompareOperation {
 		
 		Stopwatch sqrtsw = new Stopwatch();
 		sum = 0;
+		
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
 				sum += (Math.sqrt(numbers[i])+Math.sqrt(numbers[j]));

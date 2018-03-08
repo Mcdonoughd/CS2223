@@ -1,7 +1,6 @@
 package algs.experiment.magic.fivebyfive;
 
 import algs.experiment.magic.Cell;
-import algs.experiment.magic.Computed;
 
 /**
  * A 5x5 latin magic square has 25 digits from 1-25. There are 25! possible arrangements

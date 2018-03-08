@@ -19,6 +19,7 @@ package algs.days.day02;
  * The 880 squares of order four were enumerated by Frénicle de Bessy in 1693.
  * http://mathworld.wolfram.com/MagicSquare.html
  * 
+ * This sort of algorithm is classified as Brute Force. It tries all possibilities.
  */
 public class FindMagicSquare {
 	public static void main(String[] args) {

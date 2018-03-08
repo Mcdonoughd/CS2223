@@ -1,4 +1,6 @@
-package algs.experiment.magic;
+package algs.experiment.magic.fivebyfive;
+
+import algs.experiment.magic.Cell;
 
 public class Computed extends Cell {
 	
