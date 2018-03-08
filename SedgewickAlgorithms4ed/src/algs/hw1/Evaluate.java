@@ -8,7 +8,13 @@ import edu.princeton.cs.algs4.*;
  * 
  * To run in Eclipse, you will need to enter your input into the Console window directly. 
  * After you press return, nothing appears to happen. This is because you need to "close" the
- * StdIn. This is done on a PC by pressing Control-Z.
+ * StdIn. 
+ * 
+ * This is done on a PC by pressing Control-z.
+ * 
+ * On a Macintosh (I am not making this up), to terminate the input, click the mouse anywhere else in Eclipse
+ * (typically just back in the source code or in the package explorer), then click BACK in the console window
+ * and press control-d (not Command-d).
  */
 public class Evaluate {
 	public static void main(String[] args) {
