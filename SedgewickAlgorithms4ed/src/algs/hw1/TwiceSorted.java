@@ -64,7 +64,7 @@ public abstract class TwiceSorted {
 	public abstract int[] locate (int target);
 
 	/** Small example to use. */
-	static final int[][] sample = new int[][] {
+	public static final int[][] sample = new int[][] {
 		{  5, 12, 18, 22},
 		{  7, 24, 37, 50},
 		{ 26, 27, 38, 57},
