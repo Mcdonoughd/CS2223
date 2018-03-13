@@ -1,5 +1,7 @@
 package algs.hw1;
 
+import algs.hw1.TwiceSorted;
+
 /**
  * Copy this class into your package, which must be USERID.hw1
  */
