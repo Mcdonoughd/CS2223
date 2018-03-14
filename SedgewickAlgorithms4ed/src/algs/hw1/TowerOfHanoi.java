@@ -56,7 +56,7 @@ public class TowerOfHanoi {
 		int numMoves = 0;
 		while (!stacks[0].isEmpty() || !stacks[1].isEmpty()) {
 			outputState();
-			StdOut.println ("Enter two disk numbers A B to move top disk on A to B. You win when all disks are on Stack 3.");
+			StdOut.println ("Enter two stack numbers A B to move top disk on A to B. You win when all disks are on Stack 3.");
 			int from = StdIn.readInt();
 			int to = StdIn.readInt();
 			
