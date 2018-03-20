@@ -33,7 +33,7 @@ public class DoublingTest {
      * for arrays of size 250, 500, 1000, 2000, and so forth.
      */
     public static void main(String[] args) { 
-        for (int N = 250; N <= 16000; N += N) {
+        for (int N = 1000; N <= 8000; N += 100) {
             double time = timeTrial(N);
             StdOut.printf("%7d %5.1f\n", N, time);
         } 
