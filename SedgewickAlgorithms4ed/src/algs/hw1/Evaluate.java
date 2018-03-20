@@ -36,7 +36,6 @@ public class Evaluate {
 				double v = vals.pop();
 				if (op.equals("+")) { v = vals.pop() + v; }
 				else if (op.equals("-")) { v = vals.pop() - v; }
-				else if (op.equals("+")) { v = vals.pop() + v; }
 				else if (op.equals("*")) { v = vals.pop() * v; }
 				else if (op.equals("/")) { v = vals.pop() / v; }
 				else if (op.equals("sqrt")) { v = Math.sqrt(v); }

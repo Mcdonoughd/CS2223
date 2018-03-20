@@ -2,6 +2,7 @@ package algs.days.day05;
 
 import edu.princeton.cs.algs4.*;
 
+// Strawman implementation. This is not the way a queue should be implemented....
 public class FixedCapacityQueueOfStrings  {
 	private String[] a;  // holds the items
 	private int N;       // number of items in queue
