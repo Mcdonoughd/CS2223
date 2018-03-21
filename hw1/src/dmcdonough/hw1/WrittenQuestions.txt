@@ -5,11 +5,88 @@ Written Questions
 Stack Experiments:
 ------------------
 
-1.
-2.
-3.
-4.
-5.
-6.
+1. The program reads in 6 + 8.
+    pushes 6 as double into the var stack.
+    loads + into the op stack.
+    pushes 8 as double into the var stack.
+    final stacks looks like so:
+	op: +
+	var: 6.0 8.0
+2. The program reads in -99
+	pushes -99 onto the var stack as a double
+	final stacks looks like so:
+	op: empty
+	var: -99.0
+3. The program reads in - 99
+	pushes - into the op stack
+	pushes 99 into the var stack as a double
+	final stacks looks like so:
+	op: -
+	var: 99.0
+4. The program reads in "( ( 2 / 3 ) + ( 3 * 7 ) )"
+	ignores (
+	ignores (
+	pushes 2 onto the var stack as a double
+	pushes / onto the op stack
+	pushes 3 onto the var stack as a double
+	reads )
+		pops 3 off var stack
+		pops / off op stack
+		computes 2/3 (0.6666666666666666) and saves it as a double, replacing 2 on the var stack
+	pushes + onto the op stack
+	ignores )
+	pushes 3 onto the var stack as a double
+	pushes * onto the op stack
+	pushes 7 onto the var stack as a double
+	reads )
+		pops 7 off the var stack
+		pops * off the op stack
+		computes 3*7 (21.0) and saves it as a double replacing 3 on the var stack
+	reads ) 
+		pops 21 off the var stack
+		pops + off the op stack
+		computes 0.6666666666666666+21.0
+	final stacks looks like so:
+	op: empty
+	var: 21.666666666666668
+
+5. The program reads "( 2 + ( 3 + ) 4 )" 
+	ignores (
+   	pushes 2 onto the var stack as a double
+	pushes + onto the op stack
+	ignores (
+	pushes 3 onto the var stack as a double
+	pushes + onto the op stack
+	reads )
+		pops 3 off the var stack
+		pops + off the op stack
+		computes 2+3 (5.0) and saves it as a double replacing 2 on the var stack
+	pushes 4 onto the var stack as a double
+	reads )
+		pops 4.0 off the var stack
+		pops + off the op stack
+		computes 5+4 (9.0) and saves it as a double replacing 5.0 on the var stack
+	final stacks looks like so:
+	op: empty
+	var: 9.0
+	
+6. The program reads "( floor ( 5 ^ 0.5 ) )"
+	ignores (
+	pushes floor onto the op stack
+	ignores (
+	pushes 5 onto the var stack as a double
+	pushes ^ onto the op stack
+	pushes 0.5 onto the var stack as a double
+	reads )
+		pops 0.5 off the var stack
+		pops ^ of the ops stack
+		computes 5^0.5 (2.23606797749979) and saves the value as adouble replacing 5.0 on the var stack
+	reads )
+		computes floor(2.23606797749979) (2.0)
+	final stacks looks like so:
+	op: empty
+	var: 2.0
+
+		
 
 

@@ -30,6 +30,17 @@ public class TowerOfHanoi {
 	 */
 	public static void outputState() {
 		StdOut.println("TO BE WRITTEN BY STUDENT");
+		for(int i = 0; i<=2;i++) {
+			System.out.print("Stack"+(i+1)+": ");
+			
+			while(!stacks[i].isEmpty()) {
+				System.out.print(stacks[i].toString());
+			}
+			
+			System.out.println(" ");
+		}
+		
+			
 		
 	}
 

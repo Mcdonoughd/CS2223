@@ -2,7 +2,9 @@ package dmcdonough.hw1;
 
 import java.util.Stack;   // for now, use the default Java implementation provided by the JDK.
 
-import edu.princeton.cs.algs4.*;
+import edu.princeton.cs.algs4.StdIn;
+
+
 
 /**
  * Code from p. 129 of Sedgewick (4ed).
@@ -31,6 +33,8 @@ public class Evaluate {
 			else if (s.equals ("*")) { ops.push(s); }
 			else if (s.equals ("/")) { ops.push(s); }
 			else if (s.equals ("sqrt")) { ops.push(s); }
+			else if (s.equals ("floor")) {ops.push(s);}
+			else if (s.equals("^")) {ops.push(s);}
 			else if (s.equals (")")) {
 				// pop, evaluate, and push result if token is ")".
 				String op = ops.pop();
@@ -49,6 +53,6 @@ public class Evaluate {
 				vals.push(Double.parseDouble(s));
 			}
 		}
-		StdOut.println(vals.pop());
+		System.out.println(vals.pop());
 	}
 }
