@@ -74,9 +74,17 @@ public class WastedSpaceMerge {
      * and prints them to standard output in ascending order. 
      */
     public static void main(String[] args) {
-        String[] a = StdIn.readAllStrings();
-        WastedSpaceMerge.sort(a);
-        show(a, 0, a.length-1);
-        System.out.println("Extra space:" + extraSpace);
+    	StdOut.println("N\tExtra\tEstimate = 2*N*log N - 2*N");
+        for (int N = 4; N <= 512; N *= 2) {
+        	Double[] ar = new Double[N];
+        	for (int i = 0; i < ar.length; i++) {
+        		ar[i] = Math.random();
+        	}
+        	
+        	WastedSpaceMerge.sort(ar);
+        	int k = (int) (Math.log(N) / Math.log(2));
+        	double estimate = N*(k*2 - 2);
+        	StdOut.printf("%2d\t%d\t%.2f%n", N, extraSpace, estimate);
+        }
     }
 }
