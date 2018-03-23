@@ -18,7 +18,7 @@ public class SampleBooleanArrayInvestigation {
 			
 			// For each row, visit all of its columns. Assume the array is rectangular
 			// which means each row has the same number of columns
-			int numColumns = ar[0].length;
+			int numColumns = ar[row].length;
 			for (int col = 0; col < numColumns; col++) {
 				if (ar[row][col] == true) {
 					ctr++;
@@ -33,7 +33,7 @@ public class SampleBooleanArrayInvestigation {
 	public static void main(String[] args) {
 		boolean [][] sample = new boolean[][] {
 				{ true,  false, true,  true },
-				{ false, false, true,  false },
+				{ false, false, true,  false },  
 				{ false, false, false, false },
 				{ true,  false, false, true }
 		};
