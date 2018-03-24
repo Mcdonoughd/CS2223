@@ -3,7 +3,6 @@ package algs.hw2;
 /**
  * Your goal is to output a table that looks like this:
 
-  
 N	Avg.	Inspectk
 1	1.00	1
 2	1.50	1,2

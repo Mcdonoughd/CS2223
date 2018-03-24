@@ -1,0 +1,164 @@
+Name: George Heineman / HW1 Solutions
+March 14 draft 11:04 M
+
+Stack Experiments Question
+
+An arithmetic expression AE (page 128) is either:
+  
+  * a number
+  * ( AE op AE )
+  
+The very last thing the program does is pop the topmost value from the stack
+and output it. So students should report, for each question, the state of the
+ops stack and the state of the values stack when the program completes.. 
+
+1. The input "6 + 8" has no parentheses, so it is not a well-formed expression.
+   However, the program processes it and terminates because the input completes.
+   When the program terminates, "8.0" is output, the op stack has the "+" operator 
+   and the values stack is [6] 
+
+    5 (100%)    Accurate    - Describes ops state of [+], and
+    4 (75%)	    Substantial - Describes vals state of [6], and
+    3 (50%)     Superficial - mentions that 8.0 is the result
+    2 (25%)     Incorrect   - doesn't come close
+    0 (0%)      None        - leaves blank
+
+2. The input "-99" is a valid input, namely, just a number.
+   When it terminates, the op stack is empty and so is the values stack
+
+    5 (100%)    Accurate    - Describes ops state of [], and 
+    4 (75%)	    Substantial - Describes vals state of [], and
+    3 (50%)     Superficial - mentions that -99.0 is the result
+    2 (25%)     Incorrect   - doesn't come close
+    0 (0%)      None        - leaves blank
+
+3. The input "- 99" is not well-formed expression because it doesn't
+   match the description of an AE. However, the program processes the input and
+   terminates because the input completes. When it terminates, the op stack has
+   the "-" operator and the topmost value on the values stack is empty
+
+    5 (100%)    Accurate    - Describes ops state of [-], and 
+    4 (75%)	    Substantial - Describes vals state of [], and
+    3 (50%)     Superficial - mentions that 99.0 is the result
+    2 (25%)     Incorrect   - doesn't come close
+    0 (0%)      None        - leaves blank
+
+4. The input "( ( 2 / 3 ) + ( 3 * 7 ) )" is  well-formed expression.
+   When it terminates, 21.666666666666668 is output (give or take :)
+   and all stacks are empty
+
+    5 (100%)    Accurate    - Describes ops state of [], and 
+    4 (75%)	    Substantial - Describes vals state of [], and
+    3 (50%)     Superficial - mentions that 21.666666666666668 is the result
+    2 (25%)     Incorrect   - doesn't come close
+    0 (0%)      None        - leaves blank
+
+5. The input "( 2 + ( 3 + ) 4 )" is not a well-formed expression.
+   When it terminates, 9.0 is output and all stacks are empty. Even
+   Though poorly formatted, this still works.
+
+    5 (100%)    Accurate    - Describes ops state of [], and 
+    4 (75%)	    Substantial - Describes vals state of [], and
+    3 (50%)     Superficial - mentions that 9.0 is the result
+    2 (25%)     Incorrect   - doesn't come close
+    0 (0%)      None        - leaves blank
+
+6. See solution
+
+    5 (100%)    Accurate    - Implements both Math.FLOOR and Math.EXP
+    4 (75%)	    Substantial - <NOT A VALID GRADE FOR THIS QUESTION>
+    3 (50%)     Superficial - Only does one of Math.E or Math.PI
+    2 (25%)     Incorrect   - doesn't come close
+    0 (0%)      None        - leaves blank
+   
+7. The input "( floor ( 5 ^ 0.5 ) )" is a well-formatted expression. The
+   Square Root of 5 is 2.23... and so the floor value is 2.0
+   
+    5 (100%)    Accurate    - Describes ops state of [], and 
+    4 (75%)	    Substantial - Describes vals state of [], and
+    3 (50%)     Superficial - mentions that 2.0 is the result
+    2 (25%)     Incorrect   - doesn't come close
+    0 (0%)      None        - leaves blank
+
+Tower Of Hanoi Stack Exercise
+
+No written answers here. I will only mention in passing that the total number
+of moves needed to move N disks is 2^N-1, so when grading this problem, you
+might choose to just make a few valid moves, to make sure that the code is 
+working properly. You should also make sure the code properly handles invalid
+move requests (i.e., by not crashing and by not changing state to an invalid state).
+
+Twice Sorted Programming Exercise
+
+1. The obvious solution (10 points) is to simply search through the 2D array for the 
+   element (see StraightForward_TwiceSorted solution). This takes 30752 array inspections
+   on the sample 2D Twice Sorted Array.
+   
+   However there is a more efficient implementation that takes advantage of binary search
+   
+   Note: a minor improvement to StraightForward (stopping search in a row once the target
+   is smaller than a given ar[r][c] reduces the number of comparisons to 29190, but this
+   is not what I am looking for for question 2. If students get this, give them +2 points
+   for the second question.
+   
+2. Look at Solution_RepeatedBinarySearch) that uses binary search on each row to try to
+   locate the value. This takes 14990 array inspections on the sample 2D Twice Sorted Array.
+   
+B1. Bonus question suggests a better solution.
+
+   Start with first row and do a binary search on a row. If found, great! If not found, you end up 
+   with information that can be used to eliminate entire sections of the 2D array, because
+   you know that it is TwiceSorted. You then alternate to do binary search on next column. If found, 
+   great! If not, then do binary search on a Row. Thus you continually alternate binary searches
+   on rows and columns.
+   
+   Note: I have five different solutions to this problem, each improving its behavior. Run 
+   TwiceSorted_Comparison to see the results.
+
+Binary ArraySearch Exercise
+===========================
+
+The algorithm works as follows. For each of the N values in the 0th row, do a binary search
+to try to locate that value in the 1st row. Once you find a duplicate, then you know you have
+found the special value. Output the special value and the locations of the first two values.
+
+Then for each of the remaining M-2 rows, conduct a binary array search on the corresponding
+row and output the location of the special value, which you know must exist.
+
+In the worst case, the special value is located in the two rightmost locations in the first two rows.
+This forces the most number of inspections on the second row, namely N*(log2(N)+1) = N*(k+1). But 
+don't forget the original number of inspections of the first row, or N. So we have N+N*(k+1) 
+
+Thereafter, if you put the special value in the rightmost location of every row, then you will 
+require (M-2)*(log2(N)+1) inspections, or (M-2)*(k+1). So total number is N+(M-2+N)*(k+1) in the worst case.
+
+For this problem, you have: 4+(6-2+4)*(2+1) = 4+8*3 = 28
+
+Bonus questions 1. Worst Case
+
+ 1  2  3 24
+ 4  5  6 24
+ 7  8  9 24
+10 11 12 24
+13 14 15 24
+16 17 18 24
+
+Bonus questions 2. Best Case
+
+First element looked at in binary search is (0+3)/2 = floor(1.5) = 1.
+
+24 25 26 27 
+23 24 28 29
+22 24 30 31
+21 24 32 33
+20 24 34 35
+19 24 36 37
+
+So we place the special value in [0][0], and [1][1]. Thereafter in [R][1] for R=2 .. M-2
+
+Total number of array inspections is M 
+
+Bonus Question 3.
+
+See implementation in Solution_SpecialValue
+   
