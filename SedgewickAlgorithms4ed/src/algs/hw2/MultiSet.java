@@ -13,9 +13,6 @@ package algs.hw2;
  * you can't know in advance HOW many duplicates will exist, so in the worst case, 
  * some computations will still depend upon N. 
  * 
- * Once you complete this implementation, you will need to provide empirical evidence 
- * to support the performance specifications of each method.
- * 
  * @param <Item>
  */
 public class MultiSet<Item extends Comparable<Item>> {
