@@ -72,7 +72,7 @@ public abstract class TwiceSorted {
 	};
 	
 	/** larger example to use. Do not make any modifications to these values. */
-	static final int[][] big = new int[][] { 
+	protected static final int[][] big = new int[][] { 
 			{2, 4, 19, 28, 30, 42, 60, 92},
 			{6, 8, 20, 29, 36, 48, 80, 93},
 			{31, 33, 34, 35, 38, 49, 82, 94},

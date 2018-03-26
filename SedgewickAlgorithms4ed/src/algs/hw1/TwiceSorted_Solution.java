@@ -17,20 +17,45 @@ public class TwiceSorted_Solution extends TwiceSorted {
 		super();
 	}
 
+	
+	/** 
+	 * Dumb Locate that checks everything in row col fashion in a check every option pattern
+	 */
+	
+	public int[] dumbLocate(int target) {
+		for (int row = 0; row < length(); row++) {
+			for (int col = 0; col < length(); col++) {
+				if (inspect(row, col) == target) { return new int[] {row, col}; }
+			}
+		}
+		// if target value is not found in array, then return null 
+		return null;
+}
+	
+	
+	
 	/** 
 	 * For this homework assignment, you need to complete the implementation of this
 	 * method.
 	 */
 	@Override
 	public int[] locate(int target) {
-		// Only look at the value in the upper right corner of the TwiceSorted array.
-		if (inspect(0,length()-1) == target) {
-			return new int[] {0, length()-1};
+		if(inspect(length()/2, length()/2) > target) { //if greater, check lower diagonal
+			
+			return null;
 		}
-		
-		// if target value is not found in array, then return null 
-		return null;
+		else if (inspect(length()/2, length()/2) < target) { //if less than, check upper diagonal
+			
+			return null;
+		}
+		else{
+			if (inspect(length()/2, length()/2) == target) { return new int[] {length()/2, length()/2}; } //if equal lucky!
+			//if not greater, less than or equal something is wrong return null
+			return null;
+		}
 	}
+		
+		
 
 	/** Be sure that you call your class constructor. Do not modify this method. */ 
 	public static void main (String args[]) {
