@@ -6,6 +6,9 @@ import edu.princeton.cs.algs4.StdOut;
 // Sedgewick, 4ed
 public class Insertion {
 
+	public static long lessCount;
+	public static long exchCount;
+	
 	/**
      * Rearranges the array in ascending order, using the natural order.
      * @param a the array to be sorted
@@ -29,11 +32,13 @@ public class Insertion {
     
     // is v < w ?
     private static boolean less(Comparable v, Comparable w) {
+    	lessCount++;
         return v.compareTo(w) < 0;
     }
 
     // exchange a[i] and a[j]
     private static void exch(Object[] a, int i, int j) {
+    	exchCount++;
         Object swap = a[i];
         a[i] = a[j];
         a[j] = swap;

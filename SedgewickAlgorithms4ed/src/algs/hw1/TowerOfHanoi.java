@@ -52,7 +52,7 @@ public class TowerOfHanoi {
 		stacks[0].push(3);
 		stacks[0].push(2);
 		stacks[0].push(1);
-		
+
 		int numMoves = 0;
 		while (!stacks[0].isEmpty() || !stacks[1].isEmpty()) {
 			outputState();
