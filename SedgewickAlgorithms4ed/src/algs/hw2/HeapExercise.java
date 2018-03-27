@@ -30,7 +30,9 @@ public class HeapExercise {
 
 	// Update results, given information for the given trial, data size N, number of comparisons
 	// during the delMin operation.
-	private static void updateEntry(int trial, int n, int delComparisons, int insertComparisons) {
+	// NOTE: (3-26-2018) -- IN initial version, there had been a parameter: int insertComparisons
+	// but this is no longer needed.
+	private static void updateEntry(int trial, int n, int delComparisons) {
 
 	}
 
