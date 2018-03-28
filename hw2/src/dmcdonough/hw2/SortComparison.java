@@ -57,11 +57,100 @@ public class SortComparison {
      * @param k  power of 2 unique integers to be returned
      * @return array is shuffled
      */
+    //I luckily already coded this is the previous problem so I'll just copy this
+    
+    
+
+	//computes log base 2 of input
+	public static double log2(double num){
+	return (Math.log(num)/Math.log(2));
+	}
+	
+	
+	//fills array Siblings on any N^2 size array such that:
+	public static void Sibling(int r, Integer[] ar, int level, int N, int max_level){
+		//r is the pos of the 1st val of the current level
+		
+		int num = (int) Math.pow(2, level-1) ;
+		int pattern = (int) Math.floor(N/num);
+		//int offset = (int) Math.pow(2, max_level-level-1)-1;
+		
+		for(int i = r; i <= N-1; i+=pattern) {
+			ar[i] = level; //place each element on the level with it's level number
+		}
+	}
+		
+	
+	//init the structure
+	public static void Parent(int r, Integer[] ar, int level, int N, int max_level) {
+		//check if current level of tree is greater than the greatest possible level
+		if(max_level-1 < level) {
+			return;
+		}
+		else {
+		//calculate origin to check for edges
+		int origin = (int) Math.floor((N-1)/2);
+		//calculate the left most child
+		int left_child = (int) (r-(Math.floor(r/2))-1);
+		//calc right child
+		int right_child = (int) (r+(Math.floor(r/2))+1);
+		
+		//check edges
+		if(left_child >= 0 && left_child < N && ar[left_child] == null && left_child < origin) {
+			//get sibling which exist on level the current level (min 2) and beyond
+			if (level>=2 && level<max_level ) {
+				Sibling(left_child,ar,level,N,max_level);
+			}
+    		ar[left_child] = level; //set child
+    		
+    		Parent(left_child,ar,level+1,N,max_level); //Recursive to left children
+    		Parent(right_child,ar,level+1,N,max_level); //recursive to right children
+    		 
+			}
+		}
+		//end
+		//return;
+	}
+	
+	public static Integer[] randomArray(int k) {
+		if(k % 2 != 0) {
+		return null;
+		}
+		int N = (int) Math.pow(2, k);
+		//Make array
+    	Integer[] ar = new Integer[N];
+    	
+    	//determine max level of tree
+    	int max_level = (int) (log2(N)+1);
+    	
+    	//if array is greater than size 2
+    	if(N > 2) {
+			int origin = (int) Math.floor((N-1)/2);
+			ar[origin] = 1;
+        	Parent(origin, ar, 2, N, max_level );
+    	}
+    	
+    	//else set 1st element as 1
+    	else {
+    		ar[0] = 1;
+    	}
+    	//add last value to array (note on 1x1 array one is filled twice due to this attribute
+    	ar[N-1] = max_level;
+    	
+    	//shuffle the array
+    	shuffle(ar);
+    	
+		return ar;
+		
+	}
+	
+	
+    
+    
+    
 	static Integer[] generateHighDuplicateData(int k) {
 		// Students must fill this in. This code is here to make sure we can run right from initial start of HW2
-		Integer[] vals = new Integer[k];
-    	for (int i = 0; i < vals.length; i++) { vals[i] = 0; }
-    	return vals;
+		return randomArray(k);
 	}
 	
 	// These have been placed here so you can double check that each of the sorting algorithms
@@ -131,16 +220,54 @@ public class SortComparison {
 	// exchanges, and the fewest number of comparison operations, for the unique data set
 	static void updateUniqueEntry(int trial, int n, int entry, long exch, long less, double time) {
 		// Student fills in...
+		switch (trial) {
+		case 0:
+			if(unique[n][entry][trial] == 0.0 || time < unique[n][entry][trial]) {
+				unique[n][entry][trial] = time;
+			}
+			break;
+		case 1:
+			if(unique[n][entry][trial] == 0.0 || exch < unique[n][entry][trial]) {
+				unique[n][entry][trial] = exch;
+			}
+			break;
+		case 2:
+			if(unique[n][entry][trial] == 0 || less < unique[n][entry][trial]) {
+				unique[n][entry][trial] = less;
+			}
+			break;
+		default:
+			System.out.println("ERROR!");
+			return;
+		}
+				
 	}
 	
 	static void updateDuplicatesEntry(int trial, int n, int entry, long exch, long less, double time) {
 		// Student fills in
+		switch (trial) {
+		case 0:
+			if(duplicates[n][entry][trial] == 0.0 || time < duplicates[n][entry][trial]) {
+				duplicates[n][entry][trial] = time;
+			}
+			break;
+		case 1:
+			if(duplicates[n][entry][trial] == 0.0 || exch < duplicates[n][entry][trial]) {
+				duplicates[n][entry][trial] = exch;
+			}
+			break;
+		case 2:
+			if(duplicates[n][entry][trial] == 0 || less < duplicates[n][entry][trial]) {
+				duplicates[n][entry][trial] = less;
+			}
+			break;
+		default:
+			System.out.println("ERROR!");
+			return;
+		}
 	}
 	
 public static void main(String[] args) {
-	
-		
-		StdOut.println("DELETE THIS LINE.... SAMPLE OUTPUT BELOW FOR YOUR ACTUAL RESULTS.");
 	
 		int T = 3;
 		StopwatchCPU watch;
@@ -148,7 +275,7 @@ public static void main(String[] args) {
 		double time;
 		
 		for (int t = 0; t < T; t++) {
-			System.out.printf("Trial %d ...%n", t);
+			System.out.printf("Trial %d ...%n", t+1);
 			for (int k = lowSize, idx = 0; k <= highSize; k++, idx++) {
 				
 				// For each algorithm to be compared (MergeSort,QuickSort,QuickSortAlternate)
@@ -158,7 +285,7 @@ public static void main(String[] args) {
 				
 				// Here is a sample using Insertion Sort. You will have SIX such blocks: THREE for unique data,
 				// and THREE for highly duplicated data
-				
+//Mergesort - Unique Test
 				data = generateUniqueData(k);
 				watch = new StopwatchCPU();
 				try {
@@ -167,13 +294,30 @@ public static void main(String[] args) {
 					if (!isSorted(data)) {
 						System.out.println("ERROR with Merge sort");
 					}
-					
+					watch = null;
 					updateUniqueEntry (t, idx, 0, Insertion.exchCount, Insertion.lessCount, time);
 				} catch (StackOverflowError e) {
 					// stack overflow! Be sure to put this in just in case (hint....)
 					System.out.printf("Stack Overflow (%d)!%n", k);
 				}
 				
+
+//Mergesort - Unique Test
+data = generateUniqueData(k);
+watch = new StopwatchCPU();
+try {
+	Insertion.sort(data);
+	time = watch.elapsedTime();
+	if (!isSorted(data)) {
+		System.out.println("ERROR with Merge sort");
+	}
+	watch = null;
+	updateUniqueEntry (t, idx, 0, Insertion.exchCount, Insertion.lessCount, time);
+} catch (StackOverflowError e) {
+	// stack overflow! Be sure to put this in just in case (hint....)
+	System.out.printf("Stack Overflow (%d)!%n", k);
+}
+
 			}
 		}
 		
