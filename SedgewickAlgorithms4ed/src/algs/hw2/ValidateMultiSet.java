@@ -173,23 +173,23 @@ public class ValidateMultiSet {
 			}
 			double multiplicity_average = (sw.elapsedTime() - pre_multiplicity)/n;
 		
-			// convert s1 into s2 by adding 1..N. These n operations
-			// must be averaged by dividing by n.
+			// convert s1 into s2 by adding 1..N step 2. These n operations
+			// must be averaged by dividing by n/2.
 			for (int i = 1; i <=n; i+= 2) {
 				s1.add(i);
 			}
-			double average_add = (sw.elapsedTime() - multiplicity_average)/n;
+			double average_add = (sw.elapsedTime() - multiplicity_average)/(n/2.0); 
 			
 			// ensures s1 can be converted into s2 by adding n numbers
 			ensureIdentical(s1, s2);
 			
 			// now take s2 and remove each n value, to confirm same as s1_copy.
 			double pre_remove_average = sw.elapsedTime();
-			// must be averaged by dividing by n.
+			// must be averaged by dividing by n/2.
 			for (int i = 1; i <=n; i+= 2) {
 				s2.remove(i);
 			}
-			double average_remove = (sw.elapsedTime() - pre_remove_average)/n;
+			double average_remove = (sw.elapsedTime() - pre_remove_average)/(n/2.0);
 			
 			// ensures s2 can be converted into s1_copy by removing n numbers
 			ensureIdentical(s1_copy, s2);
