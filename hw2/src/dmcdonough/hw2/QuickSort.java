@@ -3,7 +3,7 @@ package dmcdonough.hw2;
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
-import dmcdonough.hw2.QuickAlternate;
+import dmcdonough.hw2.QuickSort;
 
 /**
  *  The <tt>Quick</tt> class provides static methods for sorting an
@@ -17,13 +17,13 @@ import dmcdonough.hw2.QuickAlternate;
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
-public class QuickAlternate {
+public class QuickSort {
 
 	public static long exchCount;
 	public static long lessCount;
 
 	// This class should not be instantiated.
-	private QuickAlternate() { }
+	private QuickSort() { }
 
 	/**
 	 * Rearranges the array in ascending order, using the natural order.
@@ -42,23 +42,19 @@ public class QuickAlternate {
 		sort(a, j+1, hi);
 	}
 
-	// partition the subarray a[lo..hi] so that a[lo..j-1] <= a[j] <= a[j+1..hi]
-	// and return the index j. Alternate partitioning method.
-	private static int partition(Comparable[] a, int lo, int hi) {
-		// choose right-most element as the 'pivot'
-
-		// all values <= pivot are moved to the front of array and pivot inserted
-		// just after them.
-		int store = lo;
-		for (int i = lo; i <= hi; i++) {
-			if (less(a[i], a[hi])) {
-				exch(a, store, i);
-				store++;
-			}
-		}
-		
-		exch(a, store, hi);
-		return store;
+	private static int partition(Comparable[] a, int lo, int hi)
+	{ // Partition into a[lo..i-1], a[i], a[i+1..hi].
+	 int i = lo, j = hi+1; // left and right scan indices
+	 Comparable v = a[lo]; // partitioning item
+	 while (true)
+	 { // Scan right, scan left, check for scan complete, and exchange.
+	 while (less(a[++i], v)) if (i == hi) break;
+	 while (less(v, a[--j])) if (j == lo) break;
+	 if (i >= j) break;
+	 exch(a, i, j);
+	 }
+	 exch(a, lo, j); // Put v = a[j] into position
+	 return j; // with a[lo..j-1] <= a[j] <= a[j+1..hi].
 	}
 
 
@@ -111,7 +107,7 @@ public class QuickAlternate {
 	 */
 	public static void main(String[] args) {
 		String[] a = StdIn.readAllStrings();
-		QuickAlternate.sort(a);
+		QuickSort.sort(a);
 		show(a);
 
 	}

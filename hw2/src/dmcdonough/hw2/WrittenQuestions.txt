@@ -1,5 +1,68 @@
-<<Your Name Here>>
+Daniel MCdonough
 HW2
 Written Questions
 
-<< Use this file for providing your written answers to the question. >>
+Sort Comparison:
+------------------
+
+Example Data:
+Trial 1 ...
+QAD: Stack Overflow (16)!
+QAD: Stack Overflow (17)!
+QAD: Stack Overflow (18)!
+QAD: Stack Overflow (19)!
+Trial 2 ...
+QAD: Stack Overflow (16)!
+QAD: Stack Overflow (17)!
+QAD: Stack Overflow (18)!
+QAD: Stack Overflow (19)!
+Trial 3 ...
+QAD: Stack Overflow (16)!
+QAD: Stack Overflow (17)!
+QAD: Stack Overflow (18)!
+QAD: Stack Overflow (19)!
+Time Trials
+	N	MergeU	QuickU	QuickAU	|	MergeD	QuickD	QuickAD
+8192	0.000	0.016	0.000	|	0.000	0.000	0.063
+16384	0.000	0.000	0.000	|	0.047	0.016	0.109
+32768	0.000	0.000	0.000	|	0.016	0.000	0.391
+65536	0.000	0.000	0.000	|	0.000	0.016	0.000
+131072	0.000	0.000	0.000	|	0.016	0.016	0.000
+262144	0.000	0.000	0.000	|	0.047	0.031	0.000
+524288	0.000	0.000	0.000	|	0.078	0.063	0.000
+
+Exch Results
+	N	MergeU		QuickU		QuickAU		|	MergeD		QuickD		QuickAD
+8192	0.000e+00	1.400e+01	3.000e+01	|	0.000e+00	4.418e+04	1.916e+04
+16384	0.000e+00	1.300e+01	4.000e+01	|	0.000e+00	9.679e+04	3.649e+04
+32768	0.000e+00	1.500e+01	2.600e+01	|	0.000e+00	2.099e+05	6.847e+04
+65536	0.000e+00	2.000e+01	4.300e+01	|	0.000e+00	4.524e+05	0.000e+00
+131072	0.000e+00	2.100e+01	3.000e+01	|	0.000e+00	9.649e+05	0.000e+00
+262144	0.000e+00	1.400e+01	5.100e+01	|	0.000e+00	2.066e+06	0.000e+00
+524288	0.000e+00	2.000e+01	4.400e+01	|	0.000e+00	4.384e+06	0.000e+00
+
+Less Results
+	N	MergeU		QuickU		QuickAU		|	MergeD		QuickD		QuickAD
+8192	3.500e+01	5.600e+01	5.100e+01	|	7.756e+04	1.055e+05	1.121e+07
+16384	3.700e+01	5.100e+01	4.200e+01	|	1.731e+05	2.156e+05	4.479e+07
+32768	4.000e+01	5.100e+01	5.300e+01	|	3.619e+05	4.724e+05	1.790e+08
+65536	4.800e+01	5.600e+01	5.800e+01	|	7.856e+05	1.026e+06	0.000e+00
+131072	4.700e+01	7.000e+01	6.500e+01	|	1.664e+06	2.121e+06	0.000e+00
+262144	5.300e+01	6.800e+01	7.400e+01	|	3.487e+06	4.473e+06	0.000e+00
+524288	6.000e+01	8.500e+01	8.800e+01	|	7.369e+06	9.785e+06	0.000e+00
+
+
+
+Hypothesis 1: When there are a large number of duplicate values, the overall sorting time should be
+reduced (and should be detectable).
+
+Hypothesis 2: When there are a large number of duplicate values, the number of exchanges is
+reduced (and should be detectable).
+
+It seems as though both hypothesis fail. Looking at the data through several trials, the unique data sets would always be faster than the duplicate 
+values. Where the Unique values are almost less than the duplicate values. The unique value data set often has 0 as it's time unless the 
+set is just very unlucky. Where as the duplicate values often result in more time and more swaps this may occur due to swapping when equals that 
+may cascade along the set the more duplicate values there are rather than the one possible swap for unique values.
+
+
+

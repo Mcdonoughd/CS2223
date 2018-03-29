@@ -22,20 +22,52 @@ public class MultiSet<Item extends Comparable<Item>> {
 	class Node {
 		private Item   item;
 		private int    count;
-		private Node   next;
+		private Node   next;		
 	}
 
+	//variable for the multiset itself
+	
+	public int unique = 0;
+	public int total = 0;
+	public Node head = null;
+	
 	/** Create an empty MultiSet. */
 	public MultiSet () { 
-		
+		head = new Node();
 	}
-
+	
+	
+	public void printMS() {
+		Node iterate;
+		iterate = this.head;
+		if(iterate == null) {
+			System.out.println("MultiSet is Empty");
+			return;
+		}
+		else {
+			for(int i=0;i<=this.unique-1;i++) {
+				System.out.println(iterate.item + ": " + iterate.count);
+				if(iterate.next == null) {
+					return;
+				}else {
+					iterate = iterate.next;
+				}
+			}
+		}
+	}
+	
 	/**
 	 * Initialize the MultiSet to contain the unique elements found in the initial list.
 	 * 
 	 * Performance is allowed to be dependent on N*N, where N is the number of total items in initial.
 	 */
 	public MultiSet(Item [] initial) { 
+		//initial is an array of items
+
+		for(int i = 0;i<=initial.length-1; i++) {
+			this.add(initial[i]);
+		}
+		
 		
 	}
 
@@ -45,8 +77,8 @@ public class MultiSet<Item extends Comparable<Item>> {
 	 * Performance must be independent of the number of items in the MultiSet, or ~ 1.
 	 */
 	public int size() {
-		// student fills in
-		return -1;
+		//we keep track of the size in terms of a variable that is changed through addition
+		return this.unique;
 	}
 
 	/** 
@@ -57,7 +89,29 @@ public class MultiSet<Item extends Comparable<Item>> {
 	 * Performance must be linearly dependent upon min(U1,U2)
 	 */
 	public boolean identical (MultiSet<Item> other) { 
-		// student fills in 
+		//check if same size!
+		if(this.size() != other.size() || other == null || this == null) {
+			return false;
+		}
+		else {
+			Node this_iterator = this.head;
+			Node other_iterator = other.head;
+			for(int j =0; j<this.size()-1;j++){
+				for(int i =0; i < other.size()-1;i++) {
+					if(this_iterator.item == other_iterator.item) {
+						break; //this item was in the other
+					}
+					else{
+						//if at the end of the other list and item was not found...
+						if(other_iterator.next == null) {
+							return false;
+						}//otherwise move to the next item
+						other_iterator = other_iterator.next;
+					}
+				}
+				this_iterator = this_iterator.next;
+			}
+		}
 		return false;
 	}
 	
@@ -77,7 +131,52 @@ public class MultiSet<Item extends Comparable<Item>> {
 	 * Performance must be no worse than linearly dependent on N.
 	 */
 	public boolean add(Item it) {
-		// student fills in
+		if(it == null) {
+			System.out.println("I'm sorry, But I can't do that Dave. The item is null...");
+			return false;
+		}
+		//the multiset head
+		Node iterator = this.head;
+		//if the head is null...
+		if(iterator == null) {
+			//new item becomes head
+			this.head = new Node();
+			this.head.item = it;
+			this.head.count = 1;
+			this.unique = 1;
+			this.total = 1;
+			return true;
+		}
+		//if the head is not null...
+		else {
+			//iterate through each element
+			for(int i = 0; i<=this.unique-1; ) {
+				//check if element is at the current spot
+				if(iterator.item == it) {
+					iterator.count++;
+					this.unique++;
+					this.total++;
+					return true;
+				}
+				//if not check if there is not next spot...
+				else if(iterator.next == null) {
+					//add to end of list
+					iterator.next = new Node();
+					iterator = iterator.next;
+					iterator.count = 1;
+					iterator.item = it;
+					iterator.next = null;
+					this.unique++;
+					this.total++;
+					return true;
+				}
+				//if there is a next spot move.
+				else {
+					//move through the list
+					iterator = iterator.next;
+				}
+			}
+		}
 		return false;
 	}
 	
@@ -88,7 +187,59 @@ public class MultiSet<Item extends Comparable<Item>> {
 	 * Performance must be no worse than linearly dependent on N.
 	 */
 	public boolean remove (Item it) {
-		// student fills in
+		//if given value is null then dont do anything
+		if(it == null) {
+			System.out.println("I'm sorry, But I can't do that Dave. The item is null...");
+			return false;
+		}
+		//the multiset head
+		Node iterator = this.head;
+		//this iterator is one step behind the iterator
+		Node iterator_behind = this.head;
+		//if the head is null...
+		if(iterator == null) {
+			//error
+			System.out.println("Multiset is Empty");
+			return false;
+		}
+		//if the head is not null...
+		else {
+			//iterate through each element
+			for(int i = 0; i<=this.unique-1; ) {
+				//check if element is at the current spot
+				if(iterator.item == it) {
+					iterator.count--;
+					this.unique--;
+					this.total--;
+					//if iterator count is 0 then remove it from the set (aka rewire previous node's next to the current node's next).
+					if(iterator.count == 0) {
+						
+						//if iterator and iterator_behind are the same they are both the head. So set them to null. 
+						if(iterator_behind == iterator) {
+							this.head = null;
+						}
+						else {
+							iterator_behind.next = iterator.next;
+						}
+						return true;
+					}
+					
+					return true;
+				}
+				//if not check if there is not next spot...
+				else if(iterator.next == null) {
+					return false;
+				}
+				//if there is a next spot move.
+				else {
+					//save current spot
+					iterator_behind = iterator;
+					//move the iterator
+					iterator = iterator.next;
+					
+				}
+			}
+		}
 		return false;
 	}
 	
@@ -100,8 +251,39 @@ public class MultiSet<Item extends Comparable<Item>> {
 	 * Performance must be no worse than linearly dependent on U.
 	 */
 	public int multiplicity (Item it) {
-		// student fills in
-		return -1;
+		if(it == null) {
+			System.out.println("I'm sorry, But I can't do that Dave. The item is null...");
+			return 0;
+		}
+		//the multiset head
+		Node iterator = this.head;
+		//if the head is null...
+		if(iterator == null) {
+			//item is not in the set
+			return 0;
+		}
+		//if the head is not null...
+		else {
+			//iterate through each element
+			for(int i = 0; i<=this.unique-1; ) {
+				//check if element is at the current spot
+				if(iterator.item == it) {
+					//return the count
+					return iterator.count;
+				}
+				//if not check if there is not next spot...
+				else if(iterator.next == null) {
+					//end of list
+					return 0;
+				}
+				//if there is a next spot move.
+				else {
+					//move through the list
+					iterator = iterator.next;
+				}
+			}
+		}		
+		return 0;
 	}
 
 	/** 
@@ -135,7 +317,7 @@ public class MultiSet<Item extends Comparable<Item>> {
 	 */
 	public MultiSet<Item> intersects(MultiSet<Item> other) {
 		// student fills in
-		return null;
+		return other;
 	}
 
 	/** 

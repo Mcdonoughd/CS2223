@@ -99,6 +99,7 @@ public class ValidateMultiSet {
 	
 	/** Helper method to exit if anything is wrong. */
 	static void ensureIdentical (MultiSet<Integer> one, MultiSet<Integer> two) {
+		//two.printMS();
 		if (!one.identical(two)) {
 			System.out.println("Identical failed");
 			System.exit(-1);

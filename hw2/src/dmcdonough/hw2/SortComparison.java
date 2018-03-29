@@ -31,9 +31,10 @@ public class SortComparison {
      * @return array is shuffled.
      */
     static Integer[] generateUniqueData(int k) {
-    	// Students must fill this in. This code is here to make sure we can run right from initial start of HW2
+    	
     	Integer[] vals = new Integer[k];
-    	for (int i = 0; i < vals.length; i++) { vals[i] = 0; }
+    	for (int i = 0; i < vals.length; i++) { vals[i] = i; } //set each val equal to its index
+    	shuffle(vals); //shuffle
     	return vals;
     }
     
@@ -111,11 +112,21 @@ public class SortComparison {
 		//end
 		//return;
 	}
+	//print the given array
+	public static void printBCTH(Integer[] ar) {
+		for(int i=0; i<=ar.length-1;i++) {
+			if(i<ar.length-1) {
+			StdOut.print(ar[i]+",");
+			}
+			else {
+				StdOut.print(ar[i]);
+			}
+		}
+		StdOut.println();
+	}
 	
 	public static Integer[] randomArray(int k) {
-		if(k % 2 != 0) {
-		return null;
-		}
+		
 		int N = (int) Math.pow(2, k);
 		//Make array
     	Integer[] ar = new Integer[N];
@@ -136,7 +147,7 @@ public class SortComparison {
     	}
     	//add last value to array (note on 1x1 array one is filled twice due to this attribute
     	ar[N-1] = max_level;
-    	
+    	//printBCTH(ar);
     	//shuffle the array
     	shuffle(ar);
     	
@@ -144,13 +155,12 @@ public class SortComparison {
 		
 	}
 	
-	
-    
-    
-    
+
 	static Integer[] generateHighDuplicateData(int k) {
 		// Students must fill this in. This code is here to make sure we can run right from initial start of HW2
+		//printBCTH(randomArray(k));
 		return randomArray(k);
+		
 	}
 	
 	// These have been placed here so you can double check that each of the sorting algorithms
@@ -222,17 +232,17 @@ public class SortComparison {
 		// Student fills in...
 		switch (trial) {
 		case 0:
-			if(unique[n][entry][trial] == 0.0 || time < unique[n][entry][trial]) {
+			if(unique[n][entry][trial] >= 0.0 || time < unique[n][entry][trial]) {
 				unique[n][entry][trial] = time;
 			}
 			break;
 		case 1:
-			if(unique[n][entry][trial] == 0.0 || exch < unique[n][entry][trial]) {
+			if(unique[n][entry][trial] >= 0.0 || exch < unique[n][entry][trial]) {
 				unique[n][entry][trial] = exch;
 			}
 			break;
 		case 2:
-			if(unique[n][entry][trial] == 0 || less < unique[n][entry][trial]) {
+			if(unique[n][entry][trial] >= 0.0 || less < unique[n][entry][trial]) {
 				unique[n][entry][trial] = less;
 			}
 			break;
@@ -247,17 +257,17 @@ public class SortComparison {
 		// Student fills in
 		switch (trial) {
 		case 0:
-			if(duplicates[n][entry][trial] == 0.0 || time < duplicates[n][entry][trial]) {
+			if(duplicates[n][entry][trial] >= 0.0 || time < duplicates[n][entry][trial]) {
 				duplicates[n][entry][trial] = time;
 			}
 			break;
 		case 1:
-			if(duplicates[n][entry][trial] == 0.0 || exch < duplicates[n][entry][trial]) {
+			if(duplicates[n][entry][trial] >= 0.0 || exch < duplicates[n][entry][trial]) {
 				duplicates[n][entry][trial] = exch;
 			}
 			break;
 		case 2:
-			if(duplicates[n][entry][trial] == 0 || less < duplicates[n][entry][trial]) {
+			if(duplicates[n][entry][trial] >= 0.0 || less < duplicates[n][entry][trial]) {
 				duplicates[n][entry][trial] = less;
 			}
 			break;
@@ -272,7 +282,7 @@ public static void main(String[] args) {
 		int T = 3;
 		StopwatchCPU watch;
 		Integer[] data;
-		double time;
+		float time;
 		
 		for (int t = 0; t < T; t++) {
 			System.out.printf("Trial %d ...%n", t+1);
@@ -285,43 +295,144 @@ public static void main(String[] args) {
 				
 				// Here is a sample using Insertion Sort. You will have SIX such blocks: THREE for unique data,
 				// and THREE for highly duplicated data
-//Mergesort - Unique Test
+				
+//Merge Sort - Unique Test
 				data = generateUniqueData(k);
 				watch = new StopwatchCPU();
 				try {
-					Insertion.sort(data);
-					time = watch.elapsedTime();
+					Merge.sort(data);
+					time = (float) watch.elapsedTime();
+					if (!isSorted(data)) {
+						System.out.println("ERROR with Merge sort");
+					}
+					
+					watch = null;
+					updateUniqueEntry (t, idx, 0, Merge.exchCount, Merge.lessCount, time);
+				} catch (StackOverflowError e) {
+					// stack overflow! Be sure to put this in just in case (hint....)
+					System.out.printf("MSU: Stack Overflow (%d)!%n", k);
+				}
+				
+				//reset stats
+				Merge.exchCount = 0;
+				Merge.lessCount = 0;
+				
+//Merge Sort - Duplicates Test
+				data = generateHighDuplicateData(k);
+				//System.out.println(data);
+				watch = new StopwatchCPU();
+				try {
+					Merge.sort(data);
+					time = (float) watch.elapsedTime();
 					if (!isSorted(data)) {
 						System.out.println("ERROR with Merge sort");
 					}
 					watch = null;
-					updateUniqueEntry (t, idx, 0, Insertion.exchCount, Insertion.lessCount, time);
+					updateDuplicatesEntry (t, idx, 0, Merge.exchCount, Merge.lessCount, time);
 				} catch (StackOverflowError e) {
 					// stack overflow! Be sure to put this in just in case (hint....)
-					System.out.printf("Stack Overflow (%d)!%n", k);
-				}
+					System.out.printf("MSD: Stack Overflow (%d)!%n", k);
+				}				
 				
+				//reset stats
+				Merge.exchCount = 0;
+				Merge.lessCount = 0;
+				
+				
+/**********************************************************************************************************************/	
+				
+				
+				
+//Quick Sort - Unique Test
+				data = generateUniqueData(k);
+				watch = new StopwatchCPU();
+				try {
+					QuickSort.sort(data);
+					time = (float) watch.elapsedTime();
+					if (!isSorted(data)) {
+						System.out.println("ERROR with Quick sort");
+					}
+					
+					watch = null;
+					updateUniqueEntry (t, idx, 1, QuickSort.exchCount, QuickSort.lessCount, time);
+				} catch (StackOverflowError e) {
+					// stack overflow! Be sure to put this in just in case (hint....)
+					System.out.printf("QSU: Stack Overflow (%d)!%n", k);
+				}
+				//reset stats
+				QuickSort.exchCount = 0;
+				QuickSort.lessCount = 0;
+				
+				
+//Quick Sort - Duplicates Test
+				data = generateHighDuplicateData(k);
+				//System.out.println(data);
+				watch = new StopwatchCPU();
+				try {
+					QuickSort.sort(data);
+					time = (float) watch.elapsedTime();
+					if (!isSorted(data)) {
+						System.out.println("ERROR with Quick sort");
+					}
+					watch = null;
+					updateDuplicatesEntry (t, idx, 1, QuickSort.exchCount, QuickSort.lessCount, time);
+				} catch (StackOverflowError e) {
+					// stack overflow! Be sure to put this in just in case (hint....)
+					System.out.printf("QSD: Stack Overflow (%d)!%n", k);
+				}				
+				
+				//reset stats
+				QuickSort.exchCount = 0;
+				QuickSort.lessCount = 0;
+				
+				
+/**********************************************************************************************************************/	
+				
+				
+				
+//Quick Alt - Unique Test
+				data = generateUniqueData(k);
+				watch = new StopwatchCPU();
+				try {
+					QuickAlternate.sort(data);
+					time = (float) watch.elapsedTime();
+					if (!isSorted(data)) {
+						System.out.println("ERROR with Alt sort");
+					}
+					
+					watch = null;
+					updateUniqueEntry (t, idx, 2, QuickAlternate.exchCount, QuickAlternate.lessCount, time);
+				} catch (StackOverflowError e) {
+					// stack overflow! Be sure to put this in just in case (hint....)
+					System.out.printf("QAU: Stack Overflow (%d)!%n", k);
+				}
 
-//Mergesort - Unique Test
-data = generateUniqueData(k);
-watch = new StopwatchCPU();
-try {
-	Insertion.sort(data);
-	time = watch.elapsedTime();
-	if (!isSorted(data)) {
-		System.out.println("ERROR with Merge sort");
-	}
-	watch = null;
-	updateUniqueEntry (t, idx, 0, Insertion.exchCount, Insertion.lessCount, time);
-} catch (StackOverflowError e) {
-	// stack overflow! Be sure to put this in just in case (hint....)
-	System.out.printf("Stack Overflow (%d)!%n", k);
-}
-
+				//reset stats
+				QuickAlternate.exchCount = 0;
+				QuickAlternate.lessCount = 0;
+				
+//Quick Alt - Duplicates Test
+				data = generateHighDuplicateData(k);
+				//System.out.println(data);
+				watch = new StopwatchCPU();
+				try {
+					QuickAlternate.sort(data);
+					time = (float) watch.elapsedTime();
+					if (!isSorted(data)) {
+						System.out.println("ERROR with ALt sort");
+					}
+					watch = null;
+					updateDuplicatesEntry (t, idx, 2, QuickAlternate.exchCount, QuickAlternate.lessCount, time);
+				} catch (StackOverflowError e) {
+					// stack overflow! Be sure to put this in just in case (hint....)
+					System.out.printf("QAD: Stack Overflow (%d)!%n", k);
+				}
+				//reset stats
+				QuickAlternate.exchCount = 0;
+				QuickAlternate.lessCount = 0;
+				
 			}
 		}
-		
 		generateReport();
 	}
-
 }
