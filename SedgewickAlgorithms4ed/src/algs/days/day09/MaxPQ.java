@@ -80,7 +80,7 @@ public class MaxPQ<Key> {
 	 ****************************/
 	public static void main(String[] args) {
 		MaxPQ<String> pq = new MaxPQ<String>(16);
-		String[] a = StdIn.readAllStrings();
+		String[] a = {"HELLO","AGAIN","I","SEE","YOO","STANDING","THERE","ALONE"};
 		for (String s : a) {
 			pq.insert(s);
 		}
