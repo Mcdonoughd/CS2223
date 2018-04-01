@@ -1,0 +1,217 @@
+Name: George Heineman / HW2 Solutions
+March 29 draft 11:04 PM
+
+1. Mathematical Analysis
+
+The careful reader will observe that the array of binary array search inspections (for 2^k) is exactly
+the duplicate data array to be used in the Sorting Comparison question. But I digress.
+
+N	Est.	Avg.	Inspectk
+1	1.00000	1.00000	1
+2	1.50000	1.50000	1,2
+4	2.00000	2.00000	2,1,2,3
+8	2.62500	2.62500	3,2,3,1,3,2,3,4
+16	3.37500	3.37500	4,3,4,2,4,3,4,1,4,3,4,2,4,3,4,5
+32	4.21875	4.21875	5,4,5,3,5,4,5,2,5,4,5,3,5,4,5,1,5,4,5,3,5,4,5,2,5,4,5,3,5,4,5,6
+64	5.12500	5.12500	6,5,6,4,6,5,6,3,6,5,6,4,6,5,6,2,6,5,6,4,6,5,6,3,6,5,6,4,6,5,6,1,6,5,6,4,6,5,6,3,6,5,6,4,6,5,6,2,6,5,6,4,6,5,6,3,6,5,6,4,6,5,6,7
+
+I have added my column for Estimate, which I derived by observing the pattern (see in code documentation).
+
+Bonus Question:
+
+for N = power of 2, sum is (log N + 1) + SUM(i*2^(i-1)) for i=[1,log N] inclusive
+
+Using maple (cheat!) I find following:
+ 
+> sum(i*2^(i-1),i=1..k);
+ 
+        (k + 1)
+       2        (k + 1)    (k + 1)
+       ---------------- - 2        + 1
+              2
+
+
+2. Sorting Comparison.
+======================
+
+Here is my sample output:
+
+Trial 0 ...
+Stack Overflow on QuickAlternate (16)!
+Stack Overflow on QuickAlternate (17)!
+Stack Overflow on QuickAlternate (18)!
+Stack Overflow on QuickAlternate (19)!
+Trial 1 ...
+Stack Overflow on QuickAlternate (16)!
+Stack Overflow on QuickAlternate (17)!
+Stack Overflow on QuickAlternate (18)!
+Stack Overflow on QuickAlternate (19)!
+Trial 2 ...
+Stack Overflow on QuickAlternate (16)!
+Stack Overflow on QuickAlternate (17)!
+Stack Overflow on QuickAlternate (18)!
+Stack Overflow on QuickAlternate (19)!
+
+
+
+Time Trials
+N	MergeU	QuickU	QuickAU	|	MergeD	QuickD	QuickAD
+8192	0.000	0.000	0.000	|	0.000	0.000	0.031
+16384	0.000	0.000	0.000	|	0.000	0.000	0.109
+32768	0.000	0.000	0.000	|	0.000	0.000	0.406
+65536	0.000	0.000	0.000	|	0.000	0.000	0.000
+131072	0.031	0.031	0.016	|	0.016	0.016	0.000
+262144	0.078	0.047	0.062	|	0.031	0.031	0.000
+524288	0.172	0.125	0.140	|	0.094	0.062	0.000
+
+Exch Results
+N	MergeU		QuickU		QuickAU		|	MergeD		QuickD		QuickAD
+8192	0.000e+00	3.341e+04	7.328e+04	|	0.000e+00	5.223e+04	2.336e+04
+16384	0.000e+00	7.000e+04	1.434e+05	|	0.000e+00	1.128e+05	4.686e+04
+32768	0.000e+00	1.489e+05	3.282e+05	|	0.000e+00	2.416e+05	9.475e+04
+65536	0.000e+00	3.122e+05	7.366e+05	|	0.000e+00	5.159e+05	0.000e+00
+131072	0.000e+00	6.517e+05	1.493e+06	|	0.000e+00	1.098e+06	0.000e+00
+262144	0.000e+00	1.363e+06	3.252e+06	|	0.000e+00	2.320e+06	0.000e+00
+524288	0.000e+00	2.849e+06	6.849e+06	|	0.000e+00	4.912e+06	0.000e+00
+
+Less Results
+N	MergeU		QuickU		QuickAU		|	MergeD		QuickD		QuickAD
+8192	9.613e+04	1.257e+05	1.286e+05	|	7.734e+04	9.886e+04	1.120e+07
+16384	2.086e+05	2.804e+05	2.636e+05	|	1.669e+05	2.173e+05	4.477e+07
+32768	4.501e+05	6.144e+05	5.924e+05	|	3.580e+05	4.698e+05	1.790e+08
+65536	9.658e+05	1.324e+06	1.246e+06	|	7.698e+05	1.000e+06	0.000e+00
+131072	2.062e+06	2.722e+06	2.717e+06	|	1.634e+06	2.129e+06	0.000e+00
+262144	4.387e+06	5.970e+06	5.986e+06	|	3.480e+06	4.640e+06	0.000e+00
+524288	9.298e+06	1.278e+07	1.236e+07	|	7.455e+06	9.499e+06	0.000e+00
+
+Hypothesis 1: When there are a large number of duplicate values, the overall sorting 
+              time should be reduced (and should be detectable). 
+
+  MergeSort: Validated by the numbers. Observe how the timing is reduced, nearly by half in the output.
+             That is, the values in the right column are about 1/2 the size of the left column for 
+             problems of the same corresponding size.
+
+  QuickSort: Validated by the numbers. Even more of a reduction in timing than mergesort (column to column
+             comparison)
+
+  QuickSort-A: Empirical evidence does not support this claim. Observe how the performance rapidly
+               degenerates, even to the extent that stack overflow occurs. This appears to be quadratic
+               in timing, and doesn't subdivide problems properly.
+              
+Hypothesis 2: When there are a large number of duplicate values, the number of exchanges 
+              is reduced (and should be detectable).
+
+  MergeSort: Has no impact since Exch is not directly called by MergeSort.
+  QuickSort: Empirical evidence suggests the exact opposite. That is, with increase duplicate
+             values, the number of exchanges nearly doubles, suggesting perhaps a loss of 
+             efficiency
+  QuickSort-A: Validated by the numbers. The number of exchanges is cut by a 1/3rd.
+
+Top Level Observations
+
+  * Note how MergeSort shows 0.0 for all Exchanges. This is a testament to the fact that it does
+    not use traditional Exchange (a,b) operations to sort data. There is no easy way to get 
+    a meaningful comparison. I will point out in passing that if you were to count the number
+    of elements COPIED in the following code, it turns out to be ~N*log N
+    
+        // copy a[lo..hi] into aux[lo..hi]
+    	for (int k = lo; k <= hi; k++) {
+    		aux[k] = a[k];
+    	}
+
+    so instead of worrying any more about exchanges in MergeSort, we will leave this alone.
+    
+  * Observe that the number of Less comparisons is reduced nearly EXACTLY 20% based on highly duplicate
+    data. This number is surprisingly accurate each time. However, there is no hypothesis which was 
+    designed to consider the # Less operations. However, we can at least use this as the basis for 
+    considering why the performance of mergesort improves noticeably with duplicated data.
+    
+    Advanced Analysis (beyond homework expectations). If you look at MergeSort, you will see that 
+    any reduction to the number of less() invocations means that either the i-side of the merge or
+    the j-side of the merge has "run out". As you should recall from lecture, the ideal case for 
+    MergeSort was when one side ran out, and then the total number of less checks would be closer
+    to the ideal of N/2, rather than the worst case of N-1. SO: it turns out that having a greater
+    frequency of duplicate values means that it is more likely one side runs out, which should lead
+    to a faster result. How much more often does this happen? Well, observe that I have instrumented
+    my code further, and tracked the number of times AdvanceI and AdvanceJ are called as a result of
+    less(). Here is a sample
+    
+                    I++		J++
+      Uniq	2	6	4650085	4648098
+	  Dup	2	6	4846622	2683684
+    
+     This shows that the number of times J advanced was nearly reduced 50% (while I++ increased by about 5%).
+     So this suggests that the overall performance should also be cut in half, and this appears to be 
+     borne out by the data.
+     
+  * Observe that in QuickSort-A, the partition method only exchanges when values are less(i,j). As
+    more duplicate data exists, this method will fail, which reduces the number of exchanges.
+
+
+4.0 Heap Exercise
+=================
+
+To validate that the resize logic works, simply modify each HeapExercise so its initial creation of 
+a MaxPQ reads as follows:
+
+  MaxPQ<Double> mpq = new MaxPQ<Double>(1);
+  
+This will ensure the resize occurs as expected.
+
+4.1 Worst Case Analysis
+=======================
+
+Heap 	Trials
+N		DelMin
+4		1-2
+8		3-5
+16		7-10
+32		15-19
+64		31-36
+128		63-69
+256		127-133
+512		255-262
+1024	511-519
+2048	1023-1031
+4096	2047-2055
+8192	4095-4104
+
+
+To locate the minimum value, you will have to inspect all M leaves for the Heap with N=2^k elements. There
+are N/2 leaf nodes in this tree. To find the smallest of these N/2, you need N/2 - 1 comparisons. 
+Then once you have found it, you will need to swap with final one and then swim its value to the top.
+How many times will you need to compare in swim? while (k > 1 && less(k/2, k)).
+
+In the best case, the minimum value is already the FINAL leaf node on the last level, in which case
+you are done since you simply decrease size of PQ by 1. Thus, best case is (N/2 - 1).
+
+Of the other (N/2 - 1) possible spots, each one is (log N - 1) away from the root, so in worst case will need
+that many comparisons.
+
+We have (N/2 - 1) + (log N - 1)
+
+This is a satisfactory upper bound in worst case. Note that this is very unlikely to occur in practice. Why?
+The worst situation happens when the final leaf (the single one on the k+1 level) is the largest value of
+the leaf values, and thus when swapped with the min, it will need to swim as high up as possible.
+Observe that the root will ALWAYS be the largest value, and so won't be affected by any swim. You can compare 
+
+N/2 + log N - 2 is the worst. In practice it turns out to be even less:
+
+Heap 	Trials					
+N		DelMin		worst	N/2		LogN-2	Est.	Over
+4		1-2			2		2		0		4		0
+8		3-5			5		4		1		7		0
+16		7-10		10		8		2		12		0
+32		15-19		19		16		3		21		0
+64		31-36		36		32		4		38		0
+128		63-69		69		64		5		71		0
+256		127-133		133		128		6		136		1
+512		255-262		262		256		7		265		1
+1024	511-519		519		512		8		522		1
+2048	1023-1031	1031	1024	9		1035	2
+4096	2047-2055	2055	2048	10		2060	3
+8192	4095-4104	4104	4096	11		4109	3
+
+The reason why you don't hit the maximum in practice is that you need to have special circumstance in which
+the swim will be pushed to the limit. With random runs, these special situations occure with decreasing 
+frequency.
