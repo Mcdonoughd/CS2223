@@ -24,6 +24,7 @@ public class FindGap {
 	public static int findGap (int[] a) { 
 		ai = 0;
 		//return recursiveFindGap(a, 0, a.length-1);
+		//return alternateFindGap(a);
 		return findGapStraight(a);
 	}
 	
@@ -39,6 +40,30 @@ public class FindGap {
 		return recursiveFindGap(a,lo,mid);
 	}
 
+	/**
+	 * Solution from Ben Anderson.
+	 * 
+	 * Hold invariant that lo points to a number smaller than the missing number
+	 * while hi points to a number that is greater than the missing number.
+	 * 
+	 * Move each value accordingly, until you find the gap.
+	 * 
+	 * @param a
+	 */
+	public static int alternateFindGap(int[] a) {
+		int lo = 0;
+		int hi = a.length-1;
+		while (hi-lo > 1) {
+			int mid = (lo+hi)/2;
+			ai++;
+			if (a[mid] == mid)
+				lo = mid;
+			else
+				hi = mid;
+		}
+		return hi;
+	}
+	
 	
 	public static void main(String[] args) {
 		int g, m=0;
