@@ -9,6 +9,7 @@ public class Dominant {
 
 	// Equation for #comparisons when n is a power of 2.
 	// C(n) = 2*C(n/2) + n
+	// C(1) = 0 because there are no comparisons between two values in the collection, in the base case
 	public static int dominant(int[] collection, int lo, int hi) {
 		// one element only
 		if (lo == hi) { return collection[lo]; }

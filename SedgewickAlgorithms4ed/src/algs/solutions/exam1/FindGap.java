@@ -3,7 +3,7 @@ package algs.solutions.exam1;
 public class FindGap {
 	// record number of array inspections
 	static int ai = 0;
-	
+
 	// my sample solution
 	public static int findGapStraight (int[] a) {
 		int lo = 1;		// can avoid 0th and last one since they are known in advance
