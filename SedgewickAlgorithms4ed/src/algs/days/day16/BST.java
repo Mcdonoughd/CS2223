@@ -108,23 +108,22 @@ public class BST<Key extends Comparable<Key>, Value> {
     // invoke an inorder traversal of the tree
     public void inorder() { inorder(root); }
     private void inorder(Node n) {
-    	if (n != null) {
-    		inorder (n.left);
-    		StdOut.println (n.key);
-    		inorder (n.right);
-    	}
+    	if (n == null) { return; }
+    	
+		inorder (n.left);
+		StdOut.println (n.key);
+		inorder (n.right);
     }
     
     // traversal ideas
     // invoke a pre-order traversal of the tree
     public void preorder() { preorder(root); }
     private void preorder(Node n) {
-    	if (n != null) {
-    		StdOut.println (n.key);
-    		
-    		preorder (n.left);
-    		preorder (n.right);
-    	}
+    	if (n == null) { return; }
+		StdOut.println (n.key);
+		
+		preorder (n.left);
+		preorder (n.right);
     }
     
     /** Implement method to return Value when removing largest element. */

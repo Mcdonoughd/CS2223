@@ -21,5 +21,7 @@ public class BSTIteratorExploration {
 		for (String s : bst.keys()) {
 			StdOut.println(s);
 		}
+		
+		System.out.println("Has three leaves:" + bst.countLeaves());
 	}
 }

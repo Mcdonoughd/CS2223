@@ -95,27 +95,36 @@ public class BST<Key extends Comparable<Key>> {
 
 	// traversal ideas
 	// invoke an inorder traversal of the tree
-	public void inorder() { inorder(root); }
+	public void inorder() { inorder(root); StdOut.println(); }
 	private void inorder(Node n) {
-		if (n != null) {
-			inorder (n.left);
-			StdOut.println (n.key);
-			inorder (n.right);
-		}
+		if (n == null) { return; }
+		
+		inorder (n.left);
+		StdOut.print (n.key + " ");
+		inorder (n.right);
 	}
 
 	// traversal ideas
 	// invoke a pre-order traversal of the tree
-	public void preorder() { preorder(root); }
+	public void preorder() { preorder(root); StdOut.println();  }
 	private void preorder(Node n) {
-		if (n != null) {
-			StdOut.println (n.key);
-
-			preorder (n.left);
-			preorder (n.right);
-		}
+		if (n == null) { return; }
+		
+		StdOut.print (n.key + " ");
+		preorder (n.left);
+		preorder (n.right);
 	}
 
+	public void postorder() { postorder(root); StdOut.println();  }
+	private void postorder(Node n) {
+		if (n == null) { return; }
+		
+		postorder (n.left);
+		postorder (n.right);
+		StdOut.print (n.key + " ");
+	}
+	
+	
 	/** Implement method to return Value when removing largest element. */
 	public void deleteMin() {
 		if (root != null) { root = deleteMin(root);	}
@@ -192,6 +201,21 @@ public class BST<Key extends Comparable<Key>> {
 		if (cmplo < 0)                 keys(node.left, queue, lo, hi); 
 		if (cmplo <= 0 && cmphi >= 0)  queue.enqueue(node.key); 
 		if (cmphi > 0)                 keys(node.right, queue, lo, hi); 
+	}
+	
+	/** Returns the number of leaf nodes in the tree. */
+	public int countLeaves() { 
+		if (root == null) { return 0; }
+		
+		return countLeaves(root);
+	}
+	
+	/** Returns the number of leaf nodes in the sub-tree rooted at parent. */
+	public int countLeaves(Node parent) {
+		if (parent == null) { return 0; }
+		if (parent.left == null && parent.right == null) { return 1; }
+		
+		return countLeaves(parent.left) + countLeaves(parent.right);
 	}
 
 }
