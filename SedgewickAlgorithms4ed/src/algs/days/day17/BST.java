@@ -218,4 +218,26 @@ public class BST<Key extends Comparable<Key>> {
 		return countLeaves(parent.left) + countLeaves(parent.right);
 	}
 
+
+	// sample exam question. Just a bit too complex
+	public void removeAllLeafNodes() {
+		if (root != null) {
+			root = removeAllLeafNodes(root);
+		}
+	}
+	
+	public Node removeAllLeafNodes(Node parent) {
+		if (parent == null) { return null; }
+		
+		// this is a leaf node. Get rid of it (in recursive call)
+		if (parent.left == null && parent.right == null) return null;
+
+		// order matters! Now we work to remove all old leaves. Note in doing so
+		// we may create NEW leaves, but it is ok...
+		parent.left = removeAllLeafNodes(parent.left); 
+		parent.right = removeAllLeafNodes(parent.right);
+		
+		return parent; // ok to stay
+	}
+	
 }
