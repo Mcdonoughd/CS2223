@@ -88,6 +88,7 @@ public class FindTriangle {
 		}
 		StdOut.println();
 		
+		StdOut.println("N\tE\tCount\tEst.");
 		int N = 64;
 		while (N <= 4096) {
 			

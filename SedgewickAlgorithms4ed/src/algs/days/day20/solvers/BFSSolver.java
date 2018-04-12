@@ -11,7 +11,7 @@ import algs.days.day20.maze.Position;
  * Solver conducts a modified Breadth First Search. Specifically, it stops prematurely when a specific
  * destination has been reached.
  */
-public class BFSSolver extends Thread {
+public class BFSSolver extends PausableThread {
 	// GUI into that maze
 	final MazePanel panel;
 	final Maze      maze;
@@ -33,7 +33,7 @@ public class BFSSolver extends Thread {
 	
 	boolean bfsVisit(Position pos) {
 		Queue<Position> queue = new Queue<Position>();
-		
+
 		// positions in the Queue are Gray and under investigation.
 		queue.enqueue(pos);
 		color[pos.row][pos.col] = Maze.Gray;
@@ -41,6 +41,7 @@ public class BFSSolver extends Thread {
 		panel.repaint();
 
 		while (!queue.isEmpty()) {
+			checkPaused();
 			Position cell = queue.dequeue();
 			
 			for (Iterator<Position> it = maze.finalNeighbors[cell.row][cell.col].iterator(); it.hasNext(); ) {

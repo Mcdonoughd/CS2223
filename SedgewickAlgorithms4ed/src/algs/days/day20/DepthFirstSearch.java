@@ -4,6 +4,11 @@ import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
 import algs.days.day19.Graph;
 
+/**
+ * Run in Shell as follows:
+ * 
+ * % java algs.days.day20.DepthFirstSearch tinyG.txt
+ */
 public class DepthFirstSearch {
 	
 	boolean marked[];	// which vertices have been seen already

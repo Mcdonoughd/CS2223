@@ -4,6 +4,11 @@ import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
 import algs.days.day19.Graph;
 
+/**
+ * Run in Shell as follows:
+ * 
+ * % java algs.days.day20.DepthFirstPaths tinyG.txt
+ */
 public class DepthFirstPaths {
 	boolean[] marked;    // marked[v] = is there an s-v path?
 	int[] edgeTo;        // edgeTo[v] = last edge on s-v path
@@ -52,14 +57,22 @@ public class DepthFirstPaths {
 		In in = new In(args[0]);
 		Graph g = new Graph(in);
 		
-		// conduct a DFS over entire graph
-		DepthFirstPaths dfp = new DepthFirstPaths(g, 0);
+		int source = 0;
+		int target = 7;
+		
+		// conduct a DFS over entire graph, starting from source.
+		DepthFirstPaths dfp = new DepthFirstPaths(g, source);
 		
 		// see who was connected
-		StdOut.println("path from 0 to 7:");
-		for (int v : dfp.pathTo(7)) {
-			StdOut.print(v + " - ");
+		StdOut.printf("path from %d to %d: ", source, target);
+		Iterable<Integer> path = dfp.pathTo(target);
+		if (path == null) {
+			StdOut.println ("No Path");
+		} else {
+			for (int v : path) {
+				StdOut.print(v + " - ");
+			}
+			StdOut.println();
 		}
-		StdOut.println();
 	}
 }

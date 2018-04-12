@@ -6,6 +6,11 @@ import algs.days.day19.Graph;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
 
+/**
+ * Run in Shell as follows:
+ * 
+ * % java algs.days.day20.ShowAdjacencyMatrix tinyG.txt
+ */
 public class ShowAdjacencyMatrix {
 	public static void main(String[] args) {
 		In in = new In(args[0]);

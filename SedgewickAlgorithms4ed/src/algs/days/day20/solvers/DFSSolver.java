@@ -10,7 +10,7 @@ import algs.days.day20.maze.Position;
  * Solver conducts a modified Depth First Search. Specifically, it stops prematurely when a specific
  * destination has been reached.
  */
-public class DFSSolver extends Thread {
+public class DFSSolver extends PausableThread {
 	// GUI into that maze
 	final MazePanel panel;
 	final Maze      maze;
@@ -35,6 +35,8 @@ public class DFSSolver extends Thread {
 		panel.redraw();
 		panel.repaint();
 
+		checkPaused();
+		
 		// immediately force all processing to unwind...
 		if (pos.equals (maze.destination)) {
 			return true;

@@ -12,7 +12,7 @@ import algs.days.day20.maze.Position;
  * THIS depends on code written for the day26 lecture. Because I went back in time to include
  * this functionality as a comparison.
  */
-public class AStarSolver extends Thread {
+public class AStarSolver extends PausableThread {
 	// GUI into that maze
 	final MazePanel panel;
 	final Maze      maze;
@@ -62,6 +62,9 @@ public class AStarSolver extends Thread {
 		panel.repaint();
 
 		while (!openSet.isEmpty()) {
+			
+			checkPaused();
+			
 			// get closest by distanceToGoal.
 			Position cell = pos(openSet.delMin());
 			closed.put(id(cell), true);

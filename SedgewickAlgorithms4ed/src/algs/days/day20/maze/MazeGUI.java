@@ -8,6 +8,7 @@ import javax.swing.GroupLayout.Alignment;
 import algs.days.day20.solvers.AStarSolver;
 import algs.days.day20.solvers.BFSSolver;
 import algs.days.day20.solvers.DFSSolver;
+import algs.days.day20.solvers.PausableThread;
 
 /**
  * GUI Window constructed from within WindowBuilder in Eclipse.
@@ -17,11 +18,11 @@ public class MazeGUI extends JFrame {
 	final MazePanel  panel;
 	
 	/** Current solver in play. */
-	Thread           solver;  
+	PausableThread    solver;  
 
 	/** Construct the GUI for a random maze. */
 	public MazeGUI() {
-		setTitle("Maze Viewer: Right=BFS, LEFT=DFS, LEFT+CTRL=AStar");
+		setTitle("Maze Viewer: Right=BFS, LEFT=DFS, LEFT+CTRL=AStar. Any key pauses.");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 531, 377);
 		JPanel contentPane = new JPanel();
@@ -41,6 +42,15 @@ public class MazeGUI extends JFrame {
 				.addComponent(panel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
 		);
 		contentPane.setLayout(gl_contentPane);
+		
+		this.addKeyListener( new KeyAdapter() {
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				solver.pause(!solver.isPaused());
+			}
+			
+		});
 		
 		// this sets up the reactive code upon a resize to construct a new maze with the given height.
 		// offsets of -50 and -30 occur because of the window title bar.
