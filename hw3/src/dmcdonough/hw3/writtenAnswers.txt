@@ -1,0 +1,83 @@
+Daniel McDonough
+HW3
+Written Questions
+
+Stack Exercise:
+------------------
+
+(a)	8 7 6 5 4 3 0 1 2 9
+98-7-6-5-4-3-021---- possible
+
+(b)	5 3 1 2 4 6 7 0 9 8 
+98765-43-21-----0- Impossible 
+If entered in descending order it is impossible for 9 to come prior to 8 without it being the only element in the stack. At the time the stack contains 98 where the popped element would be 8 not 9
+
+(c)	7 4 3 2 5 1 0 6 8 9 
+987-654-3-2—1-0---- possible
+
+(d)	5 6 7 8 9 0 1 2 3 4
+98765-----43210----- possible
+
+(e)	5 6 7 8 9 4 3 2 1 0 
+98765----4-3-2-1-0- possible
+
+(f)	9 5 3 4 6 1 8 2 7 0 
+9-8765-43---21- Impossible 
+If entered in descending order it is impossible for 8 to be popped prior to 2 with 1 already being popped
+At the time the stack contains 82 where the popped element would be 2 not 8
+
+(g)	8 5 2 0 1 3 4 6 9 7 
+98-765-432-10----- impossible
+If entered in descending order it is impossible for 9 to come prior to 7 without it being the only element in the stack. At the time the stack contains 97 where the popped element would be 7 not 9
+
+(h)	7 8 5 6 3 4 1 2 0 9
+987—65—43—21—0-- possible
+
+
+
+Heap Exercise:
+---------------
+Example data:
+N	MaxComp	MaxExch
+16	25		12
+32	56		24
+64	114		47
+128	237		96
+256	485		193
+
+This supports the proposal because the number of compares is at most twice the number of exchanges
+because we need two compares to determine whether to exchange an item with its
+bigger child. And N-1 Exchanges for N items in a any heap when sunk. 
+Therefore if Exch is ~N Comp must be ~2N in the worst case.
+
+
+Recurrence Relationship:
+-----------------------------------
+A1. 	N = 2^n
+	C(1) = 0
+	C(2) = 1
+	C(4) = 3 + 2 + 1 = 6
+	C(N) = SUM(i-1)= N*i - N = 
+	(N-1)^2 = 
+	N^2
+
+A2. BestCase: N^2
+A3. WorstCase: N^2
+
+B1. C(N) = C(N-1/2) + 1
+B2. C(N) =  N
+B3. Best Case: 1
+B4. Worst Case: log(N)
+
+C1. C(N) = C(N/2) + C(N/2) + 1
+C2. C(N) = N - 1
+C3. BestCase: N*log(N)
+C4. WorstCase: N
+	
+
+
+
+
+
+
+

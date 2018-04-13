@@ -48,7 +48,6 @@ public class HeapExercise {
 	public static void main(String[] args) {
 
 		int T = 10;
-		
 		//10 trials 
 		for (int t = 0; t<T; t++) {
 			//of n 4 to 8192 size heap
