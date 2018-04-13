@@ -10,7 +10,7 @@ public class MazePanel extends JPanel {
 	Maze maze;
 	
 	/** This controls the size of each square (in pixels). Smaller is tougher. */
-	static int boxSize = 5;
+	static int boxSize = 10;
 	
 	/**
 	 * Technique for smooth flicker-free drawing is to use a double-buffering technique.

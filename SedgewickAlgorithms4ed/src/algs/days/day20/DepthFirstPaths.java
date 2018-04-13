@@ -58,7 +58,7 @@ public class DepthFirstPaths {
 		Graph g = new Graph(in);
 		
 		int source = 0;
-		int target = 7;
+		int target = 3;
 		
 		// conduct a DFS over entire graph, starting from source.
 		DepthFirstPaths dfp = new DepthFirstPaths(g, source);
