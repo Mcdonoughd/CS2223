@@ -25,7 +25,14 @@ public class AVL<Key extends Comparable<Key>> {
 			this.key = key;
 		}
 
-		public String toString() { return "[" + key + "]"; }
+		public String toString() {
+			String leftS = "";
+			if (left != null) leftS = "left:" + left.key;
+			String rightS = "";
+			if (right != null) rightS = "right:" + right.key;
+			
+			return "[" + key + " "+ leftS + " " + rightS + "]";
+		}
 	}
 
 	public boolean isEmpty() { return root != null; }
