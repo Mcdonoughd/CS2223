@@ -27,6 +27,13 @@ public class Question1C {
 		if (avl.size() != 31) {
 			StdOut.println ("  *** UNABLE TO VALIDATE ***");
 		}
+		
+		// make sure all values are there...
+		for (int i = 0; i < sorted.length; i++) {
+			if (!avl.contains(2*i+1)) {
+				StdOut.printf ("  *** UNABLE TO VALIDATE: Missing %d ***\n", 2*i+1);		
+			}
+		}
 	}
 
 }
