@@ -31,7 +31,7 @@ At the time the stack contains 82 where the popped element would be 2 not 8
 If entered in descending order it is impossible for 9 to come prior to 7 without it being the only element in the stack. At the time the stack contains 97 where the popped element would be 7 not 9
 
 (h)	7 8 5 6 3 4 1 2 0 9
-987—65—43—21—0-- possible
+987--65--43--21—0-- possible
 
 
 
@@ -53,6 +53,7 @@ Therefore if Exch is ~N Comp must be ~2N in the worst case.
 
 Recurrence Relationship:
 -----------------------------------
+SELECTION SORT
 A1. 	N = 2^n
 	C(1) = 0
 	C(2) = 1
@@ -64,17 +65,18 @@ A1. 	N = 2^n
 A2. BestCase: N^2
 A3. WorstCase: N^2
 
+
+BINARY SORT
 B1. C(N) = C(N-1/2) + 1
-B2. C(N) =  N
+B2. C(N) =  1
 B3. Best Case: 1
-B4. Worst Case: log(N)
+B4. Worst Case: log(N) + 1
 
-C1. C(N) = C(N/2) + C(N/2) + 1
-C2. C(N) = N - 1
-C3. BestCase: N*log(N)
-C4. WorstCase: N
-	
-
+MERGE SORT
+C1. C(N) = C(N/2) + C(N/2) + N
+C2. C(N) = N - 1  
+C3. BestCase: (N/2)*log(N)
+C4. WorstCase: N*log(N)
 
 
 

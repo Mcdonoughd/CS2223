@@ -22,8 +22,8 @@ public class Question1C {
 		AVL<Integer> avl = new AVL<Integer>(sorted);
 		
 		// done
-		StdOut.println("AVL tree should have size of 31:" + avl.size());
-		StdOut.println("Number of rotations should be zero:" + avl.rotations);
+		StdOut.println("AVL tree should have size of 31: " + avl.size());
+		StdOut.println("Number of rotations should be zero: " + avl.rotations);
 		if (avl.size() != 0) {
 			StdOut.println ("  *** UNABLE TO VALIDATE ***");
 		}
