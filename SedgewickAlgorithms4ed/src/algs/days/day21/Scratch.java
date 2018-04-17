@@ -19,7 +19,7 @@ public class Scratch {
 		for (int w : G.adj(v)) {
 			if (!marked[w]) {
 				edgeTo[w] = v;
-				dfs(G, w);
+				dfs(w);
 			}
 		}
 	}
