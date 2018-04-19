@@ -40,6 +40,8 @@ public class Topological {
 				StdOut.print(i + " ");
 			}
 			StdOut.println();
+		} else {
+			StdOut.println ("Digraph has cycle:");
 		}
 	}
 }
