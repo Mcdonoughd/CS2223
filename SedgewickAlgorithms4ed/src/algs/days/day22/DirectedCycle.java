@@ -17,8 +17,11 @@ public class DirectedCycle {
 		marked  = new boolean[G.V()];
 		onStack = new boolean[G.V()];
 		edgeTo  = new int[G.V()];
-		for (int v = 0; v < G.V(); v++)
-			if (!marked[v] && cycle == null) dfs(G, v);
+		for (int v = 0; v < G.V(); v++) {
+			if (!marked[v] && cycle == null) {
+				dfs(G, v);
+			}
+		}
 	}
 
 	// Conduct DFS until you visit an active vertex you are still processing. 
@@ -65,7 +68,7 @@ public class DirectedCycle {
 			for (int w : cycleDetector.cycle()) {
 				s += w + "-";
 			}
-			System.out.println("Cycle:" + s);
+			System.out.println("Cycle:" + s.substring(0, s.length()-1));
 		}
 	}
 
