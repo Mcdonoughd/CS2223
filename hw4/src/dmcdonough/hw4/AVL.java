@@ -57,12 +57,12 @@ public class AVL<Key extends Comparable<Key>> {
 	 */
 	public AVL(Key[] ordered) {
 		/** FILL IN HERE. **/
-		AVL<Key> new_keys = new AVL<Key>();
+		
 		for(int i=0;i<ordered.length;i++) {
-			new_keys.insert(ordered[i]);
+			this.insert(ordered[i]);
 		}
 		//System.out.println(this.toString());
-		StdOut.println ("number of rotations: " + new_keys.rotations);
+		StdOut.println ("number of rotations: " + this.rotations);
 	}
 	
 	/** 

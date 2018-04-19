@@ -1,5 +1,6 @@
 package dmcdonough.hw4;
 
+import dmcdonough.hw4.AVL;
 import edu.princeton.cs.algs4.StdOut;
 
 /** 
@@ -20,13 +21,19 @@ public class Question1C {
 		}
 		
 		AVL<Integer> avl = new AVL<Integer>(sorted);
-		
+		//System.out.println(avl.toString());
 		// done
 		StdOut.println("AVL tree should have size of 31:" + avl.size());
 		StdOut.println("Number of rotations should be zero:" + avl.rotations);
-		if (avl.size() != 0) {
-			StdOut.println ("  *** UNABLE TO VALIDATE ***");
+		if (avl.size() != 31) {
+			StdOut.println ("  *** UNABLE TO VALIDATE SIZE ***");
+		}
+		
+		// make sure all values are there...
+		for (int i = 0; i < sorted.length; i++) {
+			if (!avl.contains(2*i+1)) {
+				StdOut.printf ("  *** UNABLE TO VALIDATE: Missing %d ***\n", 2*i+1);		
+			}
 		}
 	}
-
 }

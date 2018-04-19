@@ -27,10 +27,15 @@ public class Question1B {
 		
 		StdOut.println("one contains a total of:" + oneCopy.size());
 		StdOut.println("two contains a total of:" + two.size());
-
+		
+		Queue<Integer> oneCopy_keys = oneCopy.keys();
+		Queue<Integer> two_keys = two.keys();
+		
 		// merge the values from two into 'one'. Now 'one' contains all values from 
 		// 'oneCopy' and 'two'.
 		one.merge(two);
+		
+		Queue<Integer> one_keys = one.keys();
 		
 		StdOut.println("combined contains a total of:" + one.size());
 		if (one.size() != oneCopy.size() + two.size()) {
@@ -48,10 +53,48 @@ public class Question1B {
 		// well, the size of the table will once again be zero, and you will have then confirmed
 		// that your 'merge' method works properly.
 		
+		//System.out.println(one_keys.size());
+		for(int i=0;i<32;i++) {
+			//get keys to a queue
+			int k1 = oneCopy_keys.dequeue();
+			int k2 = two_keys.dequeue();
+			
+			if(table.contains(k1)) {
+				//update the value for given key
+				int count = table.get(k1);
+				table.delete(k1);
+				table.put(k1, count+1);
+			}
+			else {
+				//put new value into table
+				table.put(k1,1);
+			}
+			
+			if(table.contains(k2)) {
+				//update the value for given key
+				int count = table.get(k2);
+				table.delete(k2);
+				table.put(k2, count+1);
+			}
+			else {
+				//put new value into table
+				table.put(k2,1);
+			}
+			
+		}
+		
+		for(int j = 0; j < 64; j++) {
+			int k = one_keys.dequeue();
+			//System.out.println(table.get(k));
+			if(table.contains(k)) {
+				table.delete(k);
+			}
+		}
+		//System.out.println(table.size());
+		//int s = table.size();
 		
 		// done
-		StdOut.println("Number of values remaining in table should be zero: " + table.size());
-		if (table.size() != 0) {
+		if (!table.isEmpty()) {
 			StdOut.println ("  *** UNABLE TO VALIDATE ***");
 		}
 	}

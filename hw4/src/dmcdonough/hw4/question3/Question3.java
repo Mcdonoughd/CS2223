@@ -1,5 +1,6 @@
-package dmcdonough.hw4;
+package dmcdonough.hw4.question3;
 
+import dmcdonough.hw4.SeparateChainingHashST;
 import edu.princeton.cs.algs4.StdOut;
 
 public class Question3 {

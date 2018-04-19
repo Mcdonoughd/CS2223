@@ -14,7 +14,7 @@ import edu.princeton.cs.algs4.StdOut;
 public class AVL<Key extends Comparable<Key>> {
 
 	Node root;               // root of the tree
-	int rotations;           // for instrumentation
+	public int rotations;           // for instrumentation
 	class Node {
 		Key    key;        
 		Node   left, right;  // left and right subtrees
@@ -57,7 +57,8 @@ public class AVL<Key extends Comparable<Key>> {
 	 */
 	public AVL(Key[] ordered) {
 		/** FILL IN HERE. **/
-		StdOut.println ("number of rotations:" + rotations);
+		rotations = 0;
+		//StdOut.println ("number of rotations:" + rotations);
 	}
 	
 	/** 
