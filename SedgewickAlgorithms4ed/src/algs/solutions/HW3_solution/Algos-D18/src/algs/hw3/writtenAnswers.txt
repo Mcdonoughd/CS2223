@@ -1,0 +1,48 @@
+Stack Exercise
+
+One way to solve this is to go ahead and try to come up with a sequence of push and pop
+operations. Note that the input digits all have to be in descending order from 9 to 0
+
+a. 8 7 6 5 4 3 0 1 2 9
+ 
+	9 8 - 7 - 6 - 5 - 4 - 3 - 2 1 0 - - - -
+
+b. 5 3 1 2 4 6 7 0 9 8
+
+Look for out of sequence digits. If the final digit of the output is a 8, you can ask
+yourself what happened to the zero? It must have already been popped off; but for this
+to happen, there there is no way that the 5 was the first digit to appear on the output. 
+Think about it this way, for the 5 to be the first value output, then "9 8 7 6" must all
+have been pushed onto the stack, and still remain there; thus 9 must appear after 8.
+
+c. 7 4 3 2 5 1 0 6 8 9
+
+ 	9 8 7 - 6 5 4 - 3 - 2 - - 1 - 0 - - - -
+
+d. 5 6 7 8 9 0 1 2 3 4 
+
+	9 8 7 6 5 - - - - - 4 3 2 1 0 - - - - -
+
+
+e. 5 6 7 8 9 4 3 2 1 0
+
+	9 8 7 6 5 - - - - - 4 - 3 - 2 - 1 - 0 -
+
+
+f. 9 5 3 4 6 1 8 2 7 0 
+
+Since 9 and 5 are the first two values popped off (in that order) then just before
+popping the 5, the stack contains (in this order): "8 7 6" where 6 is on the top
+of the stack and the next to be popped. Which means that 7 must popped off of the 
+stack before 8. However, in the above output, 8 appears before 7, so this is impossible.
+
+g. 8 5 2 0 1 3 4 6 9 7
+
+This has an ALMOST valid sequence. Since "8 5" are popped in order, this means that "9 7 6"
+are on the stack in this order. However, in the output representation, the 9 comes before
+the 7, which is impossible given this stack.
+
+h. 7 8 5 6 3 4 1 2 0 9 
+
+	9 8 7 - - 6 5 - - 4 3 - - 2 1 - - 0 - - 
+	
