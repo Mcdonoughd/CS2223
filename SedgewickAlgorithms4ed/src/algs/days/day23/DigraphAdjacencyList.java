@@ -1,25 +1,27 @@
 package algs.days.day23;
 
 import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.StdOut;
 
 /**
  * The next extension for graphs; each edge is directed AND has a positive (double) weight associated
  * with it.
  */
-public abstract class EdgeWeightedDigraph {
-    final int V;                // number of vertices in this digraph
-    int E;                      // number of edges in this digraph
-   
+public class DigraphAdjacencyList extends EdgeWeightedDigraph {
+    Bag<DirectedEdge>[] adj;    // adj[v] = adjacency list for vertex v
+    
     /**
      * Initializes an empty edge-weighted digraph with <tt>V</tt> vertices and 0 edges.
      *
      * @param  V the number of vertices
      * @throws IllegalArgumentException if <tt>V</tt> < 0
      */
-    public EdgeWeightedDigraph(int V) {
-        if (V < 0) throw new IllegalArgumentException("Number of vertices in a Digraph must be nonnegative");
-        this.V = V;
-        this.E = 0;
+    @SuppressWarnings("unchecked")
+	public DigraphAdjacencyList(int V) {
+    	super(V);
+        adj = (Bag<DirectedEdge>[]) new Bag[V];
+        for (int v = 0; v < V; v++)
+            adj[v] = new Bag<DirectedEdge>();
     }
 
     /**  
@@ -35,7 +37,7 @@ public abstract class EdgeWeightedDigraph {
      * @throws IndexOutOfBoundsException if the endpoints of any edge are not in prescribed range
      * @throws IllegalArgumentException if the number of vertices or edges is negative
      */
-    public EdgeWeightedDigraph(In in) {
+    public DigraphAdjacencyList(In in) {
         this(in.readInt());
         int E = in.readInt();
         for (int i = 0; i < E; i++) {
@@ -46,14 +48,15 @@ public abstract class EdgeWeightedDigraph {
         }
     }
 
-    public int V() { return V; }
-    public int E() { return E; }
-
     /** Adds the directed edge e to this edge-weighted digraph. */
-    public abstract void addEdge(DirectedEdge e);
+    public void addEdge(DirectedEdge e) {
+        int v = e.from();
+        adj[v].add(e);
+        E++;
+    }
 
     /** Returns the directed edges incident from vertex v. */
-    public abstract Iterable<DirectedEdge> adj(int v);
+    public Iterable<DirectedEdge> adj(int v) { return adj[v]; }
 
     /** Returns all directed edges in this edge-weighted digraph. */
     public Iterable<DirectedEdge> edges() {
@@ -77,7 +80,7 @@ public abstract class EdgeWeightedDigraph {
         s.append(V + " " + E + "\n");
         for (int v = 0; v < V; v++) {
             s.append(v + ": ");
-            for (DirectedEdge e : adj(v)) {
+            for (DirectedEdge e : adj[v]) {
                 s.append(e + "  ");
             }
             s.append("\n");
@@ -85,5 +88,13 @@ public abstract class EdgeWeightedDigraph {
         return s.toString();
     }
 
+    /**
+     * Unit tests the <tt>EdgeWeightedDigraph</tt> data type.
+     */
+    public static void main(String[] args) {
+        In in = new In(args[0]);
+        DigraphAdjacencyList G = new DigraphAdjacencyList(in);
+        StdOut.println(G);
+    }
 
 }
