@@ -86,6 +86,18 @@ public class DijkstraSP {
 	 * Unit tests the <tt>DijkstraSP</tt> data type.
 	 */
 	public static void main(String[] args) {
+		
+		// inclass example
+		EdgeWeightedDigraph sample = new DigraphAdjacencyList(new In(new File ("day24.txt")));
+		DijkstraSP sample_sp = new DijkstraSP(sample, 0);
+		for (int v = 0; v < sample.V(); v++) {
+			StdOut.println(v + ":" + sample_sp.distTo(v));
+			for (DirectedEdge e : sample_sp.pathTo(v)) {
+				StdOut.print(e + " ");
+			}
+			StdOut.println();
+		}
+		
 		File dir = new File ("src");
 		File dir2 = new File (dir, "algs");
 		File dir3 = new File (dir2, "days");
