@@ -35,7 +35,7 @@ public class AVL<Key extends Comparable<Key>> {
 		}
 	}
 
-	public boolean isEmpty() { return root != null; }
+	public boolean isEmpty() { return root == null; }
 
 	public String toString() { return "<bst: root=" + root +">"; }
 

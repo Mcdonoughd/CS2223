@@ -35,7 +35,7 @@ public class AVL<Key extends Comparable<Key>> {
 		}
 	}
 
-	public boolean isEmpty() { return root != null; }
+	public boolean isEmpty() { return root == null; }
 
 	public String toString() { return "<bst: root=" + root +">"; }
 
@@ -316,6 +316,8 @@ public class AVL<Key extends Comparable<Key>> {
 		return parent;
 	}
 
+	final Queue<Key> empty = new Queue<Key>();
+	
 	/**
 	 * Returns all keys in the symbol table as an <tt>Iterable</tt>.
 	 * To iterate over all of the keys in the symbol table named <tt>st</tt>,
@@ -323,7 +325,10 @@ public class AVL<Key extends Comparable<Key>> {
 	 *
 	 * @return all keys in the symbol table
 	 */
-	public Iterable<Key> keys() { return keys(min(), max()); }
+	public Iterable<Key> keys() {
+		if (root == null) { return empty; }
+		return keys(min(), max()); 
+	}
 
 	public Iterable<Key> keys(Key lo, Key hi) {
 		Queue<Key> queue = new Queue<Key>();

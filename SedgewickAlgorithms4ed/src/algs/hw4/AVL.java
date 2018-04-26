@@ -36,7 +36,7 @@ public class AVL<Key extends Comparable<Key>> {
 		}
 	}
 
-	public boolean isEmpty() { return root != null; }
+	public boolean isEmpty() { return root == null; }
 	public int size() { return size(root); }
 	
 	// Helper method that deals with "empty nodes"
