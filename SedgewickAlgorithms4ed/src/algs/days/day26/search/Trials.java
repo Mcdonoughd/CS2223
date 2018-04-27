@@ -110,7 +110,6 @@ public class Trials {
 			check = new SeparateChainingHashST<EightPuzzleNode, Boolean>();
 			bfs(goal, n);
 			
-			
 			if (n == null) {
 				StdOut.println(numMoves + "\tUnable to find board " + numMoves + " away from solution.");
 			} else {
