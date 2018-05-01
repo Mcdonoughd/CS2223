@@ -1,4 +1,4 @@
-package algs.hw3;
+
 
 public class BST<Key extends Comparable<Key>, Value> {
 	static int numComparison;
