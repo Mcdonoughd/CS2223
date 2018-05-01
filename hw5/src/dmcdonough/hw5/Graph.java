@@ -1,5 +1,4 @@
-package algs.hw5;
-
+package dmcdonough.hw5;
 import edu.princeton.cs.algs4.In;
 
 /** Standard undirected Grah implementation, as starting point for Q3 on HW5. */
@@ -61,13 +60,40 @@ public class Graph {
 
     /** Fill in this method to determine if undirected graph is connected. */
     public boolean connected() {
+    	//use bfs to see if there is a path from every vertex to every other vertex
+    	for(int v = 0; v < V; v++){
+    		BreathFirstSearch bfp = new BreathFirstSearch(this, v);
+    		for(int v1 = 0; v1 < V; v1++){
+    			if(!bfp.hasPathTo(v)){
+    				return false;
+    			}
+    		}
+    	}
+    	return true;
     	// TODO: REPLACE WITH YOUR CODE
-    	return false;
+    	//return false;
     }
 
     /** Implement as part of HW5, Question 3. */
     public int findSafeVertex() {
-    	// TODO: REPLACE WITH YOUR CODE
+    	//first check that the graph is connected
+    	if(!connected()){
+    		return -1;
+    	}
+    	DepthFirstPaths d = new DepthFirstPaths(this,0);
+    	boolean[] marked = d.getMarked();
+    	//return a vertex whose neighbors have all been marked
+    	for(int v = 0; v < V; v++){
+    		boolean allNeighborsVisited = true;
+    		for(int w: this.adj(v)){
+    			if(marked[w] == false){
+    				allNeighborsVisited = false;
+    			}
+    		}
+    		if(allNeighborsVisited == true){
+    			return v;
+    		}
+    	}
     	return -1;
     }
     
@@ -79,13 +105,33 @@ public class Graph {
      */
     int eccentricity(int s) {
     	// TODO: REPLACE WITH YOUR CODE
-    	return 0;
+    	BreathFirstSearch search = new BreathFirstSearch(this,s);
+    	int largestdist = 0;
+    	int ecc = 0;
+    	for(int i = 0; i < V; i++){
+    		
+    		if(search.distTo(i)> largestdist && search.distTo(i) < Integer.MAX_VALUE){
+    			ecc = search.distTo(i);
+    		}
+    	}
+    	return ecc;
     }
     
     /** Implement as part of HW5, Question 3. */
     public int diameter () {
-    	// TODO: REPLACE WITH YOUR CODE
-    	return 0;
+    	int diameter = 0;
+    	int MAXeccentricity =0;
+    	for(int v = 0; v < V; v++){
+
+        	//bfs from v to generate all distto values on other vertices
+        	BreathFirstSearch b = new BreathFirstSearch(this,v);
+        	int newecc = eccentricity(v);
+    		
+        	if(newecc > diameter){
+        		diameter = newecc;
+        	}
+    	}
+    	return diameter;
     }
     
     /**

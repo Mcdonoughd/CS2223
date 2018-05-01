@@ -1,4 +1,4 @@
-package algs.hw5;
+package dmcdonough.hw5;
 
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;

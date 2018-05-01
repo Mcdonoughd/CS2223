@@ -1,4 +1,4 @@
-package algs.hw5;
+package dmcdonough.hw5;
 
 import java.util.Iterator;
 

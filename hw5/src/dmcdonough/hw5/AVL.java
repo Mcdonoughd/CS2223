@@ -1,4 +1,4 @@
-package algs.hw5;
+package dmcdonough.hw5;
 
 import edu.princeton.cs.algs4.StdOut;
 
@@ -323,9 +323,9 @@ public class AVL<Key extends Comparable<Key>> {
 	 *
 	 * @return all keys in the symbol table
 	 */
-	public Iterable<Key> keys() { return keys(min(), max()); }
+	public Queue<Key> keys() { return keys(min(), max()); }
 
-	public Iterable<Key> keys(Key lo, Key hi) {
+	public Queue<Key> keys(Key lo, Key hi) {
 		Queue<Key> queue = new Queue<Key>();
 		keys(root, queue, lo, hi);
 		return queue;

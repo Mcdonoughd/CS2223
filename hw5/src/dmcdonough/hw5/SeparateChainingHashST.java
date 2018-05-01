@@ -1,4 +1,4 @@
-package algs.hw5;
+package dmcdonough.hw5;
 
 import edu.princeton.cs.algs4.*;
 
@@ -7,8 +7,8 @@ public class SeparateChainingHashST<Key, Value> {
 	int M;                                // hash table size
 	SequentialSearchST<Key, Value>[] st;  // array of linked-list symbol tables
 
-	final static int INIT_CAPACITY = 11;   // initial default size
-	final static int AVG_LENGTH = 7;      // Threshold to determine resizing
+	final static int INIT_CAPACITY = 500;   // initial default size
+	final static int AVG_LENGTH = 200;      // Threshold to determine resizing
 
 	/** Initialize empty symbol table with <tt>M</tt> chains. */
 	public SeparateChainingHashST(int M) {

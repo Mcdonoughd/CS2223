@@ -1,4 +1,4 @@
-package algs.hw5;
+package dmcdonough.hw5;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,6 +7,7 @@ import java.util.Scanner;
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 import algs.days.day12.SeparateChainingHashST;
+
 
 /**
  * Modify this class for problem 1 on HW5.
@@ -23,8 +24,22 @@ public class WordLadder {
 	 * Determine if the two same-sized words are off by just a single character.
 	 */
 	public static boolean offByOne(String w1, String w2) {
-		// FILL IN ...
-		return false;
+		int offby = 0;
+		char[] word1 = w1.toCharArray();
+		char[] word2 = w2.toCharArray();
+		//length of string is always 4
+		for(int i=0;i<4;i++) {
+			if(word1[i]!=word2[i]) {
+				offby++; //if char are off by 1 then 
+			}
+		}
+		//if not offbyone return false
+		if(offby!=1) {
+			return false;
+		}
+		else {
+		return true;
+		}
 	}
 
 
@@ -46,17 +61,42 @@ public class WordLadder {
 		while (sc.hasNext()) {
 			String s = sc.next();
 			if (s.length() == 4) {
-
-				// fill in here...
+				avl.insert(s);
 			}
 		}
 		sc.close();
 
-		// now construct graph, where each node represents a word, and an edge exists between 
-		// two nodes if their respective words are off by a single letter. Hint: use the
-		// keys() method provided by the AVL tree.
-		// fill in here...
-
+		
+		Queue<String> queue = avl.keys();
+		int Qsize = queue.size();
+		//init graph
+		Graph graph = new Graph(Qsize);
+		
+		//array of strings added to the table
+		String[] checked = new String[Qsize];
+		
+		//for all values in the tree...
+		for(int i =0;i<Qsize;i++) {
+			String value = queue.dequeue(); //get the value from the avl
+			//for all past values..
+			for(int j = 0;j< i ;j++) {
+				if(checked[j] != null) {
+					//check if they are off by one
+					if(offByOne(checked[j],value)) {
+						//if so add an edge
+						graph.addEdge(i, j);
+					}
+				}
+			}
+			
+			//add values to the checked array, table and reverse table
+			checked[i] = value;
+			table.put(value, i);
+			reverse.put(i, value);
+			
+		}
+		
+		
 		StdOut.println("Enter word to start from (all in lower case):");
 		String start = StdIn.readString().toLowerCase();
 		StdOut.println("Enter word to end at (all in lower case):");
@@ -76,6 +116,32 @@ public class WordLadder {
 		// that finds shortest distance (should it exist) between start and end.
 		// be sure to output the words in the word ladder, IN ORDER, from the start to end.
 
-		// fill in here...
+		//Breath first search -> guarenteed to find the shortest path
+		int str = table.get(start);
+		int fin = table.get(end);
+		BreathFirstSearch Search = new BreathFirstSearch(graph,str,fin);
+		//Seach.bfs
+		//Iterable<Integer> //Path =  Search.shortestPathTo(fin, str);
+		System.out.println(Search.hasPathTo(fin));
+		System.out.println(Search.distTo(fin));
+		
+		
+		//boolean[] list_of_nodes = Search.getMarked();
+		//int qsize  Seach.;
+		//System.out.println(start);
+//		for(int i = 0; i<qsize; i++) {
+//			System.out.println();
+//		}
+		 if (Search.hasPathTo(fin)) {
+             System.out.print(start + " ");
+             for (int v : Search.shortestPathTo(fin,str)) {
+                 System.out.print(reverse.get(v) + " " );
+                 //System.out.print("hello ");
+             }
+             System.out.println();
+         }
+	
+		//reverse.get(Search.forEach(action));
 	}
 }
+
