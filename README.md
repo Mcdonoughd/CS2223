@@ -13,6 +13,10 @@ Books:
 &nbsp;	  Books Required for The Course
 
 
+Dan's Solutions:
+&nbsp;	  The work done by myself during the course
+
+
 SedgewickAlgorithms4ed:
 &nbsp;	  Collection of all Inclass notes and code, and other cool Algorithmic Resourses
 
